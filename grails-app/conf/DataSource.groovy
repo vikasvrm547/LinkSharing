@@ -1,9 +1,10 @@
 dataSource {
     pooled = true
     jmxExport = true
-    dialect = "org.hibernate.dialect.MySQL5InnoDBDialect"
-    dbCreate ="update"
     driverClassName = "com.mysql.jdbc.Driver"
+    dialect = org.hibernate.dialect.MySQL5InnoDBDialect
+    username = "root"
+    password = "vikas"
 
 }
 hibernate {
@@ -19,22 +20,21 @@ hibernate {
 environments {
     development {
         dataSource {
-            dbCreate = "update" // one of 'create', 'create-drop', 'update', 'validate', ''
-            url = "jdbc:h2:mem:devDb;MVCC=TRUE;LOCK_TIMEOUT=10000;DB_CLOSE_ON_EXIT=FALSE"
-            username = "vikas"
-            password = "vikas"
+            dbCreate = "create-drop" // one of 'create', 'create-drop', 'update', 'validate', ''
+
+            url = "jdbc:mysql://localhost:3306/linksharing"
         }
     }
     test {
         dataSource {
             dbCreate = "update"
-            url = "jdbc:h2:mem:testDb;MVCC=TRUE;LOCK_TIMEOUT=10000;DB_CLOSE_ON_EXIT=FALSE"
+            url = "jdbc:hsqldb:mem:linksharing"
         }
     }
     production {
         dataSource {
             dbCreate = "update"
-            url = "jdbc:h2:prodDb;MVCC=TRUE;LOCK_TIMEOUT=10000;DB_CLOSE_ON_EXIT=FALSE"
+            url = "jdbc:hsqldb:mem:linksharing"
             properties {
                // See http://grails.org/doc/latest/guide/conf.html#dataSource for documentation
                jmxEnabled = true

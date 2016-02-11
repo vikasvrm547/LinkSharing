@@ -10,9 +10,10 @@
 // if (System.properties["${appName}.config.location"]) {
 //    grails.config.locations << "file:" + System.properties["${appName}.config.location"]
 // }
+grails.config.locations = [ "file:${userHome}/.grails/Config.groovy"]
 
-grails.project.groupId = "com.linksharing" // change this to alter the default package name and Maven publishing destination
-
+grails.project.groupId = "com.tothenew" // change this to alter the default package name and Maven publishing destination
+grails.externalVariable = "internal"
 // The ACCEPT header will not be used for content negotiation for user agents containing the following strings (defaults to the 4 major rendering engines)
 grails.mime.disable.accept.header.userAgents = ['Gecko', 'WebKit', 'Presto', 'Trident']
 grails.mime.types = [ // the first one is the default format
@@ -102,6 +103,7 @@ log4j.main = {
     //appenders {
     //    console name:'stdout', layout:pattern(conversionPattern: '%c{2} %m%n')
     //}
+         
 
     error  'org.codehaus.groovy.grails.web.servlet',        // controllers
            'org.codehaus.groovy.grails.web.pages',          // GSP
@@ -114,4 +116,7 @@ log4j.main = {
            'org.springframework',
            'org.hibernate',
            'net.sf.ehcache.hibernate'
+            'com.tothenew'
+
+
 }

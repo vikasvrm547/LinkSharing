@@ -1,6 +1,6 @@
 package com.tothenew
 
-import enums.Seriousness
+import com.tothenew.enums.Seriousness
 import grails.test.mixin.TestFor
 import spock.lang.Specification
 

@@ -1,6 +1,6 @@
 package com.tothenew
 
-import enums.Visibility
+import com.tothenew.enums.Visibility
 import grails.test.mixin.TestFor
 import spock.lang.Specification
 import spock.lang.Unroll
@@ -52,5 +52,20 @@ class TopicSpec extends Specification {
         Topic.count() == 1;
         topicObj.errors.allErrors.size() == 1;
         topicObj.errors.getFieldErrorCount('name') == 1;
+    }
+
+    def "Check toString of topic"() {
+        setup:
+        Topic topic = new Topic(name: name)
+
+        when:
+        String topicName = topic.toString()
+
+        then:
+        topicName == result
+
+        where:
+        name            | result
+        "testTopicName" | "TopicName: testTopicName"
     }
 }

@@ -93,7 +93,7 @@ class UserSpec extends Specification {
         userObj.errors.getFieldErrorCount('userName') == 1;
     }
 
-
+    @Unroll("check getName method sno---------#sno")
     def "check getName method"() {
         given:
         String userName = "vikasvrm1";
@@ -108,11 +108,26 @@ class UserSpec extends Specification {
         result == expected
 
         where:
-        firstName | lastName | expected
-        "vikas"   | "verma"  | "vikas verma"
-        " "       | " "      | "  "
-        null      | "verma"  | "null verma"
-        null      | null     | ""
+        sno | firstName | lastName | expected
+        1   | "vikas"   | "verma"  | "vikas verma"
+        2   | ""        | ""       | ""
+        3   | null      | "verma"  | "verma"
+        4   | null      | null     | ""
+    }
+
+    def "Check toString of user"() {
+        setup:
+        User user = new User(userName: userName)
+
+        when:
+        String name = user.toString()
+
+        then:
+        name == result
+
+        where:
+        userName       | result
+        "testUserName" | "UserName: testUserName"
     }
 }
 

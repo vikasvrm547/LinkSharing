@@ -35,6 +35,21 @@ class LinkResourceSpec extends Specification {
         8   | "description" | new User() | new Topic() | null                       | false
 
     }
+
+    def "Check toString of linkResource"() {
+        setup:
+        LinkResource linkResource = new LinkResource(url: url)
+
+        when:
+        String resourceURL = linkResource.toString()
+
+        then:
+        resourceURL == result
+
+        where:
+        url                       | result
+        "http://www.tothenew.com" | "URL: http://www.tothenew.com"
+    }
 }
 
 

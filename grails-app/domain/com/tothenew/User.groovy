@@ -1,26 +1,26 @@
 package com.tothenew
 
 class User {
-    String email;
-    String userName;
-    String password;
-    String firstName;
-    String lastName;
-    Byte[] photo;
-    Boolean admin = false;
-    Boolean active = false;
-    Date dateCreated;
-    Date lastUpdated;
+    String email
+    String userName
+    String password
+    String firstName
+    String lastName
+    Byte[] photo
+    Boolean admin = false
+    Boolean active = false
+    Date dateCreated
+    Date lastUpdated
 
     static transients = ['name']
 
     static mapping = {
         photo(sqlType: 'longblob')
     }
-    
+
     static constraints = {
         email(unique: true, blank: false, email: true)
-        password(blank: false, minSize: 5)
+        password blank: false, minSize: 5
         firstName(blank: false)
         lastName(blank: false)
         userName(unique: true, blank: false)
@@ -29,11 +29,15 @@ class User {
         admin(nullable: true)
     }
 
+    static hasMany = [topics   : Topic, subscriptions: Subscription, readingItems: ReadingItem,
+                      resources: Resource, resourceRatings: ResourceRating]
+
     String getName() {
-        [firstName, lastName].findAll { it }.join(" ")
+        return [firstName, lastName].findAll { it }.join(" ")
     }
 
-    static hasMany = [topics   : Topic, subscriptions: Subscription, resourceItems: ReadingItem,
-                      resources: Resource, resourceRatings: ResourceRating];
-
+    @Override
+    String toString() {
+        return "UserName: ${userName}"
+    }
 }

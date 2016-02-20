@@ -27,14 +27,14 @@ environments {
     }
     test {
         dataSource {
-            dbCreate = "update"
-            url = "jdbc:hsqldb:mem:linksharing"
+            dbCreate = "create-drop"
+            url = "jdbc:mysql://localhost:3306/linksharing"
         }
     }
     production {
         dataSource {
             dbCreate = "update"
-            url = "jdbc:hsqldb:mem:linksharing"
+            url = "jdbc:mysql://localhost:3306/linksharing"
             properties {
                // See http://grails.org/doc/latest/guide/conf.html#dataSource for documentation
                jmxEnabled = true

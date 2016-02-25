@@ -17,14 +17,18 @@ class BootStrap {
         User user = new User(email: "v1@gmail.com",
                 userName: "vikas1",
                 password: Constants.PASSWORD,
+                confirmPassword: Constants.PASSWORD,
                 firstName: "vikas",
-                lastName: "verma")
+                lastName: "verma",
+                active: true)
 
         User admin = new User(email: "v2@gmail.com",
                 userName: "vikas2",
                 password: Constants.PASSWORD,
+                confirmPassword: Constants.PASSWORD,
                 firstName: "vikas",
                 lastName: "verma",
+                active: true,
                 admin: true)
 
         if (!User.count()) {

@@ -12,7 +12,8 @@ class User {
     Date dateCreated
     Date lastUpdated
 
-    static transients = ['name']
+    String confirmPassword;
+    static transients = ['name', 'confirmPassword']
 
     static mapping = {
         photo(sqlType: 'longblob')
@@ -20,13 +21,17 @@ class User {
 
     static constraints = {
         email(unique: true, blank: false, email: true)
-        password blank: false, minSize: 5
+        password(blank: false, minSize: 5)
         firstName(blank: false)
         lastName(blank: false)
         userName(unique: true, blank: false)
         photo(nullable: true)
         active(nullable: true)
         admin(nullable: true)
+        confirmPassword(bindable: true, nullable: true, blank: true, validator: { val, user ->
+            return (val != null) && val.equals(user.password)
+
+        })
     }
 
     static hasMany = [topics   : Topic, subscriptions: Subscription, readingItems: ReadingItem,

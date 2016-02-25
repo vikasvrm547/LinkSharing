@@ -1,7 +1,6 @@
 package com.tothenew
 
 class DemoController {
-
     def index() {
         render(grailsApplication.config.grails.externalVariable);
         log.fatal("I am fatal")

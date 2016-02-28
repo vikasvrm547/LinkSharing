@@ -2,7 +2,7 @@ package com.tothenew
 
 class UserController {
 
-    def index() {
-        render("user dahsboard")
+    def show() {
+        render(view: 'index', model: [linkResourceCO:null, tendingTopics:Topic.getTrendingTopics(), subscribedTopics:session.user.getSubscribedTopics()])
     }
 }

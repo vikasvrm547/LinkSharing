@@ -1,8 +1,14 @@
 package com.tothenew.enums
 
-/**
- * Created by vikas on 11/2/16.
- */
+
 enum Visibility {
     PUBLIC,PRIVATE
+
+    static Visibility convertToEnum(String visibility){
+        try{
+            return valueOf(visibility.toUpperCase())
+        }catch (Exception e){
+            return null
+        }
+    }
 }

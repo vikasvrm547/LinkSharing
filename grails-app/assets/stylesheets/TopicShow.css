@@ -1,0 +1,14 @@
+.topic-show-user-name{
+    font-size: large;
+}
+
+.topic-info-panel-body,.show-users-panel-body{
+    overflow-y: auto;
+    height: 250px;
+}
+
+
+.user-info ,.topic-info{
+    margin: 5px;
+    border-bottom: 1px solid blue
+}

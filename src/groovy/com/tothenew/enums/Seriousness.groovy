@@ -1,8 +1,13 @@
 package com.tothenew.enums
 
-/**
- * Created by vikas on 11/2/16.
- */
 enum Seriousness {
     SERIOUS,VERY_SERIOUS,CASUAL
+
+    static Seriousness convertToEnum(String seriousness){
+        try{
+            return valueOf(seriousness.toUpperCase())
+        }catch (Exception e){
+            return null
+        }
+    }
 }

@@ -1,20 +1,20 @@
 package com.tothenew
 
+import com.tothenew.co.ResourceSearchCo
 import com.tothenew.enums.Visibility
+import com.tothenew.vo.TopicVO
 
 class TopicController {
 
-    def show(Integer id) {
-        log.info("showwwwwww")
-        Topic topic = Topic.get(id)
-        log.info topic.visibility
+    def show(ResourceSearchCo resourceSearchCo) {
+        println resourceSearchCo.topicId
+        Topic topic = Topic.read(resourceSearchCo.topicId)
         if (topic) {
             if (topic.visibility == Visibility.PUBLIC) {
-                log.info "visibility"
-                render("success")
+                render(view: 'show', model: [subscribedUsers: topic.getSubscribedUsers(), topic: topic])
             } else if (topic.visibility == Visibility.PRIVATE) {
                 if (Subscription.findByUserAndTopic(session.user, topic)) {
-                    render("success")
+                    render(view: 'show', model: [subscribedUsers: topic.getSubscribedUsers(), topic: topic])
                 } else {
                     flash.error = "Without subscription user cannot see private topics"
                     redirect(controller: "login", action: "index")
@@ -24,5 +24,21 @@ class TopicController {
             flash.error = "There is no such topic available"
             redirect(controller: "login", action: "index")
         }
+    }
+
+    def save(String topicName, String visibilityString) {
+        Topic topic = new Topic(name: topicName, visibility: Visibility.convertToEnum(visibilityString), createdBy: session.user)
+        if (topic.save(flush: true)) {
+            flash.message = "Topic created successfully"
+            redirect(controller: "user", action: "show")
+        } else {
+            log.error("Topic not created successfully")
+            flash.error = "Topic not created successfully"
+            render(topic.errors.allErrors)
+        }
+    }
+
+    def displayTrendingTopics() {
+        render(Topic.getTrendingTopics())
     }
 }

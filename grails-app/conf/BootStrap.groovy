@@ -31,16 +31,16 @@ class BootStrap {
                 active: true,
                 admin: true)
 
-        if (!User.count()) {
-            createUser(user)
-            createUser(admin)
-        }
+         /*   if (!User.count()) {
+                createUser(user)
+                createUser(admin)
+            }
 
-        if (!Topic.count()) createTopics()
-        if (!Resource.count()) createResources()
-        subscribeTopics()
-        createReadingItems()
-        createResourceRatings()
+            if (!Topic.count()) createTopics()
+            if (!Resource.count()) createResources()
+            subscribeTopics()
+            createReadingItems()
+            createResourceRatings()*/
     }
 
 

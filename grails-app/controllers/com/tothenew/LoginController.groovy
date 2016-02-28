@@ -1,17 +1,21 @@
 package com.tothenew
 
+
 class LoginController {
 
     def index() {
         if (session.user) {
-            forward(controller: "user", action: "index")
-        } else {
-            render("failed to login")
+            forward(controller: "user", action: "show")
+        }else {
+            render(view: 'index', model: [topPosts:Resource.getTopPosts(), recentShares:Resource.getRecentShares()])
         }
     }
 
-    def loginHandler(String userName, String password) {
-        User user = User.findByUserNameAndPassword(userName, password)
+    def loginHandler(String loginEmailOrUsername, String loginPassword) {
+        User user = User.findByUserNameAndPassword(loginEmailOrUsername, loginPassword)
+        if(!user){
+            user = User.findByEmailAndPassword(loginEmailOrUsername, loginPassword)
+        }
         if (user) {
             if (user.active) {
                 session.user = user
@@ -22,7 +26,7 @@ class LoginController {
             }
         } else {
             flash.error = "User not found"
-            render(flash.error)
+            redirect(action: 'index')
         }
     }
 

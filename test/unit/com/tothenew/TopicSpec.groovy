@@ -68,4 +68,23 @@ class TopicSpec extends Specification {
         name            | result
         "testTopicName" | "TopicName: testTopicName"
     }
+
+    @Unroll("Sno------------ #sno")
+    def "check Visibility enum convertToEnum method"() {
+        when:
+        Visibility result = Visibility.convertToEnum(str)
+        then:
+        result == expected
+        where:
+        sno | str       | expected
+        1   | "PUBLIC"  | Visibility.PUBLIC
+        2   | "public"  | Visibility.PUBLIC
+        3   | "PRIVATE" | Visibility.PRIVATE
+        4   | "Private" | Visibility.PRIVATE
+        6   | "vikas "  | null
+        7   | " "       | null
+        8   | null      | null
+
+
+    }
 }

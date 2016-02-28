@@ -2,6 +2,7 @@ package com.tothenew
 
 import com.tothenew.enums.Seriousness
 import com.tothenew.enums.Visibility
+import com.tothenew.vo.TopicVO
 
 class Topic {
     String name
@@ -17,13 +18,26 @@ class Topic {
 
     static hasMany = [subscriptions: Subscription, resources: Resource]
 
+    static mapping = {
+        sort name: 'asc'
+    }
+    static transients = ['subscribedUsers']
+
+    static namedQueries = {
+        getAllTopicIDAndName {
+            projections {
+                property('id')
+                property('name')
+            }
+        }
+    }
+
     @Override
-    String toString(){
-        return "TopicName: ${name}"
+    String toString() {
+        return name
     }
 
     def afterInsert() {
-        log.info "----------Into After Insert------"
         Topic.withNewSession {
             Subscription subscription = new Subscription(user: this.createdBy, topic: this, seriousness: Seriousness.VERY_SERIOUS)
             if (subscription.save(flush: true)) {
@@ -32,5 +46,40 @@ class Topic {
                 log.error "Error saving subscription : ${subscription.errors.allErrors}"
             }
         }
+    }
+
+    static List<TopicVO> getTrendingTopics() {
+        List<TopicVO> topicVOList = []
+        def criteria = Resource.createCriteria()
+        List result = criteria.list(max: 5) {
+            projections {
+                createAlias('topic', 't')
+                property('t.id', 'topicId')
+                property('t.name', 'topicName')
+                property('t.visibility', 'topicVisibility')
+                rowCount('resource_count')
+                property('t.createdBy')
+            }
+
+            groupProperty('t.id')
+            eq('t.visibility', Visibility.PUBLIC)
+            order('topicName', 'desc')
+            order('resource_count', 'desc')
+        }
+
+        result.each {
+            topicVOList.add(new TopicVO(id: it[0], name: it[1], visibility: it[2], count: it[3], createdBy: it[4]))
+        }
+        return topicVOList
+    }
+
+     List<User> getSubscribedUsers() {
+        return Subscription.createCriteria().list {
+                    projections {
+                        property('user')
+                    }
+                    eq('topic', this)
+
+                }
     }
 }

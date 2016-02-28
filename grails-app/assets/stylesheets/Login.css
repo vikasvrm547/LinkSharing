@@ -1,0 +1,62 @@
+
+.navbar-header{
+    background-color:#337ab7;
+}
+
+.page-container-inner-left-div{
+	float: left;
+
+}
+
+.page-container-inner-right-div{
+	float: right;
+}
+
+.top-post-panel-dropdown{
+	text-align: right;
+}
+
+.top-post-panel-dropdown-button{
+	background-color:white;
+	color:black;
+}
+
+
+#register_label{
+
+	text-align: left;
+}
+
+.fa-facebook-official{
+	color: blue;
+}
+
+.fa-twitter{
+	color: green;	
+}
+
+.fa-google-plus{
+	color: red;
+}
+
+hr{
+	border-color: #337ab7;
+}
+
+.profile-content-top-right-anchor,.view-post-anchor{
+	text-align: right;
+}
+
+a{
+	text-decoration: underline;
+}
+
+.top-post,.recent-post{
+	margin: 5px;
+	border-bottom:1px solid blue
+}
+.top-post-panel-body,.recent-post-panel-body{
+	overflow-y: auto;
+	height: 250px;
+}
+

@@ -1,12 +1,11 @@
 package com.tothenew
 
+import grails.test.mixin.Mock
 import grails.test.mixin.TestFor
 import spock.lang.Specification
 
-/**
- * See the API for {@link grails.test.mixin.web.ControllerUnitTestMixin} for usage instructions
- */
 @TestFor(ResourceController)
+@Mock([Resource,User,LinkResource,DocumentResource,Topic])
 class ResourceControllerSpec extends Specification {
 
     def setup() {
@@ -15,6 +14,18 @@ class ResourceControllerSpec extends Specification {
     def cleanup() {
     }
 
-    void "test something"() {
+    void "check delete action of link resource"() {
+        given:
+        LinkResource linkResource = new LinkResource(description: "s1",createdBy: new User(),
+                url: 'http://www.tothenew.com/',topic: new Topic())
+        linkResource.save(flush: true)
+        when:
+        controller.delete(resourceId)
+        then:
+        response.text == rText
+        where:
+        sno | resourceId | rText
+        1   | 1l         | "Resource successfully deleted"
+        2   | 2l         | "Resource not found"
     }
 }

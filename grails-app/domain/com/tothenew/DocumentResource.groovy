@@ -8,8 +8,7 @@ class DocumentResource extends Resource {
     }
 
     @Override
-    String toString()
-    {
+    String toString() {
         return "FilePath: $filePath"
     }
 }

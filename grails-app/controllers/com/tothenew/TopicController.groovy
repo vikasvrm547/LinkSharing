@@ -7,14 +7,16 @@ import com.tothenew.vo.TopicVO
 class TopicController {
 
     def show(ResourceSearchCo resourceSearchCo) {
-        println resourceSearchCo.topicId
+        Topic.get(1)
         Topic topic = Topic.read(resourceSearchCo.topicId)
         if (topic) {
             if (topic.visibility == Visibility.PUBLIC) {
                 render(view: 'show', model: [subscribedUsers: topic.getSubscribedUsers(), topic: topic])
-            } else if (topic.visibility == Visibility.PRIVATE) {
-                if (Subscription.findByUserAndTopic(session.user, topic)) {
+                // render("Success")
+            } else {
+                if (Subscription.countByUserAndTopic(session.user, topic)) {
                     render(view: 'show', model: [subscribedUsers: topic.getSubscribedUsers(), topic: topic])
+                    // render("Success")
                 } else {
                     flash.error = "Without subscription user cannot see private topics"
                     redirect(controller: "login", action: "index")
@@ -34,7 +36,7 @@ class TopicController {
         } else {
             log.error("Topic not created successfully")
             flash.error = "Topic not created successfully"
-            render(topic.errors.allErrors)
+            render("error")
         }
     }
 

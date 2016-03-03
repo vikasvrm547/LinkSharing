@@ -23,7 +23,21 @@
     </div>
 
 
-    <g:render template="/user/show"/>
+    <div class="panel panel-primary">
+        <div class="panel-heading">
+            <h3 class="panel-title">Users:${topic}</h3>
+        </div>
+        <div class="panel-body show-users-panel-body">
+            <g:each in="${subscribedUsers}">
+                <div class="user-info">
+                    <div class="row">
+                        <g:render template="/user/show" model="[user:it,subscribedUserCount:it.subscribedTopics.size()]"/>
+                    </div>
+                </div>
+            </g:each>
+        </div>
+    </div>
+
 
 </div>
 

@@ -13,7 +13,7 @@ class User {
     Date lastUpdated
 
     String confirmPassword;
-    static transients = ['name', 'confirmPassword','subscribedTopics']
+    static transients = ['name', 'confirmPassword', 'subscribedTopics']
 
     static mapping = {
         photo(sqlType: 'longblob')
@@ -47,14 +47,13 @@ class User {
         return userName
     }
 
-    def getSubscribedTopics(){
-        List<Topic> topics = Subscription.createCriteria().list{
+    def getSubscribedTopics() {
+        List<Topic> topics = Subscription.createCriteria().list {
             projections {
                 property('topic')
             }
-            eq('user',this)
+            eq('user', this)
         }
-
-        return  topics
+        return topics
     }
 }

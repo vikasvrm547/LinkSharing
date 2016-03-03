@@ -1,6 +1,7 @@
 package com.tothenew
 
 import com.tothenew.co.ResourceSearchCo
+import com.tothenew.enums.Visibility
 import com.tothenew.vo.RatingInfoVO
 
 abstract class Resource {
@@ -45,32 +46,28 @@ abstract class Resource {
             }
             eq('resource', this)
         }
-        return new RatingInfoVO(totalScore: result[0],totalVotes: result[1],averageScore: result[2])
+        return new RatingInfoVO(totalScore: result[0], totalVotes: result[1], averageScore: result[2])
     }
 
-    public static List<Resource> getRecentShares(){
+    public static List<Resource> getRecentShares() {
 
-        return Resource.list(max:5,sort:'dateCreated',order:'desc')
+        return Resource.createCriteria().list(max: 5, sort: 'lastUpdated', order: 'desc') {
+            createCriteria('topic', 't')
+            eq('t.visibility', Visibility.PUBLIC)
+        }
 
     }
 
     public static List<Resource> getTopPosts() {
-
-        List<Resource> resources = []
-
         def result = ResourceRating.createCriteria().list(max: 5) {
-            projections {
-                property('resource.id')
-            }
-
-            groupProperty('resource.id')
-            count('id', 'totalVotes')
+            createAlias('resource', 'r')
+            createAlias('r.topic', 't')
+            eq('t.visibility', Visibility.PUBLIC)
+            avg('id', 'totalVotes')
+            groupProperty('r.id')
             order('totalVotes', 'desc')
         }
-
         List list = result.collect { it[0] }
-        resources = Resource.getAll(list)
-
-        return resources
+        return Resource.getAll(list)
     }
 }

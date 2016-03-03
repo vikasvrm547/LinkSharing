@@ -6,9 +6,9 @@ class LinkResource extends Resource {
     static constraints = {
         url(url: true, blank: true)
     }
+
     @Override
-    String toString()
-    {
+    String toString() {
         return "URL: $url"
     }
 }

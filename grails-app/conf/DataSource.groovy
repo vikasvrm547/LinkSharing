@@ -5,7 +5,7 @@ dataSource {
     dialect = org.hibernate.dialect.MySQL5InnoDBDialect
     username = "root"
     password = "vikas"
-    //loggingSql = true
+    loggingSql = true
 }
 hibernate {
     cache.use_second_level_cache = true
@@ -14,6 +14,7 @@ hibernate {
     cache.region.factory_class = 'org.hibernate.cache.ehcache.SingletonEhCacheRegionFactory' // Hibernate 4
     singleSession = true // configure OSIV singleSession mode
     flush.mode = 'manual' // OSIV session flush mode outside of transactional context
+    format_sql=true
 }
 
 // environment specific settings

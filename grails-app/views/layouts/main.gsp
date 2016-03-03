@@ -71,11 +71,13 @@
         </div>
     </nav>
 </div>
-
 <div class="container-fluid body-top-container">
     <g:if test="${flash.error}">
         ${flash.error}
     </g:if>
+    <g:elseif  test="${flash.message}">
+        ${flash.message}
+    </g:elseif>
     <g:layoutBody/>
 
 </div>

@@ -8,10 +8,11 @@ class ApplicationFilters {
                 log.info("Going to $controllerName -> $actionName")
             }
             after = { Map model ->
-
+                log.info("after")
+                log.info(model)
             }
             afterView = { Exception e ->
-
+                log.info("after view")
             }
         }
 

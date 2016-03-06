@@ -28,11 +28,11 @@
 
                 <div class="col-xs-9">
                     <div class="row">
-                        <h5 class="col-xs-6">${it.createdBy}<small>@vikas 5min</small></h5>
-                        <a class="col-xs-6 profile-content-top-right-anchor">${it.topic}</a></div>
+                        <h5 class="col-xs-6">${it?.createdBy}<small>@vikas 5min</small></h5>
+                        <a class="col-xs-6 profile-content-top-right-anchor">${it?.topic}</a></div>
 
                     <div class="row">
-                        <p class="col-xs-12">${it.description}</p>
+                        <p class="col-xs-12">${it?.description}</p>
                     </div>
 
                     <div class="row">

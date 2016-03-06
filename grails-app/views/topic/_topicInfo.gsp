@@ -1,3 +1,4 @@
+
 <div class="topic-info">
     <div class="row">
         <div class="list-group  col-xs-3">
@@ -15,17 +16,17 @@
             <div class="row">
                 <div class="col-xs-4">
                     <small class="col-xs-12">@vikas</small>
-                    <small class="col-xs-12"><a>Subscribe</a></small>
+                    <small class="col-xs-12"><ls:showSubscribe topicId="${topic.id}"/></small>
                 </div>
 
                 <div class="col-xs-4">
                     <small class="col-xs-12">Subscriptions</small>
-                    <small class="col-xs-12">${subscribedUsers?.size()}</small>
+                    <small class="col-xs-12"><ls:subscriptionCount topicId="${topic.id}" /></small>
                 </div>
 
                 <div class="col-xs-4">
                     <small class="col-xs-12">Posts</small>
-                    <small class="col-xs-12">${topic.resources.size()}</small>
+                    <small class="col-xs-12"><ls:resourceCount topicId="${topic.id}"/> </small>
                 </div>
             </div>
         </div>
@@ -33,13 +34,14 @@
 
     <div class="row " style="text-align:right">
         <form class="form-inline pull">
-
+            <g:if test="${session.user}">
             <i class="fa fa-envelope-o nav_icon col-sm-2 form-group pull-right" style="font-size: 30px"></i>
 
             <div class="dropdown col-sm-4 form-group pull-right">
-                <g:render template="/share/seriousnessDropDown"/>
 
+                <g:render template="/share/seriousnessDropDown"/>
             </div>
         </form>
+            </g:if>
     </div>
 </div>

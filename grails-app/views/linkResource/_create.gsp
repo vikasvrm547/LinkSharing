@@ -7,9 +7,8 @@
             </div>
 
             <div class="modal-body">
-            %{-- <g:renderErrors bean="${linkResourceCO}"/>--}%
                 <g:form class="form-horizontal" role="form"
-                        url="[controller: 'resource', action: 'saveLinkResource']">
+                        url="[controller: 'linkResource', action: 'save']">
                     <div class="form-group">
                         <div class="col-sm-4 "><label class="control-label">Link*:</label></div>
 
@@ -29,7 +28,7 @@
                     </div>
 
                     <div class="form-group">
-                        <div class="col-sm-4 "><label class="control-label">Visibility*:</label>
+                        <div class="col-sm-4 "><label class="control-label">Topics*:</label>
                         </div>
 
                         <div class="col-xs-8">

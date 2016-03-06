@@ -17,3 +17,28 @@
 .body-top-container{
 	margin-top: 70px;
 }
+
+.fa-facebook-official{
+	color: blue;
+}
+
+.fa-twitter{
+	color: green;
+}
+
+.fa-google-plus{
+	color: red;
+}
+
+a{
+	text-decoration: underline;
+}
+
+.page-container-inner-left-div{
+	float: left;
+
+}
+
+.page-container-inner-right-div{
+	float: right;
+}

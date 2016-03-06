@@ -9,6 +9,6 @@ class LinkResource extends Resource {
 
     @Override
     String toString() {
-        return "URL: $url"
+        return url
     }
 }

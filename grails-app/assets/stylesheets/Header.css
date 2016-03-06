@@ -1,6 +1,19 @@
+
 .navbar-header{
     background-color:#337ab7;
 }
+
+
+.nav_icon{
+    font-size: 20px;
+    margin:5px
+}
+.nav-dropdown{
+    background-color:white;
+    color:black;
+    border:0;
+}
+
 #custom-search-input{
     margin-top: 10px;
     border: solid 1px #E4E4E4;

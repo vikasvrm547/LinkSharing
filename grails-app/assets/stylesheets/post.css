@@ -1,28 +1,10 @@
 
-.navbar-header{
-	background-color:#337ab7;
-}
-
-
-.nav_icon{
-	font-size: 20px;
-	margin:5px
-}
-.nav-dropdown{
-	background-color:white;
-	color:black;
-	border:0;
-}
-
 .post-panel-anchor{
 	float: right;
 	margin-right: 6px;
 	font-size: 20px;
 }
 
-a{
-	text-decoration: underline;
-}
 .input-top-right-anchor{
 	text-align: right;
 }
@@ -32,22 +14,11 @@ a{
 	margin-right: 10px
 }
 
-
 .fa-facebook-official,.fa-twitter,.fa-google-plus{
 	text-decoration: none;
 	font-size: 20px;
 	margin-left: 20px
 }
-
-.fa-facebook-official{
-	color: blue;
-}
-
-.fa-twitter{
-
-	color: green;	
-}
-
-.fa-google-plus{
-	color: red;
+.post-panel-body{
+	margin: 5px;
 }

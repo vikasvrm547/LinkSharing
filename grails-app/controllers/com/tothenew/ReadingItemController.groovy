@@ -3,11 +3,14 @@ package com.tothenew
 class ReadingItemController {
 
     def changeIsRead(Long id, Boolean isRead) {
-        int result = ReadingItem.executeUpdate("update ReadingItem set isRead=:isRead where id=:id", [id: id, isRead: isRead])
+
+        int result = ReadingItem.executeUpdate("update ReadingItem set isRead=:isRead where resource.id=:resourceId and user.id=:userId",
+                [resourceId: id, isRead: isRead,userId:session.user.id])
         if (result) {
-            render("Reading item successfully updated")
+            flash.message = "Reading item successfully updated"
         } else {
-            render("Reading item could not update successfully")
+            flash.error = "Reading item could not update successfully"
         }
+        redirect(controller: 'login' ,action: 'index')
     }
 }

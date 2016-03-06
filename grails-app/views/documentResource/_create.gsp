@@ -6,49 +6,48 @@
                 <h4 class="modal-title">Share document</h4>
             </div>
 
-            <div class="modal-body">
+        <div class="modal-body">
 
-                <form class="form-horizontal" role="form">
-                    <div class="form-group">
-                        <div class="col-sm-4 "><label class="control-label" for="name">Document*:</label></div>
+            <g:form class="form-horizontal" controller="documentResource" action="save" enctype="multipart/form-data">
+                <div class="form-group">
+                    <div class="col-sm-4 "><label class="control-label">Document*:</label></div>
 
-                        <div class="col-lg-8 col-sm-8 col-8">
-                            <div class="input-group">
-                                <span class="input-group-btn">
-                                    <span class="btn btn-primary btn-file">
-                                        Browse&hellip; <input type="file" multiple>
-                                    </span>
+                    <div class="col-lg-8 col-sm-8 col-8">
+                        <div class="input-group">
+                            <span class="input-group-btn">
+                                <span class="btn btn-primary btn-file">
+                                    Browse&hellip; <input type="file" name="file">
                                 </span>
-                                <input type="text" class="form-control" readonly>
-                            </div>
+                            </span>
+                            <input type="text" class="form-control" readonly>
                         </div>
                     </div>
+                </div>
 
-                    <div class="form-group">
-                        <div class="col-sm-4 "><label class="control-label" for="comment">Comment:</label></div>
+                <div class="form-group">
+                    <div class="col-sm-4 "><label class="control-label" for="comment">Comment:</label></div>
 
-                        <div class="col-sm-8">
-                            <textarea class="form-control" rows="5" placeholder="Comment" id="comment"></textarea>
-                        </div>
+                    <div class="col-sm-8">
+                        <textarea class="form-control" rows="5" placeholder="Comment" name="comment" id="comment"></textarea>
+                    </div>
+                </div>
+
+                <div class="form-group">
+                    <div class="col-sm-4 "><label class="control-label">Topics*:</label>
                     </div>
 
-                    <div class="form-group">
-                        <div class="col-sm-4 "><label class="control-label" for="visibility">Visibility*:</label>
-                        </div>
-
-                        <div class="col-xs-8">
-                            <g:render template="/share/topicsDropDown"/>
-                        </div>
+                    <div class="col-xs-8">
+                        <g:render template="/share/topicsDropDown"/>
                     </div>
+                </div>
 
-                </form>
+                </div>
 
-            </div>
-
-            <div class="modal-footer">
-                <button type="button" class="btn btn-primary">Share</button>
-                <button type="button" class="btn btn-default" data-dismiss="modal">Cancel</button>
-            </div>
+                <div class="modal-footer">
+                    <g:submitButton name="submit" class="btn btn-primary">Share</g:submitButton>
+                    <button type="button" class="btn btn-default" data-dismiss="modal">Cancel</button>
+                </div>
+            </g:form>
         </div>
     </div>
 </div>

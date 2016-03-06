@@ -7,7 +7,7 @@ import com.tothenew.vo.TopicVO
 class TopicController {
 
     def show(ResourceSearchCo resourceSearchCo) {
-        Topic.get(1)
+        //Topic.get(1)
         Topic topic = Topic.read(resourceSearchCo.topicId)
         if (topic) {
             if (topic.visibility == Visibility.PUBLIC) {

@@ -18,7 +18,7 @@
                     </div>
 
                     <div class="form-group">
-                        <div class="col-sm-6 "><label class="control-label" for="visibility">Visibility*:</label>
+                        <div class="col-sm-6 "><label class="control-label" for="visibility">Topics*:</label>
                         </div>
 
                         <div class="col-sm-6">

@@ -7,6 +7,7 @@
         }
 
         "/"(controller: 'login', action: 'index')
-        "500"(view:'/error')
+        "500"(view:'error/500Error')
+        "404"(view:'/404Error')
 	}
 }

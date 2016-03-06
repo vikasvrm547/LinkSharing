@@ -19,7 +19,7 @@
 </head>
 
 <body>
-<div class="container-fuid" >
+<div class="container-fluid" >
     <nav class="nav navbar-default navbar-fixed-top" style="margin-left: 2%;margin-right: 2%" >
         <div class="container-fluid" >
 

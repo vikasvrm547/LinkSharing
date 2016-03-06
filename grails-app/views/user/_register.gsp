@@ -4,58 +4,64 @@
     </div>
 
     <div class="panel-body">
-        <form class="form-horizontal" role="form">
+        <g:form controller="user" action="register" class="form-horizontal" role="form">
             <div class="form-group">
-                <div class="col-sm-4"><label id="fname" class="register_label control-label">First name*:</label>
+                <div class="col-sm-4"><label class="register_label control-label">First name*:</label>
                 </div>
 
                 <div class="col-sm-8">
-                    <input type="text" class="form-control" placeholder="First name" id="firstname">
+                    <input type="text" class="form-control" placeholder="First name" name="firstName"
+                           value="${registerCO?.firstName}" id="firstName">
                 </div>
             </div>
 
             <div class="form-group">
-                <div class="col-sm-4"><label class="control-label" for="lname">Last name*:</label></div>
+                <div class="col-sm-4"><label class="control-label">Last name*:</label></div>
 
                 <div class="col-sm-8">
-                    <input type="text" class="form-control" placeholder="Last name" id="lastname">
+                    <input type="text" class="form-control" placeholder="Last name" name="lastName"
+                           value="${registerCO?.lastName}" id="lastName">
                 </div>
             </div>
 
             <div class="form-group">
-                <div class="col-sm-4"><label class="control-label" for="email">Email*:</label></div>
+                <div class="col-sm-4"><label class="control-label">Email*:</label></div>
 
                 <div class="col-sm-8">
-                    <input type="email" class="form-control" placeholder="Email" id="email">
+                    <input type="email" class="form-control" placeholder="Email" name="email"
+                           value="${registerCO?.email}" id="email">
                 </div>
             </div>
 
             <div class="form-group">
-                <div class="col-sm-4"><label class="control-label" for="uname">User name*:</label></div>
+                <div class="col-sm-4"><label class="control-label">User name*:</label></div>
 
                 <div class="col-sm-8">
-                    <input type="text" class="form-control" placeholder="User name" id="username">
+                    <input type="text" class="form-control" placeholder="User name" name="userName"
+                           value="${registerCO?.userName}" id="userName">
                 </div>
             </div>
 
             <div class="form-group">
-                <div class="col-sm-4"><label class="control-label" for="pwd">Password*:</label></div>
+                <div class="col-sm-4"><label class="control-label">Password*:</label></div>
 
                 <div class="col-sm-8">
-                    <input type="password" class="form-control" placeholder="Password" id="password">
+                    <input type="password" class="form-control" placeholder="Password" name="password"
+                           value="${registerCO?.password}" id="password">
                 </div>
             </div>
 
             <div class="form-group">
-                <div class="col-sm-4"><label class="control-label" for="pwd">Confirm_Password*:</label></div>
+                <div class="col-sm-4"><label class="control-label">Confirm_Password*:</label></div>
 
                 <div class="col-sm-8">
-                    <input type="password" class="form-control" placeholder="confirm Password" id="password">
+                    <input type="password" class="form-control" placeholder="confirm Password" name="confirmPassword"
+                           value="${registerCO?.confirmPassword}" id="confirmPassword">
                 </div>
             </div>
 
             <div class="form-group">
-                <div class="col-sm-4"><label class="control-label" for="pwd">Photo</label></div>
+                <div class="col-sm-4"><label class="control-label">Photo</label></div>
 
                 <div class="col-lg-8 col-sm-8 col-8">
                     <div class="input-group">
@@ -71,10 +77,10 @@
 
             <div class="form-group">
                 <div class=" col-sm-6 pull-right">
-                    <button type="submit" class="form-control btn btn-primary col-sm-6">Submit</button>
+                    <g:submitButton name="Submit" class="form-control btn btn-primary col-sm-6">Submit</g:submitButton>
                 </div>
             </div>
-        </form>
+        </g:form>
 
     </div>
 </div>

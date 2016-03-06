@@ -10,9 +10,9 @@
 <body>
 
 <div class="col-xs-7 page-container-inner-left-div">
-
+    <g:renderErrors bean="${registerCO}"/>
    <g:render template="/resource/recentPost"/>
-    <g:render template="/resource/topPost"/>
+    <ls:topPosts topPosts="${topPosts}"/>
 
 </div>
 

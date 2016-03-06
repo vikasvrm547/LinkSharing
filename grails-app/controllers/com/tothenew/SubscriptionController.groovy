@@ -4,30 +4,35 @@ import com.tothenew.enums.Seriousness
 
 class SubscriptionController {
 
-    def delete(Long id) {
-        Subscription subscription = Subscription.get(id);
+    def delete(Long subscriptionId) {
+        Subscription subscription = Subscription.get(subscriptionId);
         if (subscription) {
             subscription.delete(flush: true)
-            render("Subscription successfully deleted")
+            flash.message = "Subscription successfully deleted"
+            redirect(controller: 'login', action: 'index')
         } else {
-            render("Subscription not found")
+            flash.error = "Subscription not found"
+            redirect(controller: 'login', action: 'index')
+
         }
     }
 
-    def save(Long id) {
-        Topic topic = Topic.get(id)
+    def save(Long topicId) {
+        Topic topic = Topic.get(topicId)
         if (topic) {
             Subscription subscription = new Subscription(topic: topic, user: session.user, seriousness: Seriousness.SERIOUS)
             if (subscription.validate()) {
                 subscription.save();
-                render("Subscription save successfully")
+                flash.message = "Subscription save successfully"
+                redirect(controller: 'login', action: 'index')
+
             } else {
                 flash.error = "Subscription not save successfully"
-                render(subscription.errors.allErrors)
+                redirect(controller: 'login', action: 'index')
             }
         } else {
             flash.error = "topic not found to save subscription"
-            render("topic not found to save subscription")
+            redirect(controller: 'login', action: 'index')
         }
     }
 
@@ -48,5 +53,9 @@ class SubscriptionController {
         } else {
             render("Seriousness not valid")
         }
+    }
+
+    def demo() {
+        render(params)
     }
 }

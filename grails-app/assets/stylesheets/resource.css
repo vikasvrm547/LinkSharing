@@ -1,0 +1,13 @@
+
+.trending-topic{
+
+    padding: 5px;
+    border-bottom: 1px solid blue;
+}
+.tending-topic-panel-body{
+    overflow-y: auto;
+    height: 340px;
+}
+.post-panel-body{
+    margin: 5px;
+}

@@ -1,14 +1,4 @@
 
-
-.nav_icon{
-	font-size: 20px;
-	margin:5px
-}
-.nav-dropdown{
-	background-color:white;
-	color:black;
-	border:0;
-}
 .panels-dropdown{
 	background-color:white;
 	color:black;
@@ -16,15 +6,6 @@
 
 hr{
 	border-color: #337ab7;
-}
-
-.page-container-inner-left-div{
-	float: left;
-
-}
-
-.page-container-inner-right-div{
-	float: right;
 }
 
 .inbox-panel-anchor{
@@ -42,32 +23,15 @@ hr{
 	text-align: right;
 }
 
-a{
-	text-decoration: underline;
-}
+
 .subscription-header-top-left-anchor{
 	text-align: right;
 	color: white;
 }
 
-.fa-facebook-official{
-	color: blue;
-}
 
-.fa-twitter{
-	color: green;	
-}
 
-.fa-google-plus{
-	color: red;
-}
-
-.create-topic-modal-dropdown,.share-link-modal-dropdown,.share-document-modal-dropdown,.send-invitation-modal-dropdown{
-		background-color:white;
-		color:black;
-}
-
-.trending-topic{
+.trending-topic,.inbox-post{
 
 	padding: 5px;
 	border-bottom: 1px solid blue;
@@ -75,5 +39,9 @@ a{
 .tending-topic-panel-body{
 	overflow-y: auto;
 	height: 340px;
+}
+.inbox-panel-body{
+	overflow-y: auto;
+	height: 950px;
 }
 

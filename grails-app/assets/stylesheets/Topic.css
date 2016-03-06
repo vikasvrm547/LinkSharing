@@ -1,15 +1,8 @@
-.page-container-inner-left-div{
-    float: left;
-}
 
-.page-container-inner-right-div{
-    float: right;
-}
 .show-users-panel-body{
     overflow-y: auto;
     height: 265px;
 }
-
 
 .user-info {
     margin: 5px;

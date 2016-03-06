@@ -3,7 +3,7 @@ package com.tothenew
 import com.tothenew.co.LinkResourceCO
 import com.tothenew.co.ResourceSearchCo
 import com.tothenew.enums.Visibility
-import javassist.tools.rmi.ObjectNotFoundException
+import grails.transaction.Transactional
 
 class ResourceController {
 
@@ -13,45 +13,60 @@ class ResourceController {
         }
     }
 
-    def show(Long id) {
-        Resource resource = Resource.get(id)
+    def show(Long resourceId, Long userId) {
+
+        User currentUser = session.user
+        Resource resource = Resource.findById(resourceId)
+        //render(resource)
         if (resource) {
-            //use get trending topics here
-            render(resource.getRatingInfo())
+            if (resource.topic.canViewedBy(currentUser)) {
+                //use get trending topics here
+                //  render(resource.getRatingInfo())
+                Integer score = currentUser.getScore(resourceId)
+
+                // session.userScore = score
+                render(view: 'show', model: [postVO: resource.getPost(resourceId, userId), currentUser: currentUser,
+                                             score : score, tendingTopics: Topic.getTrendingTopics()])
+            }
         } else {
             render("Resource not found")
         }
     }
 
-    def saveLinkResource(LinkResourceCO linkResourceCO) {
 
-        if (linkResourceCO?.hasErrors()) {
-            // render(view: '/user/show', model: [linkResourceCO:linkResourceCO,tendingTopics:Topic.getTrendingTopics(), subscribedTopics:User.getSubscribedTopics(session.user.id)])
-            flash.error = render("Failed to create1 : ${linkResourceCO.errors.allErrors}")
-            render("Failed to create1 : ${linkResourceCO.errors.allErrors}")
-        } else {
-            Resource resource = new LinkResource(url: linkResourceCO.linkResourceLink, description: linkResourceCO.linkResourceComment,
-                    topic: Topic.get(linkResourceCO.linkResourceTopicId), createdBy: session.user)
-            if (resource.save()) {
-                flash.message = "Link resource successfully save"
-                forward(controller: 'user', action: 'show')
-            } else {
-                flash.error = "Failed to create2 : ${resource.errors.allErrors}"
-                render("Failed to create2 : ${resource.errors.allErrors}")
+    def delete(Long id) {
+        if (session.user.canDeleteResource(id)) {
+            Resource resource = Resource.load(id);
+            if (resource) {
+                try {
+                    //resource.delete(flush: true)
+                    if (resource.deleteFile())
+                        flash.message = "Resource successfully deleted"
+                    else
+                        flash.error = "Resource could not delete successfully"
+                } catch (Exception e) {
+                    flash.error = "Resource not found"
+                }
+                finally {
+                    redirect(controller: 'login', action: 'index')
+                }
             }
-
         }
     }
 
-    def delete(Long id) {
-        Resource resource = Resource.load(id);
-        if (resource) {
-            try {
-                resource.delete(flush: true)
-                render("Resource successfully deleted")
-            } catch (Exception e) {
-                render("Resource not found")
+    void addToReadingItems(Resource resource) {
+        Topic topic = Resource.createCriteria().get {
+            projections {
+                property('topic')
             }
+            eq('topic', resource.topic)
+        }
+        List<User> subscribedUserList = topic.getSubscribedUsers()
+        subscribedUserList.each { user ->
+            if (user.id == session.user?.id)
+                resource.addToReadingItems(new ReadingItem(user: user, resource: resource, isRead: true))
+            else
+                resource.addToReadingItems(new ReadingItem(user: user, resource: resource, isRead: false))
         }
     }
 }

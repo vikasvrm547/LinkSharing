@@ -12,12 +12,12 @@
 
         <div class="col-xs-4">
             <small class="col-xs-12">Subscriptions</small>
-            <small class="col-xs-12">${subscribedUserCount}</small>
+            <small class="col-xs-12"><ls:subscriptionCount user="${user?:null}"/></small>
         </div>
 
         <div class="col-xs-4">
             <small class="col-xs-12">Topics</small>
-            <small class="col-xs-12">10</small>
+            <small class="col-xs-12"><ls:topicCount user="${user?:null}"/></small>
         </div>
     </div>
 </div>

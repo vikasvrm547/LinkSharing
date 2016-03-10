@@ -4,20 +4,21 @@
     </div>
 
     <div class="panel-body recent-post-panel-body">
-        <g:each in="${recentShares}">
-
-            <div class="row recent-post">
+        <g:each in="${recentShares}" var="post">
+            <g:render template="/resource/show" model="[post:post]"/>
+          %{--  <div class="row recent-post">
                 <div class="list-group  col-xs-3">
-                    <asset:image src="user.png" class="img-thumbnail" height="100" width="100"/>
+                    <ls:userImage userId="${it?.createdBy?.id}" class="img-thumbnail" height="100" width="100"/>
+
                 </div>
 
                 <div class="col-xs-9">
                     <div class="row">
-                        <h5 class="col-xs-6">${it.createdBy}<small>@vikas 5min</small></h5>
-                        <a class="col-xs-6 profile-content-top-right-anchor">${it.topic}</a></div>
+                        <h5 class="col-xs-6">${it?.createdBy}<small>@vikas 5min</small></h5>
+                        <a class="col-xs-6 profile-content-top-right-anchor">${it?.topic}</a></div>
 
                     <div class="row" style="">
-                        <p class="col-xs-12">${it.description}</p>
+                        <p class="col-xs-12">${it?.description}</p>
                     </div>
 
                     <div class="row">
@@ -28,7 +29,7 @@
                         <a class="col-xs-9 view-post-anchor">View post</a>
                     </div>
                 </div>
-            </div>
+            </div>--}%
 
         </g:each>
     </div>

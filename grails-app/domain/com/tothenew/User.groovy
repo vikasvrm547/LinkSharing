@@ -1,7 +1,9 @@
 package com.tothenew
 
+import com.tothenew.co.SearchCO
+import com.tothenew.enums.Seriousness
 import com.tothenew.vo.PostVO
-import org.xhtmlrenderer.css.parser.property.PrimitivePropertyBuilders.Top
+import org.grails.datastore.mapping.query.Query
 
 import javax.websocket.Session
 
@@ -47,13 +49,17 @@ class User {
         return [firstName, lastName].findAll { it }.join(" ")
     }
 
+    boolean equals(User user) {
+        return this.id == user.id
+    }
+
     @Override
     String toString() {
         return userName
     }
 
     def getSubscribedTopics() {
-        List<Topic> topics = Subscription.createCriteria().list {
+        List<Topic> topics = Subscription.createCriteria().list() {
             projections {
                 property('topic')
             }
@@ -62,14 +68,25 @@ class User {
         return topics
     }
 
-    def getInboxItems() {
+    Subscription getSubscription(Long topicId) {
+        return Subscription.createCriteria().get {
+            eq('topic.id', topicId)
+            eq('user.id', this.id)
+        }
+    }
+
+    Integer getTotalReadingItem(){
+        return ReadingItem.countByUser(this)?:0
+    }
+
+    List<PostVO> getInboxItems(SearchCO searchCO) {
         // User currentUser = session.user
         List<PostVO> readingItemsList = [];
-        ReadingItem.findAllByUserAndIsRead(this, false).each {
-            readingItemsList.add(new PostVO(resourceID: it.resource.id, description: it.resource.description,
-                    topicName: it.resource.topic.name,userId: it.user.id, userUserName: it.resource.createdBy.userName,
+        ReadingItem.findAllByUser(this,[max:searchCO.max , offset:searchCO.offset]).each {
+            readingItemsList.add(new PostVO(topicId: it.resource.topic.id, resourceID: it.resource.id, description: it.resource.description,
+                    topicName: it.resource.topic.name, userId: it.user.id, userUserName: it.resource.createdBy.userName,
                     userFirstName: it.resource.createdBy.firstName, userLastName: it.resource.createdBy.lastName,
-                    userPhoto: it.resource.createdBy.photo, isRead: it.isRead,
+                    isRead: it.isRead,
                     url: it.resource.class.toString().equals("class com.tothenew.LinkResource") ? it.resource.toString() : "",
                     filePath: it.resource.class.toString().equals("class com.tothenew.DocumentResource") ? it.resource.toString() : ""))
 
@@ -77,10 +94,18 @@ class User {
         return readingItemsList
     }
 
-
     Boolean canDeleteResource(Long id) {
         Resource resource = Resource.get(id)
-        if (this.admin || (resource.createdBy.id == this.id)) {
+        if (this.admin || this.equals(resource.createdBy.id)) {
+            return true
+        } else {
+            return false
+        }
+    }
+
+    Boolean hasTopicRight(Long id) {
+        Topic topic = Topic.get(id)
+        if (this.admin || this.equals(topic.createdBy)) {
             return true
         } else {
             return false
@@ -89,24 +114,25 @@ class User {
 
     Boolean isSubscribed(Long topicId) {
         Topic topic = Topic.get(topicId)
-        if (topic && Subscription.countByUserAndTopic(this, topic)){
+        if (topic && Subscription.countByUserAndTopic(this, topic)) {
             return true
-        }else {
+        } else {
             return false
         }
     }
-    Integer getScore(Long resourceId){
+
+    Integer getScore(Long resourceId) {
         Resource resource = Resource.get(resourceId)
-        if(resource) {
+        if (resource) {
             Integer score = ResourceRating.createCriteria().get {
                 projections {
                     property('score')
                 }
                 eq('user', this)
-                eq('resource', Resource.get(8))
+                eq('resource', resource)
             }
             return score
-        }else{
+        } else {
             return 0;
         }
     }

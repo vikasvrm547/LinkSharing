@@ -17,9 +17,8 @@
         </div>
 
         <div class="panel-body topic-info-panel-body">
-            <g:render template="topicInfo"/>
+            <g:render template="show"/>
         </div>
-
     </div>
 
 
@@ -27,76 +26,54 @@
         <div class="panel-heading">
             <h3 class="panel-title">Users:${topic}</h3>
         </div>
+
         <div class="panel-body show-users-panel-body">
             <g:each in="${subscribedUsers}">
                 <div class="user-info">
                     <div class="row">
-                        <g:render template="/user/show" model="[user:it]"/>
+                        <g:render template="/user/show" model="[user: it]"/>
                     </div>
                 </div>
             </g:each>
         </div>
     </div>
-
-
 </div>
 
-<div class="col-xs-7 page-container-inner-right-div">
 
+<!-- inbox start-->
+<div class="col-xs-7 page-container-inner-right-div">
     <div class="panel panel-primary">
         <div class="panel-heading">
-            <h3 class="panel-title">Indox</h3>
-        </div>
-
-        <div class="panel-body inbox-panel-body">
-
             <div class="row">
-                <div class="list-group  col-xs-3">
-
-                    <asset:image src="user.png" class="img-thumbnail" height="100" width="100"/>
-
+                <div class="col-sm-3">
+                    Posts:"${topic}"
                 </div>
 
-                <div class="col-xs-9">
-                    <div class="row">
-                        <h5 class="col-xs-6">Vikas verma <small>@vikas 5min</small></h5>
-                        <a class="col-xs-6 input-top-right-anchor">Grails</a>
-                    </div>
-
-                    <div class="row">
-                        <p class="col-xs-12">hello vikassss</p>
-                    </div>
-
-                    <div class="row">
-                        <div class="col-xs-3">
-                            <a href="#">
-                                <div class="fa fa-facebook-official"></div>
-                            </a>
-                            <a href="#">
-                                <div class="fa fa-twitter inline"></div>
-                            </a>
-                            <a href="#">
-                                <div class="fa fa-google-plus inline"></div>
-                            </a>
-                        </div>
-
-                        <div class="col-xs-9">
-                            <a href="#" class="inline inbox-panel-anchor">View Post</a>
-                            <a href="#" class="inline inbox-panel-anchor">Mark as read</a>
-                            <a href="#" class="inline inbox-panel-anchor">view full site</a>
-                            <a href="#" class="inline inbox-panel-anchor">Download</a>
+                <div class="col-sm-6 col-sm-offset-3">
+                    <div id="custom-search-input" style="margin: 1px;">
+                        <div class="input-group col-md-12">
+                            <input type="text" id="topic-post-search-textbox" class="form-control input-lg" placeholder="Search.."/>
+                            <span class="input-group-btn">
+                                <button class="btn btn-info btn-lg" id="topic-post-search-button" type="button">
+                                    <i class="glyphicon glyphicon-search"></i>
+                                </button>
+                                <button class="btn btn-info btn-lg" id="topic-post-search-clear-button" type="button">
+                                    <i class="glyphicon glyphicon-remove"></i>
+                                </button>
+                            </span>
                         </div>
                     </div>
+                    <input type="hidden" value="${topic.id}" id="hidden-topic-id"/>
                 </div>
             </div>
         </div>
+
+        <div class="panel-body post-panel-body" id = "post-panel-body">
+            <g:each in="${topicPosts}" var="post">
+                <g:render template="/resource/show" model="[post: post]"/>
+            </g:each>
+        </div>
     </div>
-
-
-    <g:render template="/linkResource/create"/>
-    <g:render template="/documentResource/create"/>
-    <asset:javascript src="topic.js"/>
-    <asset:javascript src="BrowseFile.js"/>
 </div>
 </body>
 </html>

@@ -1,12 +1,17 @@
 package com.tothenew
 
+import grails.converters.JSON
+import org.apache.xpath.operations.Bool
+
 
 class LoginController {
+
     def index() {
         if (session.user) {
             forward(controller: "user", action: "show")
         } else {
-            render(view: 'index', model: [topPosts: Resource.getTopPosts(), recentShares: Resource.getRecentShares()])
+            render(view: 'index', model:
+                    [topPosts: Resource.getTopPosts(), recentShares: Resource.getRecentShares()])
         }
     }
 
@@ -29,19 +34,19 @@ class LoginController {
         }
     }
 
+    def validateEmail() {
+        Boolean valid = User.countByEmail(params.email) ? false : true
+        render valid
+    }
+    def validateUserName() {
+        Boolean valid = User.countByUserName(params.userName) ? false : true
+        render valid
+    }
+
     def logout() {
         session.invalidate()
         forward(action: 'index')
     }
 
-    def register() {
-        User newUser = new User('userName': 'normal', email: 'newUser@mail.com', password: "newUserPassword", confirmPassword: "newUserPassword", firstName: 'normal', lastName: 'user', isAdmin: false, isActive: true)
 
-        if (newUser.save(flush: true)) {
-            render "New user added successfully"
-        } else {
-            flash.message = "${newUser} could not be added, ${newUser.errors.allErrors}"
-            render "${newUser.errors.allErrors.collect { message(error: it) }}"
-        }
-    }
 }

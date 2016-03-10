@@ -36,8 +36,8 @@
                     <div class="col-sm-4 "><label class="control-label">Topics*:</label>
                     </div>
 
-                    <div class="col-xs-8">
-                        <g:render template="/share/topicsDropDown"/>
+                    <div class="col-xs-8 modal-topic-drop-down">
+                        %{--<g:render template="/share/topicsDropDown"/>--}%
                     </div>
                 </div>
 

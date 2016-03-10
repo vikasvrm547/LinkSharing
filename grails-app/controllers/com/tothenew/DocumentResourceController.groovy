@@ -12,7 +12,7 @@ class DocumentResourceController extends ResourceController {
         if (file.empty) {
             flash.error = 'file cannot be empty'
         } else {
-            Topic topic = Topic.get(params.int('linkResourceTopicId'))
+            Topic topic = Topic.get(params.int('topicId'))
             if (topic) {
                 saveDocumentResource(params, topic)
             } else {

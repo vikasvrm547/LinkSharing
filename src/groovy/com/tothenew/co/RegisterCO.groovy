@@ -1,6 +1,7 @@
 package com.tothenew.co
 
 import grails.validation.Validateable
+import org.springframework.web.multipart.MultipartFile
 
 @Validateable
 class RegisterCO {
@@ -9,7 +10,7 @@ class RegisterCO {
     String password
     String firstName
     String lastName
-    Byte[] photo
+    MultipartFile userPhoto
     String confirmPassword;
 
     static constraints = {
@@ -18,10 +19,9 @@ class RegisterCO {
         firstName(blank: false)
         lastName(blank: false)
         userName(blank: false)
-        photo(nullable: true)
+        userPhoto(nullable: true)
         confirmPassword(bindable: true, nullable: true, blank: true, validator: { val, user ->
-            return (val != null) && val.equals(user.password)
-
+            return (val != null) && val.equals(user.password)?:"com.tothenew.co.RegisterCO.confirmPassword.validator"
         })
     }
 }

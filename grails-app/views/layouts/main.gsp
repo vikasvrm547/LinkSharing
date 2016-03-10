@@ -19,9 +19,9 @@
 </head>
 
 <body>
-<div class="container-fluid" >
-    <nav class="nav navbar-default navbar-fixed-top" style="margin-left: 2%;margin-right: 2%" >
-        <div class="container-fluid" >
+<div class="container-fluid">
+    <nav class="nav navbar-default navbar-fixed-top" style="margin-left: 2%;margin-right: 2%">
+        <div class="container-fluid">
 
             <div class="navbar-header">
                 <a class="navbar-brand" href="#" style="color:white">Link sharing</a>
@@ -55,7 +55,8 @@
                     <div class="dropdown form-group">
 
                         <select class="btn btn-primary dropdown-toggle nav-dropdown" type="button"
-                                name="headerUserDropDown" id="headerUserDropDown" onchange="location = this.options[this.selectedIndex].value;">
+                                name="headerUserDropDown" id="headerUserDropDown"
+                                onchange="location = this.options[this.selectedIndex].value;">
                             <option value="">----${session.user}----</option>
                             <option value="#">Profile</option>
                             <g:if test="${controllerName.equals('user')}">
@@ -71,15 +72,29 @@
         </div>
     </nav>
 </div>
+
 <div class="container-fluid body-top-container">
     <g:if test="${flash.error}">
-        ${flash.error}
+        <div class="alert alert-success">
+            ${flash.error}
+        </div>
     </g:if>
-    <g:elseif  test="${flash.message}">
-        ${flash.message}
+    <g:elseif test="${flash.message}">
+        <div class=" alert alert-danger">
+            ${flash.message}
+        </div>
     </g:elseif>
+    <div class="messageAlert">
+    </div>
+
     <g:layoutBody/>
 
+    <g:render template="/topic/create"/>
+    <g:render template="/topic/email"/>
+    <g:render template="/linkResource/create"/>
+    <g:render template="/documentResource/create"/>
+    <asset:javascript src="validation.js"/>
+    <asset:javascript src="application.js"/>
 </div>
 </body>
 </html>

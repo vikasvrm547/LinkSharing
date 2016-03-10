@@ -42,3 +42,24 @@ a{
 .page-container-inner-right-div{
 	float: right;
 }
+
+.badge{
+	background-color: #0000C0;
+}
+
+.make-align-center{
+	text-align: center;
+}
+
+.modal-result{
+	display: none;
+}
+.post-footer-links{
+	text-align: right;
+}
+.input-top-right-anchor{
+	text-align: right;
+}
+.error {
+	color:#FF0000;
+}

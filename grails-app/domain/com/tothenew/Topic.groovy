@@ -4,6 +4,7 @@ import com.tothenew.enums.Seriousness
 import com.tothenew.enums.Visibility
 import com.tothenew.vo.PostVO
 import com.tothenew.vo.TopicVO
+import org.apache.xpath.operations.Bool
 
 class Topic {
     String name
@@ -102,6 +103,37 @@ class Topic {
         return posts
     }*/
 
+    public List<PostVO> getTopicPosts() {
+        List<PostVO> topicPosts = []
+        Resource.createCriteria().list() {
+            projections {
+                property('id')
+                property('description')
+                property('url')
+                property('filePath')
+                topic {
+                    property('id')
+                    property('name')
+                }
+                createdBy {
+                    property('id')
+                    property('userName')
+                    property('firstName')
+                    property('lastName')
+                }
+                property('lastUpdated')
+            }
+            eq('topic.id', this.id)
+            order('lastUpdated', 'desc')
+        }.each {
+            topicPosts.add(new PostVO(resourceID: it[0], description: it[1], url: it[2], filePath: it[3], topicId:
+                    it[4], topicName: it[5], userId: it[6], userUserName: it[7], userFirstName: it[8], userLastName: it[9],
+                      lastUpdated: it[10],isRead: ReadingItem.getIsRead(it[0],it[6])))
+        }
+
+        return topicPosts
+    }
+
     Boolean isPublic() {
 
         if (this.visibility.equals(Visibility.PUBLIC)) {
@@ -118,4 +150,5 @@ class Topic {
             return false
         }
     }
+
 }

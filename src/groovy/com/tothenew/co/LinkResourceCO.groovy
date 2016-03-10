@@ -6,7 +6,7 @@ import grails.validation.Validateable
 class LinkResourceCO {
     String linkResourceLink;
     String linkResourceComment;
-    Integer linkResourceTopicId;
+    Integer topicId;
     static constraints = {
         linkResourceLink(url: true, blank: true)
     }

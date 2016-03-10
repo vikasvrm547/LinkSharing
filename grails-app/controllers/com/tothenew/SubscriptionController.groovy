@@ -1,61 +1,78 @@
 package com.tothenew
 
 import com.tothenew.enums.Seriousness
+import grails.converters.JSON
 
 class SubscriptionController {
 
-    def delete(Long subscriptionId) {
-        Subscription subscription = Subscription.get(subscriptionId);
-        if (subscription) {
-            subscription.delete(flush: true)
-            flash.message = "Subscription successfully deleted"
-            redirect(controller: 'login', action: 'index')
-        } else {
-            flash.error = "Subscription not found"
-            redirect(controller: 'login', action: 'index')
-
+    def delete(Long topicId) {
+        Thread.sleep(2000)
+        Map resultInfo = [:]
+        User currentUser = session.user
+        Topic topic = Topic.get(topicId)
+        if (topic.createdBy.equals(session.user)){
+            resultInfo.error = "Creator of topic cannot delete subscription"
         }
+        else if (topic && currentUser) {
+            Subscription subscription = Subscription.findByTopicAndUser(topic, currentUser)
+
+            if (subscription) {
+                subscription.delete(flush: true)
+                resultInfo.message = "Subscription successfully deleted"
+            } else {
+                resultInfo.error = "Subscription not found"
+            }
+        } else {
+            resultInfo.error = "topic not found to save subscription"
+        }
+        render(resultInfo as JSON)
     }
 
     def save(Long topicId) {
+        Thread.sleep(2000)
         Topic topic = Topic.get(topicId)
+        Map resultInfo = [:]
         if (topic) {
             Subscription subscription = new Subscription(topic: topic, user: session.user, seriousness: Seriousness.SERIOUS)
-            if (subscription.validate()) {
-                subscription.save();
-                flash.message = "Subscription save successfully"
-                redirect(controller: 'login', action: 'index')
-
+            if (subscription?.save(flush: true)) {
+                resultInfo.message = "Subscription save successfully"
             } else {
-                flash.error = "Subscription not save successfully"
-                redirect(controller: 'login', action: 'index')
+                resultInfo.error = "Subscription not save successfully"
             }
         } else {
-            flash.error = "topic not found to save subscription"
-            redirect(controller: 'login', action: 'index')
+
+            resultInfo.error = "topic not found to save subscription"
         }
+        render(resultInfo as JSON)
     }
 
-    def update(Long id, String seriousnessString) {
+    def update(Long topicId, String seriousnessString) {
+        Map resultInfo = [:]
         Seriousness seriousnessEnum = Seriousness.convertToEnum(seriousnessString);
-        Subscription subscription = Subscription.get(id)
+        Subscription subscription = Subscription.createCriteria().get {
+            eq('topic.id',topicId)
+            eq('user.id',session.user.id)
+        }
         if (seriousnessEnum) {
             if (subscription) {
                 subscription.seriousness = seriousnessEnum
                 if (subscription.save(flush: true)) {
-                    render "Subscription updated successfully"
+                    resultInfo.message = "Subscription updated successfully"
                 } else { // never come in that case
-                    render("Subscription couldn't be able to save")
+                    resultInfo.error = "Subscription couldn't be able to save"
                 }
             } else {
-                render("Subscription not found")
+                resultInfo.error = "Subscription not found"
             }
         } else {
-            render("Seriousness not valid")
+            resultInfo.error = "Seriousness not valid"
         }
+        render( resultInfo as JSON)
     }
 
     def demo() {
-        render(params)
+        Map m = ["1": "one", "2": "two"]
+
+        render(m as JSON)
     }
 }

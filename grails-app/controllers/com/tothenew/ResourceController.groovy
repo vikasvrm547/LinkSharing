@@ -1,19 +1,29 @@
 package com.tothenew
 
-import com.tothenew.co.LinkResourceCO
-import com.tothenew.co.ResourceSearchCo
+import com.tothenew.co.ResourceSearchCO
 import com.tothenew.enums.Visibility
-import grails.transaction.Transactional
+import com.tothenew.vo.PostVO
 
 class ResourceController {
 
-    def search(ResourceSearchCo resourceSearchCo) {
-        if (resourceSearchCo.q) {
-            resourceSearchCo.visibility = Visibility.PUBLIC
+    def search(ResourceSearchCO resourceSearchCO) {
+      //  resourceSearchCO.topicId = 2
+      //  resourceSearchCO.q = "to"
+        String result =""
+        List<PostVO> postVOList = []
+        if (resourceSearchCO.q) {
+            postVOList = Resource.search(resourceSearchCO).list().collect({
+                Resource.getPost(it.id)
+            })
         }
+
+        postVOList.each{
+            result += g.render(template: g.createLink(controller: 'resource',action: 'show'),model: [post:it])
+        }
+        render(result)
     }
 
-    def show(Long resourceId, Long userId) {
+    def show(Long resourceId) {
 
         User currentUser = session.user
         Resource resource = Resource.findById(resourceId)
@@ -22,10 +32,10 @@ class ResourceController {
             if (resource.topic.canViewedBy(currentUser)) {
                 //use get trending topics here
                 //  render(resource.getRatingInfo())
-                Integer score = currentUser.getScore(resourceId)
+                Integer score = currentUser?.getScore(resourceId)
 
                 // session.userScore = score
-                render(view: 'show', model: [postVO: resource.getPost(resourceId, userId), currentUser: currentUser,
+                render(view: 'show', model: [postVO: Resource.getPost(resourceId), currentUser: currentUser,
                                              score : score, tendingTopics: Topic.getTrendingTopics()])
             }
         } else {

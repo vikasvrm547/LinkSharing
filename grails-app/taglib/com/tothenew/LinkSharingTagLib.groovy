@@ -1,13 +1,18 @@
 package com.tothenew
 
+import com.tothenew.enums.Seriousness
+import com.tothenew.enums.Visibility
+
 class LinkSharingTagLib {
     static namespace = "ls"
 
     def readLink = { attr, body ->
         User user = attr.user
+        Resource resource = Resource.get(attr.resourceId)
+        ReadingItem readingItem = ReadingItem.findByResourceAndUser(resource,user)
         String link = "${g.createLink([controller: 'ReadingItem', action: 'changeIsRead', params: [id: attr.resourceId, isRead: !attr.isRead]])}"
         Boolean isRead = Boolean.valueOf(attr.isRead)
-        if (user)
+        if (user && readingItem)
             if (isRead) {
                 out << "<a href=${link}>Mark as unread</a>"
             } else {
@@ -30,7 +35,7 @@ class LinkSharingTagLib {
             out << g.link([url: attr.url, target: '_blank'], "view full site")
         } else if (resourceType?.equals("DocumentResource")) {
             // condition because in case of resourceType =null elseif still not execute
-            out << g.link([controller: 'DocumentResource', action: 'download' , params: [resourceId: resourceId]], "Download")
+            out << g.link([controller: 'DocumentResource', action: 'download', params: [resourceId: resourceId]], "Download")
         }
     }
 
@@ -41,26 +46,63 @@ class LinkSharingTagLib {
             out << g.link([class: attr.class, controller: 'resource', action: 'delete', params: [id: "${attr.resourceId}"]], body())
         }
     }
+
+    def canUpdateTopic = { attr, body ->
+        Boolean canDelete = attr.currentUser?.hasTopicRight(attr.topicId)
+        if (canDelete) {
+            out << body()
+        }
+    }
+
+
     def showSubscribe = { attr, body ->
         Long topicId = attr.topicId
         if (session.user) {
             if (session.user.isSubscribed(topicId)) {
 
-                Long subscriptionId = Subscription.createCriteria().get {
-
-                    projections {
-                        property('id')
-                    }
-                    eq('topic.id', topicId)
-                    eq('user', session.user)
-                }
-                out << g.link([class : attr.class, controller: 'subscription', action: 'delete',
-                               params: [subscriptionId: subscriptionId]], "Unsubscribe")
+                out << g.link([class : "subscription ${attr.class}", controller: 'subscription', action: 'delete',
+                               params: [topicId: topicId]], "Unsubscribe")
             } else {
-                out << g.link([class : attr.class, controller: 'subscription', action: 'save',
+                out << g.link([class : "subscription", controller: 'subscription', action: 'save',
                                params: [topicId: topicId]], "Subscribe")
             }
         }
+    }
+
+    def showSeriousness = { attr, body ->
+        Long topicId = attr.topicId
+        if (session.user && topicId) {
+            Subscription subscription = session.user.getSubscription(topicId)
+            if (subscription) {
+                out << g.select(from: Seriousness.values(), value: subscription?.seriousness,
+                        name: "seriousness", class: attr.class, topicId: topicId)
+            }
+        }
+    }
+
+    def showInvitation = { attr, body ->
+        Long topicId = attr.topicId
+        if (session.user && topicId) {
+            Subscription subscription = session.user.getSubscription(topicId)
+            if (subscription) {
+                out << g.link(class: attr.class)
+            }
+        }
+    }
+
+    def showSubscribedTopics = { attr, body ->
+        User user = session.user
+        if(user) {
+            out << g.select(from: user.getSubscribedTopics(),
+                    name: "topicId",optionKey:"id", class: attr.class)
+        }
+
+    }
+
+    def showVisibility = { attr, body ->
+        out << g.select(from: Visibility.values(), value: attr.visibility,
+                name: "visibility", class: attr.class, topicName: attr.topicName)
+
     }
 
     def resourceCount = { attr, body ->
@@ -91,7 +133,8 @@ class LinkSharingTagLib {
         out << count ?: 0
     }
     def userImage = { attr, body ->
-        out << "<img src='/assets/user/user.png' class = '${attr.class}' height='${attr.height}' width='${attr.width}'/>"
+        String url = g.createLink(controller: 'user',action: 'image',params: [userId:"${attr.userId}"])
+        out << g.img([uri: url, class: "${attr.class}", height: attr.height, width: attr.width])
     }
 
 }

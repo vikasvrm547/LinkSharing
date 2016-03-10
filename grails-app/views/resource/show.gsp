@@ -21,9 +21,10 @@
 
                 <div class="col-xs-9">
                     <div class="row">
-                        <h5 class="col-xs-6">${postVO.getNameOfUser()}<small>@${postVO.userUserName} 5min</small></h5>
+                        <h5 class="col-xs-6">${postVO?.getNameOfUser()}<small>@${postVO?.userUserName} 5min</small></h5>
                         <a class="col-xs-6 input-top-right-anchor">
                             <g:link name="topicName" controller="topic" action="show"
+                                    class="col-xs-6 input-top-right-anchor"
                                     params='[topicId: "${postVO?.topicId}"]'>
                                 ${postVO?.topicName}
                             </g:link>
@@ -32,17 +33,20 @@
 
                     <div class="row">
                         <p class="col-xs-12">hello vikassss</p>
-                        <g:form controller="resourceRating" action="save" params="[userId    : currentUser.id,
-                                                                                   resourceId: postVO.resourceID]">
-                            <g:select name="score" from="${1..5}" value="${score ?: 1}"/>
-                            <g:submitButton name="submit"/>
-                        </g:form>
+                        <g:if test="${session.user}">
+                            <g:form controller="resourceRating" action="save" params="[userId    : currentUser?.id,
+                                                                                       resourceId: postVO?.resourceID]">
+                                <g:select name="score" from="${1..5}"
+                                          value="${currentUser?.getScore(postVO?.resourceID) ?: 1}"/>
+                                <g:submitButton name="submit"/>
+                            </g:form>
+                        </g:if>
 
                     </div>
                 </div>
 
                 <div class="row post-content">
-                    <p class="col-xs-12">${postVO.description}</p>
+                    <p class="col-xs-12">${postVO?.description}</p>
                 </div>
 
                 <div class="row">
@@ -58,8 +62,8 @@
                         </a>
                     </div>
 
-                    <div class="col-xs-7">
-                        <g:if test="${session.user}" >
+                    <div class="col-xs-7 post-footer-links">
+                        <g:if test="${session.user}">
                             <a>Edit</a>
                         </g:if>
                         <ls:resourceTypeLink resourceId="${postVO?.resourceID}" url="${postVO?.url}"

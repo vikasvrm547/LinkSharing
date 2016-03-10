@@ -13,7 +13,7 @@ hr{
 	margin-right: 6px;
 }
 
-.subscription-panel-boby{
+.subscription-panel-body{
 	margin-left: 15px;
 }
 .tending-topic-panel-body,.inbox-panel-body{
@@ -36,12 +36,12 @@ hr{
 	padding: 5px;
 	border-bottom: 1px solid blue;
 }
-.tending-topic-panel-body{
+.tending-topic-panel-body,.subscription-panel-body{
 	overflow-y: auto;
-	height: 340px;
+	max-height: 340px;
 }
 .inbox-panel-body{
 	overflow-y: auto;
-	height: 950px;
+	max-height: 950px;
 }
 

@@ -1,15 +1,11 @@
 package com.tothenew
 
-import com.tothenew.co.ResourceSearchCo
+import com.tothenew.co.ResourceSearchCO
 import com.tothenew.enums.Visibility
 import grails.test.mixin.Mock
 import grails.test.mixin.TestFor
-import groovy.mock.interceptor.MockFor
-import org.junit.runner.Request
 import spock.lang.Specification
 import spock.util.mop.ConfineMetaClassChanges
-
-import javax.websocket.Session
 
 /**
  * See the API for {@link grails.test.mixin.web.ControllerUnitTestMixin} for usage instructions
@@ -23,7 +19,7 @@ class TopicControllerSpec extends Specification {
     void "check show action with error conditions"() {
         given:
         Topic topic = new Topic(name: "topic", createdBy: new User(), visibility: visibility).save(flush: true)
-        ResourceSearchCo resourceSearchCo = new ResourceSearchCo([topicId: topicId])
+        ResourceSearchCO resourceSearchCo = new ResourceSearchCO([topicId: topicId])
 
         Subscription.metaClass.static.countByUserAndTopic = { User user, Topic topic1 ->
             flag

@@ -9,7 +9,7 @@ class DocumentResource extends Resource {
     String contentType
     static transients = ['contentType','fileName']
     static constraints = {
-        filePath(blank: false)
+        filePath(blank: false,bindable:true)
         contentType(bindable: true,blank: false, validator: { val,obj ->
             return val.equals(Constants.DOCUMENT_CONTENT_TYPE)
         })

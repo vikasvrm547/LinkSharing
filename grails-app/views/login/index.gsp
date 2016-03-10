@@ -3,6 +3,7 @@
 <head>
     <title>Login</title>
     <meta name="layout" content="main"/>
+    <asset:javascript src="jquery.validate.js"/>
     <asset:stylesheet src="Login.css"/>
     <asset:stylesheet src="BrowseFile.css"/>
 </head>
@@ -10,7 +11,6 @@
 <body>
 
 <div class="col-xs-7 page-container-inner-left-div">
-    <g:renderErrors bean="${registerCO}"/>
    <g:render template="/resource/recentPost"/>
     <ls:topPosts topPosts="${topPosts}"/>
 

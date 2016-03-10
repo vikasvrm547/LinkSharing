@@ -7,30 +7,28 @@
             </div>
 
             <div class="modal-body">
-
-                <g:form class="form-horizontal" url="[controller: 'topic', action: 'save']">
+                <g:form class="form-horizontal modal-body-form">
                     <div class="form-group">
 
-                        <div class="col-sm-6 "><label class="control-label" for="name">Name*:</label></div>
+                        <div class="col-sm-6 "><label class="control-label">Name *:</label></div>
 
                         <div class="col-sm-6">
-                            <input type="text" class="form-control" placeholder="Topic Name" id="topicName"
+                            <input type="text" class="form-control topicName" placeholder="Topic Name" id="topicName"
                                    name="topicName">
                         </div>
                     </div>
 
                     <div class="form-group">
-                        <div class="col-sm-6 "><label class="control-label" for="visibility">Visibility*:</label>
+                        <div class="col-sm-6 "><label class="control-label">Visibility *:</label>
                         </div>
 
                         <div class="col-sm-6">
                             <g:render template="/share/visibilityDropDown"/>
-
                         </div>
                     </div>
 
                     <div class="modal-footer">
-                        <g:submitButton name="Create" class="btn btn-primary"></g:submitButton>
+                        <button onclick="ajaxifiedTopicCreate()" class="btn btn-primary" data-dismiss="modal">Create</button>
                         <button type="button" class="btn btn-default" data-dismiss="modal">Cancel</button>
                     </div>
                 </g:form>

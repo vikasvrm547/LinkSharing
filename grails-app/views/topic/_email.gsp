@@ -21,8 +21,8 @@
                         <div class="col-sm-6 "><label class="control-label" for="visibility">Topics*:</label>
                         </div>
 
-                        <div class="col-sm-6">
-                            <g:render template="/share/topicsDropDown"/>
+                        <div class="col-sm-6 modal-topic-drop-down">
+
                         </div>
                     </div>
 

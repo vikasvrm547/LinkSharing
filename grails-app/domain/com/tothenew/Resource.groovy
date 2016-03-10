@@ -1,6 +1,6 @@
 package com.tothenew
 
-import com.tothenew.co.ResourceSearchCo
+import com.tothenew.co.ResourceSearchCO
 import com.tothenew.enums.Visibility
 import com.tothenew.vo.PostVO
 import com.tothenew.vo.RatingInfoVO
@@ -26,14 +26,15 @@ abstract class Resource {
     static hasMany = [readingItems: ReadingItem, ratings: ResourceRating]
 
     static namedQueries = {
-        search { ResourceSearchCo resourceSearchCo ->
-            if (resourceSearchCo.topicId) {
-                eq('topic.id', resourceSearchCo.topicId)
-            }
-            if (resourceSearchCo.visibility) {
-                eq('topic.visibility', resourceSearchCo.visibility)
-            }
+
+        search {
+            ResourceSearchCO resourceSearchCO ->
+                if (resourceSearchCO.topicId && resourceSearchCO.q) {
+                    eq('topic.id', resourceSearchCO.topicId)
+                    ilike('description', "%${resourceSearchCO.q}%")
+                }
         }
+
     }
 
     RatingInfoVO getRatingInfo() {
@@ -50,16 +51,106 @@ abstract class Resource {
         return new RatingInfoVO(totalScore: result[0], totalVotes: result[1], averageScore: result[2])
     }
 
-    public static List<Resource> getRecentShares() {
 
-        return Resource.createCriteria().list(max: 5, sort: 'lastUpdated', order: 'desc') {
-            createCriteria('topic', 't')
-            eq('t.visibility', Visibility.PUBLIC)
+    public List<PostVO> getTopicPosts() {
+        List<PostVO> topicPosts = []
+        Resource.createCriteria().list() {
+            projections {
+                property('id')
+                property('description')
+                property('url')
+                property('filePath')
+                topic {
+                    property('id')
+                    property('name')
+                }
+                createdBy {
+                    property('id')
+                    property('userName')
+                    property('firstName')
+                    property('lastName')
+                }
+                property('lastUpdated')
+            }
+            eq('topic.id', this.id)
+            order('lastUpdated', 'desc')
+        }.each {
+            topicPosts.add(new PostVO(resourceID: it[0], description: it[1], url: it[2], filePath: it[3], topicId:
+                    it[4], topicName: it[5], userId: it[6], userUserName: it[7], userFirstName: it[8], userLastName: it[9],
+                    lastUpdated: it[10], isRead: ReadingItem.getIsRead(it[0], it[6])))
         }
+
+        return topicPosts
+    }
+
+
+    public static List<Resource> getRecentShares() {
+        List<PostVO> recentPosts = []
+        Resource.createCriteria().list(max: 5, sort: 'lastUpdated', order: 'desc') {
+            projections {
+                property('id')
+                property('description')
+                property('url')
+                property('filePath')
+                topic {
+                    property('id')
+                    property('name')
+                    eq('visibility', Visibility.PUBLIC)
+                }
+                createdBy {
+                    property('id')
+                    property('userName')
+                    property('firstName')
+                    property('lastName')
+                }
+                property('lastUpdated')
+            }
+            order('lastUpdated', 'desc')
+        }.each {
+            recentPosts.add(new PostVO(resourceID: it[0], description: it[1], url: it[2], filePath: it[3], topicId:
+                    it[4], topicName: it[5], userId: it[6], userUserName: it[7], userFirstName: it[8], userLastName: it[9],
+                    lastUpdated: it[10], isRead: ReadingItem.getIsRead(it[0], it[6])))
+        }
+        return recentPosts
+    }
+
+    public static List<PostVO> getTopPosts() {
+        List<PostVO> topPosts = []
+        ResourceRating.createCriteria().list(max: 5) {
+            projections {
+                property('resource.id')
+                'resource' {
+                    property('description')
+                    property('url')
+                    property('filePath')
+                    'topic' {
+                        property('id')
+                        property('name')
+                        eq('visibility', Visibility.PUBLIC)
+                    }
+                    'createdBy' {
+                        property('id')
+                        property('userName')
+                        property('firstName')
+                        property('lastName')
+                    }
+                    property('lastUpdated')
+                }
+            }
+
+            groupProperty('resource.id')
+            avg('score', 'rating')
+            order('rating', 'desc')
+        }?.each {
+            topPosts.add(new PostVO(resourceID: it[0], description: it[1], url: it[2], filePath: it[3], topicId:
+                    it[4], topicName: it[5], userId: it[6], userUserName: it[7], userFirstName: it[8], userLastName: it[9],
+                    lastUpdated: it[10]))
+        }
+        return topPosts
 
     }
 
-    public static List<Resource> getTopPosts() {
+    /*public static List<Resource> getTopPosts() {
         def result = ResourceRating.createCriteria().list(max: 5) {
             createAlias('resource', 'r')
             createAlias('r.topic', 't')
@@ -70,7 +161,7 @@ abstract class Resource {
         }
         List list = result.collect { it[0] }
         return Resource.getAll(list)
-    }
+    }*/
 
     static String checkResourceType(Long id) {
         Resource resource = Resource.get(id)
@@ -83,46 +174,41 @@ abstract class Resource {
         }
     }
 
-     PostVO getPost(Long resourceId,Long userId) {
+   static PostVO getPost(Long resourceId) {
 
-        def post = ResourceRating.createCriteria().get{
+        List post = Resource.createCriteria().get {
             projections {
-                property('resource.id')
-                property('score')
-            }
-            resource {
+                property('id')
                 property('description')
                 property('url')
                 property('filePath')
-                eq('id', resourceId)
-                readingItems{
-                    property('isRead')
-                }
-                topic {
-                    property('name')
+                'topic' {
                     property('id')
+                    property('name')
                 }
-                createdBy {
+                'createdBy' {
+                    property('id')
                     property('userName')
                     property('firstName')
                     property('lastName')
-                    property('photo')
                 }
+                property('lastUpdated')
             }
-            if(userId > 0)
-                eq('user.id',userId)
+            eq('id', resourceId)
         }
-        return new PostVO(resourceID: post[0], resourceRating: post[1], description: post[2], url: post[3], filePath: post[4],
-                isRead: post[5], topicName: post[6],topicId: post[7], userUserName: post[8], userFirstName: post[9],
-                userLastName: post[10], userPhoto: post[11])
+
+        return new PostVO(resourceID: post[0], score: 0, description: post[1], url: post[2], filePath: post[3],
+                topicId: post[4], topicName: post[5], userId: post[6], userUserName: post[7], userFirstName: post[8],
+                userLastName: post[9], lastUpdated: post[10])
     }
 
-    Boolean deleteFile(){
+
+    Boolean deleteFile() {
         log.info("This will be implemented in linkresource")
         return false
     }
 
-    Boolean canViewBy(){
+    Boolean canViewBy() {
 
     }
 

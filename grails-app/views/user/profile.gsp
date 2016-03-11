@@ -1,55 +1,86 @@
+<%--
+  Created by IntelliJ IDEA.
+  User: vikas
+  Date: 11/3/16
+  Time: 11:54 AM
+--%>
+
 <%@ page contentType="text/html;charset=UTF-8" %>
 <html>
 <head>
-    <title>Topic</title>
+    <title>Profile</title>
     <meta name="layout" content="main"/>
-    <asset:stylesheet src="Topic.css"/>
-    <asset:stylesheet src="BrowseFile.css"/>
+    <script>
+        $(document).ready(function(){
+
+            $.ajax({
+                url: "/user/topics",
+                data:{id: $("#userId").val()},
+                success: function(result){
+                     $("#createdTopics").html(result);
+                }
+
+            });
+
+            $.ajax({
+                url: "/user/subscriptions",
+                data:{id: $("#userId").val()},
+                success: function(result){
+                    $("#subscribedTopics").html(result);
+                }
+            });
+        });
+
+
+    </script>
 </head>
 
 <body>
 
 <div class="col-xs-5 page-container-inner-left-div">
+    <!-- panel profile start -->
+    <div class="panel panel-primary">
+        <div class="panel-body">
+            <g:render template="/user/show" model="[user: user ?: null]"/>
+        </div>
+    </div>
+    <!-- end panel profile start -->
 
     <div class="panel panel-primary">
         <div class="panel-heading">
-            <h3 class="panel-title">Topic:${topic}</h3>
+            Subscriptions
         </div>
 
-        <div class="panel-body topic-info-panel-body">
-            <g:render template="show"/>
+        <div class="panel-body subscription-panel-body" id="subscribedTopics">
+
         </div>
     </div>
 
 
     <div class="panel panel-primary">
         <div class="panel-heading">
-            <h3 class="panel-title">Users:${topic}</h3>
+            Topics
         </div>
 
-        <div class="panel-body show-users-panel-body">
-            <g:each in="${subscribedUsers}">
-                <div class="user-info">
-                    <div class="row">
-                        <g:render template="/user/show" model="[user: it]"/>
-                    </div>
-                </div>
-            </g:each>
+        <div class="panel-body topic-panel-body" id="createdTopics">
+
         </div>
     </div>
 </div>
 
 
+
 <!-- Post start-->
+
 <div class="col-xs-7 page-container-inner-right-div">
     <div class="panel panel-primary">
         <div class="panel-heading">
             <div class="row">
                 <div class="col-sm-3">
-                    Posts:"${topic}"
+                    Posts
                 </div>
 
-                <div class="col-sm-6 col-sm-offset-3">
+                %{--<div class="col-sm-6 col-sm-offset-3">
                     <div id="custom-search-input" style="margin: 1px;">
                         <div class="input-group col-md-12">
                             <input type="text" id="topic-post-search-textbox" class="form-control input-lg" placeholder="Search.."/>
@@ -64,16 +95,19 @@
                         </div>
                     </div>
                     <input type="hidden" value="${topic.id}" id="hidden-topic-id"/>
-                </div>
+                </div>--}%
             </div>
         </div>
 
         <div class="panel-body post-panel-body" id = "post-panel-body">
-            <g:each in="${topicPosts}" var="post">
+            <g:each in="${resources}" var="post">
                 <g:render template="/resource/show" model="[post: post]"/>
             </g:each>
         </div>
     </div>
 </div>
+
+<input type="hidden" value="${currentUser.id}" id="userId"/>
 </body>
+
 </html>

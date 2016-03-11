@@ -1,3 +1,35 @@
+
+function ajaxRequest(url, data, success, beforeSend, complete) {
+    $.ajax({
+        url: url,
+        data: data,
+        success: success,
+        beforeSend: beforeSend,
+        complete: complete
+    });
+}
+
+
+function success(result) {
+    var messageAlert = $(".messageAlert");
+    for (item in result) {
+        if (item === "message") {
+            messageAlert.text(result[item]);
+            messageAlert.addClass("alert alert-success");
+        }
+        else {
+            messageAlert.text(result[item]);
+            messageAlert.addClass("alert alert-danger");
+        }
+    }
+}
+function ajaxifiedTopicCreate() {
+    var url = "/topic/save";
+    var data = {topicName: $('.topicName').val(), visibilityString: $('.visibilityString').val()};
+    ajaxRequest(url, data, success);
+}
+
+
 $(".fa-comment").on('click', function () {
 
     $("#create-topic-modal").modal('show');
@@ -36,50 +68,28 @@ $(".fa-envelope-o").on('click', function () {
 });
 
 
-function ajaxRequest(url, data, success, beforeSend, complete) {
-    $.ajax({
-        url: url,
-        data: data,
-        success: success,
-        beforeSend: beforeSend,
-        complete: complete
-    });
-}
-
-
-function success(result) {
-    var messageAlert = $(".messageAlert");
-    for (item in result) {
-        if (item === "message") {
-            messageAlert.text(result[item]);
-            messageAlert.addClass("alert alert-success");
-        }
-        else {
-            messageAlert.text(result[item]);
-            messageAlert.addClass("alert alert-danger");
-        }
-    }
-}
 
 $("#topic-post-search-button").on('click', function () {
     var url = "/resource/search";
-     var data = {topicId:$("#hidden-topic-id").val(),q:$("#topic-post-search-textbox").val()};
-    var success = function (result) {
-        $("#post-panel-body").html(result)
-    };
-    ajaxRequest(url, data, success);
+    var searchText = $("#topic-post-search-textbox").val();
+    if (searchText != "") {
+        var data = {topicId: $("#hidden-topic-id").val(), q: searchText};
+        var success = function (result) {
+            $("#post-panel-body").html(result)
+        };
+        ajaxRequest(url, data, success);
+    } else
+        alert("Please enter something")
 
 });
 $("#topic-post-search-clear-button").on('click', function () {
     $("#topic-post-search-textbox").val(" ");
-
+});
+$("#global-search-clear-button").on('click', function () {
+    $("#global-search-textbox").val(" ");
 });
 
-function ajaxifiedTopicCreate() {
-    var url = "/topic/save";
-    var data = {topicName: $('.topicName').val(), visibilityString: $('.visibilityString').val()};
-    ajaxRequest(url, data, success);
-}
+
 
 $(".seriousness").change(function () {
     var url = "/subscription/update";
@@ -127,3 +137,5 @@ $(".subscription").click(function (e) {
     ajaxRequest(subscriptionHref, '', success);
 
 });
+
+

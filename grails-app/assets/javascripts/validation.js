@@ -1,19 +1,19 @@
 $(function () {
     $('#registration-form').validate({
         rules: {
-            'firstName':{
+            'firstName': {
                 required: true
             },
-            'lastName':{
+            'lastName': {
                 required: true
             },
-            'password':{
+            'password': {
                 required: true,
-                minlength :5
+                minlength: 5
             },
-            'confirmPassword':{
+            'confirmPassword': {
                 required: true,
-                confirm:true
+                confirm: true
             },
             'userName': {
                 required: true,
@@ -41,17 +41,17 @@ $(function () {
             }
         },
         messages: {
-            'firstName':{
+            'firstName': {
                 required: "First name can't be blank",
             },
-            'lastName':{
+            'lastName': {
                 required: "Last name can't be blank",
             },
-            'password':{
+            'password': {
                 required: "Password can't be blank",
                 minlength: "Password should be atleast 5 character long"
             },
-            'confirmPassword':{
+            'confirmPassword': {
                 required: "Confirm password can't be blank"
             },
             'email': {
@@ -73,4 +73,17 @@ $(function () {
         }
         return result;
     }, "Confirm password not matched with password");
+
 });
+
+function globalSearchBoxValidation() {
+
+    var searchText = $("#global-search-textbox").val();
+    var regex = /\s/g;
+
+    if (searchText == "" || searchText.test(regex)) {// test not working..
+        return false
+    } else {
+        return true
+    }
+}

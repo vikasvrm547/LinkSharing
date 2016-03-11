@@ -1,10 +1,11 @@
 package com.tothenew.co
 
+import com.tothenew.User
 import grails.validation.Validateable
 import org.springframework.web.multipart.MultipartFile
 
 @Validateable
-class RegisterCO {
+class UserCO {
     String email
     String userName
     String password
@@ -24,4 +25,5 @@ class RegisterCO {
             return (val != null) && val.equals(user.password)?:"com.tothenew.co.RegisterCO.confirmPassword.validator"
         })
     }
+
 }

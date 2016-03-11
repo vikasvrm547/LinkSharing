@@ -43,7 +43,7 @@
     <g:if test="${session.user}">
         <div class="footer">
             <ls:showSeriousness topicId="${topic?.id}" class="btn btn-primary seriousness"/>
-            <ls:canUpdateTopic topicId="${topic?.id}" currentUser="${currentUser}">
+            <ls:canUpdateTopic topicId="${topic?.id}" currentUser="${session.user}">
                 <ls:showVisibility topicName="${topic?.name}" visibility="${topic?.visibility}"
                                    class="btn btn-primary visibility"/>
                <i class="glyphicon glyphicon-edit nav_icon "></i>

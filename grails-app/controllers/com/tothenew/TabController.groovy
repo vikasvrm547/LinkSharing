@@ -2,7 +2,7 @@ package com.tothenew
 
 import grails.converters.JSON
 
-class DemoController {
+class TabController {
     def index() {
         render(grailsApplication.config.grails.externalVariable);
         log.fatal("I am fatal")
@@ -16,6 +16,11 @@ class DemoController {
     def jsonDemo(){
         Map m = ["1":"one","2":"two"]
         render(m as JSON)
+    }
+
+    def abc() {
+        println "here jnfukbewifbew jkfnkjwefnk"
+        render view: "not-found"
     }
 
 }

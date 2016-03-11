@@ -29,10 +29,26 @@ abstract class Resource {
 
         search {
             ResourceSearchCO resourceSearchCO ->
-                if (resourceSearchCO.topicId && resourceSearchCO.q) {
-                    eq('topic.id', resourceSearchCO.topicId)
+                if (resourceSearchCO.q) {
                     ilike('description', "%${resourceSearchCO.q}%")
                 }
+                if (resourceSearchCO.topicId) {
+                    eq('topic.id', resourceSearchCO.topicId)
+                }
+
+                if (resourceSearchCO.visibility && resourceSearchCO.visibility == Visibility.PUBLIC) {
+                    'topic' {
+                        eq('visibility', Visibility.PUBLIC)
+
+                    }
+                }
+
+                if (resourceSearchCO.id) {
+                    eq('createdBy.id', resourceSearchCO.id)
+                }
+        }
+        userResources {
+
         }
 
     }
@@ -174,7 +190,7 @@ abstract class Resource {
         }
     }
 
-   static PostVO getPost(Long resourceId) {
+    static PostVO getPost(Long resourceId) {
 
         List post = Resource.createCriteria().get {
             projections {

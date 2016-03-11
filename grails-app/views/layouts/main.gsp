@@ -24,19 +24,26 @@
         <div class="container-fluid">
 
             <div class="navbar-header">
-                <a class="navbar-brand" href="#" style="color:white">Link sharing</a>
+                <a class="navbar-brand" href="${g.createLink(controller: 'login', action: 'index')}"
+                   style="color:white">
+                    Link sharing
+                </a>
             </div>
 
-            <form class="form-inline  pull-right" role="form">
+            <g:form class="form-inline  pull-right" name="global-search-form" controller="resource" action="search"
+                    onsubmit="return globalSearchBoxValidation()" method="get" role="form">
                 <div class="form-group ">
+                    <input type="hidden" name="visibility" value="PUBLIC"/>
+
                     <div id="custom-search-input" style="text-align:right">
                         <div class="input-group col-md-12">
-                            <input type="text" class="form-control input-lg" placeholder="Search.."/>
+                            <input type="text" class="form-control input-lg " name="q"
+                                   id="global-search-textbox" placeholder="Search.."/>
                             <span class="input-group-btn">
-                                <button class="btn btn-info btn-lg" type="button">
+                                <button class="btn btn-info btn-lg" id="global-search-button" type="submit">
                                     <i class="glyphicon glyphicon-search"></i>
                                 </button>
-                                <button class="btn btn-info btn-lg" type="button">
+                                <button class="btn btn-info btn-lg" id="global-search-clear-button" type="button">
                                     <i class="glyphicon glyphicon-remove"></i>
                                 </button>
                             </span>
@@ -55,32 +62,33 @@
                     <div class="dropdown form-group">
 
                         <select class="btn btn-primary dropdown-toggle nav-dropdown" type="button"
-                                name="headerUserDropDown" id="headerUserDropDown"
+                                id="headerUserDropDown"
                                 onchange="location = this.options[this.selectedIndex].value;">
                             <option value="">----${session.user}----</option>
-                            <option value="#">Profile</option>
+                            <option value="<g:createLink controller='user' action='profile'
+                                                         params="[id: session.user?.id]"/>">
+                                Profile
+                            </option>
                             <g:if test="${controllerName.equals('user')}">
-                                <option value="#">Users</option>
-                                <option value="#">Topic</option>
-                                <option value="#">Post</option>
+                                <option value="<g:createLink controller='user' action='list'/>">Users</option>
                             </g:if>
                             <option value="<g:createLink controller='login' action='logout'/> ">Logout</option>
                         </select>
                     </div>
                 </g:if>
-            </form>
+            </g:form>
         </div>
     </nav>
 </div>
 
 <div class="container-fluid body-top-container">
     <g:if test="${flash.error}">
-        <div class="alert alert-success">
+        <div class="alert alert-danger">
             ${flash.error}
         </div>
     </g:if>
     <g:elseif test="${flash.message}">
-        <div class=" alert alert-danger">
+        <div class=" alert alert-success">
             ${flash.message}
         </div>
     </g:elseif>

@@ -30,16 +30,6 @@ hr{
 }
 
 
-
-.trending-topic,.inbox-post{
-
-	padding: 5px;
-	border-bottom: 1px solid blue;
-}
-.tending-topic-panel-body,.subscription-panel-body{
-	overflow-y: auto;
-	max-height: 340px;
-}
 .inbox-panel-body{
 	overflow-y: auto;
 	max-height: 950px;

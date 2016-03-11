@@ -9,13 +9,13 @@ class LinkSharingTagLib {
     def readLink = { attr, body ->
         User user = attr.user
         Resource resource = Resource.get(attr.resourceId)
-        ReadingItem readingItem = ReadingItem.findByResourceAndUser(resource,user)
+        ReadingItem readingItem = ReadingItem.findByResourceAndUser(resource, user)
         String link = "${g.createLink([controller: 'ReadingItem', action: 'changeIsRead', params: [id: attr.resourceId, isRead: !attr.isRead]])}"
         Boolean isRead = Boolean.valueOf(attr.isRead)
         if (user && readingItem)
-            if (isRead) {
+            if (isRead == true) {
                 out << "<a href=${link}>Mark as unread</a>"
-            } else {
+            } else if (isRead == false) {
                 out << "<a href=${link}>Mark as read</a>"
             }
     }
@@ -74,7 +74,7 @@ class LinkSharingTagLib {
         if (session.user && topicId) {
             Subscription subscription = session.user.getSubscription(topicId)
             if (subscription) {
-                out << g.select(from: Seriousness.values(), value: subscription?.seriousness,
+                out << g.select(from: Seriousness.values(),optionKey: "key", value: subscription?.seriousness,
                         name: "seriousness", class: attr.class, topicId: topicId)
             }
         }
@@ -92,15 +92,15 @@ class LinkSharingTagLib {
 
     def showSubscribedTopics = { attr, body ->
         User user = session.user
-        if(user) {
+        if (user) {
             out << g.select(from: user.getSubscribedTopics(),
-                    name: "topicId",optionKey:"id", class: attr.class)
+                    name: "topicId", optionKey: "id", class: attr.class)
         }
 
     }
 
     def showVisibility = { attr, body ->
-        out << g.select(from: Visibility.values(), value: attr.visibility,
+        out << g.select(from: Visibility.values(),optionKey: "key", value: attr.visibility,
                 name: "visibility", class: attr.class, topicName: attr.topicName)
 
     }
@@ -133,7 +133,7 @@ class LinkSharingTagLib {
         out << count ?: 0
     }
     def userImage = { attr, body ->
-        String url = g.createLink(controller: 'user',action: 'image',params: [userId:"${attr.userId}"])
+        String url = g.createLink(controller: 'user', action: 'image', params: [userId: "${attr.userId}"])
         out << g.img([uri: url, class: "${attr.class}", height: attr.height, width: attr.width])
     }
 

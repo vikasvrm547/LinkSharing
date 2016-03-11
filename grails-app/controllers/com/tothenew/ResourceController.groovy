@@ -7,20 +7,24 @@ import com.tothenew.vo.PostVO
 class ResourceController {
 
     def search(ResourceSearchCO resourceSearchCO) {
-      //  resourceSearchCO.topicId = 2
-      //  resourceSearchCO.q = "to"
-        String result =""
+        String result = ""
         List<PostVO> postVOList = []
         if (resourceSearchCO.q) {
             postVOList = Resource.search(resourceSearchCO).list().collect({
                 Resource.getPost(it.id)
             })
         }
-
-        postVOList.each{
-            result += g.render(template: g.createLink(controller: 'resource',action: 'show'),model: [post:it])
+        if (resourceSearchCO.visibility == Visibility.PUBLIC) {
+            render(view: 'search', model: [postVOList: postVOList, trendingTopics: Topic.getTrendingTopics()])
+        } else {
+            postVOList.each {
+                result += g.render(template: g.createLink(controller: 'resource', action: 'show'), model: [post: it])
+            }
+            if (postVOList.size()==0){
+                result = "<h1>No resource found<h1>"
+            }
+            render(result)
         }
-        render(result)
     }
 
     def show(Long resourceId) {

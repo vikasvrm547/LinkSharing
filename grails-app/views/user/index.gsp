@@ -26,7 +26,7 @@
 
         <div class="panel-body subscription-panel-body">
             <g:each in="${subscribedTopics}">
-        <g:render template="/topic/show" model='[topic:it]'/>
+                <g:render template="/topic/show" model='[topic: it]'/>
             </g:each>
         </div>
     </div>
@@ -45,10 +45,11 @@
 
         <div class="panel-body inbox-panel-body">
             <g:each in="${readingItems}" var="post">
-                <g:render template="/resource/show" model="[post:post]"/>
+                <g:render template="/resource/show" model="[post: post]"/>
 
             </g:each>
-            <g:paginate class="pagination" total="${totalReadingItems}" controller="user" action="show" max="${searchCO.max}" offset="${searchCO.offset}"/>
+            <g:paginate class="pagination" total="${totalReadingItems}" controller="user" action="show"
+                        max="${searchCO.max}" offset="${searchCO.offset}"/>
         </div>
     </div>
 </div>

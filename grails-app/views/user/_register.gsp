@@ -4,7 +4,7 @@
     </div>
 
     <div class="panel-body">
-        <g:form name="registration-form" id="registration-form" controller="user" action="register" class="form-horizontal"
+        <g:form name="registration-form"  controller="user" action="register" class="form-horizontal"
                 enctype="multipart/form-data">
             <div class="form-group">
                 <div class="col-sm-4"><label class="register_label control-label">First name *:</label>

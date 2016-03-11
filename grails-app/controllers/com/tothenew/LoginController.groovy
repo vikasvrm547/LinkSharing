@@ -23,15 +23,13 @@ class LoginController {
         if (user) {
             if (user.active) {
                 session.user = user
-                redirect(action: 'index')
             } else {
                 flash.error = "user is not active"
-                render(flash.error)
             }
         } else {
             flash.error = "User not found"
-            redirect(action: 'index')
         }
+        redirect(action: 'index')
     }
 
     def validateEmail() {

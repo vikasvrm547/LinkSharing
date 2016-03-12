@@ -8,33 +8,33 @@
 
             <div class="modal-body">
 
-                <form class="form-horizontal" role="form">
+                <g:form controller="topic" action="invite" class="form-horizontal" role="form">
                     <div class="form-group">
-                        <div class="col-sm-6 "><label class="control-label" for="name">Email*:</label></div>
+                        <div class="col-sm-6 "><label class="control-label">Email*:</label></div>
 
                         <div class="col-sm-6">
-                            <input type="email" class="form-control" placeholder="Email" id="email">
+                            <input type="email" name="email" class="form-control" placeholder="Email" id="email" required>
                         </div>
                     </div>
 
                     <div class="form-group">
-                        <div class="col-sm-6 "><label class="control-label" for="visibility">Topics*:</label>
+                        <div class="col-sm-6 "><label class="control-label">Topics*:</label>
                         </div>
 
                         <div class="col-sm-6 modal-topic-drop-down">
 
                         </div>
                     </div>
+                    <div class="modal-footer">
+                        <button type="submit" class="btn btn-primary">Share</button>
+                        <button type="button" class="btn btn-default" data-dismiss="modal">Cancel</button>
 
-                </form>
-
-            </div>
-
-            <div class="modal-footer">
-                <button type="button" class="btn btn-primary">Share</button>
-                <button type="button" class="btn btn-default" data-dismiss="modal">Cancel</button>
+                    </div>
+                </g:form>
 
             </div>
+
+
         </div>
     </div>
 </div>

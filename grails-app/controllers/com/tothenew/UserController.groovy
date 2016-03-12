@@ -5,7 +5,9 @@ import com.tothenew.co.TopicSearchCO
 import com.tothenew.co.UserCO
 import com.tothenew.co.SearchCO
 import com.tothenew.co.UserSearchCO
+import com.tothenew.dto.EmailDTO
 import com.tothenew.enums.Visibility
+import com.tothenew.util.Utility
 import com.tothenew.vo.TopicVO
 import com.tothenew.vo.UserVO
 
@@ -14,6 +16,7 @@ class UserController {
     def subscriptionService
     def topicService
     def resourceService
+    def emailService
 
     def show(SearchCO searchCO) {
         searchCO.max = searchCO.max ?: 10
@@ -129,7 +132,7 @@ class UserController {
     def list(UserSearchCO userSearchCO) {
         List<UserVO> userVOList = []
         if (session.user?.admin) {
-            User.search(userSearchCO).list([sort:userSearchCO.sort,order:userSearchCO.order]).each { user ->
+            User.search(userSearchCO).list([sort: userSearchCO.sort, order: userSearchCO.order]).each { user ->
                 userVOList.add(new UserVO(id: user.id, userName: user.userName, email: user.email, firstName: user.firstName,
                         lastName: user.lastName, active: user.active))
             }
@@ -137,5 +140,24 @@ class UserController {
         } else {
             redirect(controller: 'login', action: 'index')
         }
+    }
+
+    def forgotPassword(String email) {
+        User user = User.findByEmail(email)
+        if (user && user.active) {
+            String newPassword = Utility.getRandomPassword()
+            user.password = newPassword
+            EmailDTO emailDTO = new EmailDTO(to: [email], subject: "Your Link sharing New Password",
+                    view: '/email/_password', model: [newPassword: newPassword])
+            emailService.sendMail(emailDTO)
+            if (User.updatePassword(newPassword, email)) {
+                flash.message = "${user.password}If your Email id is valid and you are active user then you will get your new password via mail"
+            } else {
+                flash.error = "Please try again"
+            }
+        } else {
+            flash.error = "You are not authorized user"
+        }
+        redirect(controller: "login", action: "index")
     }
 }

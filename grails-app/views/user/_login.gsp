@@ -26,7 +26,8 @@
 
             <div class="form-group">
                 <div class="col-sm-offset-2 col-sm-10">
-                    <a href="#" class="col-sm-6">Forgot Password</a>
+
+                    <span id="forgot-password" class="col-sm-6">Forgot Password</span>
                     <g:submitButton name="Submit" class="btn btn-primary col-sm-6"></g:submitButton>
                 </div>
             </div>

@@ -22,6 +22,6 @@
     <g:render template="/user/register"/>
 
 </div>
-
+<g:render template="/user/forgotPassword"/>
 </body>
 </html>

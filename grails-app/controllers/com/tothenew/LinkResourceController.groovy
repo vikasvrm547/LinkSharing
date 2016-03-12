@@ -10,14 +10,14 @@ class LinkResourceController extends ResourceController{
             flash.error = render("Failed to create1 : ${linkResourceCO.errors.allErrors}")
             render("Failed to create1 : ${linkResourceCO.errors.allErrors}")
         } else {
-            Resource resource = new LinkResource(url: linkResourceCO.linkResourceLink, description: linkResourceCO.linkResourceComment,
+            LinkResource linkResource = new LinkResource(url: linkResourceCO.linkResourceLink, description: linkResourceCO.linkResourceComment,
                     topic: Topic.get(linkResourceCO.topicId), createdBy: session.user)
-            if (resource.save()) {
+            if (linkResource.save()) {
                 flash.message = "Link resource successfully save"
+                addToReadingItems(linkResource)
                 forward(controller: 'user', action: 'show')
             } else {
-                flash.error = "Failed to create2 : ${resource.errors.allErrors}"
-                render("Failed to create2 : ${resource.errors.allErrors}")
+                flash.error = "Failed to create link resource"
             }
         }
     }

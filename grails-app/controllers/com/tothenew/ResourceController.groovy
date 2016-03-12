@@ -78,9 +78,9 @@ class ResourceController {
         List<User> subscribedUserList = topic.getSubscribedUsers()
         subscribedUserList.each { user ->
             if (user.id == session.user?.id)
-                resource.addToReadingItems(new ReadingItem(user: user, resource: resource, isRead: true))
+                resource.addToReadingItems(new ReadingItem(user: user, resource: resource, isRead: true).save())
             else
-                resource.addToReadingItems(new ReadingItem(user: user, resource: resource, isRead: false))
+                resource.addToReadingItems(new ReadingItem(user: user, resource: resource, isRead: false).save())
         }
     }
 }

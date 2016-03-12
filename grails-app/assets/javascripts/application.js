@@ -36,6 +36,12 @@ $(".fa-comment").on('click', function () {
 
 });
 
+$("#forgot-password").on('click', function () {
+
+    $("#forgot-password-modal").modal('show');
+
+});
+
 $(".glyphicon-link").on('click', function () {
     var url = "/user/subscribedTopics";
     var success = function (result) {
@@ -67,21 +73,6 @@ $(".fa-envelope-o").on('click', function () {
 
 });
 
-
-
-$("#topic-post-search-button").on('click', function () {
-    var url = "/resource/search";
-    var searchText = $("#topic-post-search-textbox").val();
-    if (searchText != "") {
-        var data = {topicId: $("#hidden-topic-id").val(), q: searchText};
-        var success = function (result) {
-            $("#post-panel-body").html(result)
-        };
-        ajaxRequest(url, data, success);
-    } else
-        alert("Please enter something")
-
-});
 $("#topic-post-search-clear-button").on('click', function () {
     $("#topic-post-search-textbox").val(" ");
 });
@@ -103,6 +94,19 @@ $(".visibility").change(function () {
     ajaxRequest(url, data, success);
 });
 
+
+$("#topic-post-search-button").on('click', function () {
+    var url = "/resource/search";
+    var searchText = $("#topic-post-search-textbox").val();
+    if (searchText != "") {
+        var data = {topicId: $("#hidden-topic-id").val(), q: searchText};
+        var success = function (result) {
+            $("#post-panel-body").html(result)
+        };
+        ajaxRequest(url, data, success);
+    }
+
+});
 
 $(".subscription").click(function (e) {
     e.preventDefault();

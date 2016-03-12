@@ -13,8 +13,8 @@
                         <div class="col-sm-4 "><label class="control-label">Link*:</label></div>
 
                         <div class="col-xs-8">
-                            <input type="text" class="form-control" placeholder="Link" id="linkResourceLink"
-                                   name="linkResourceLink">
+                            <input type="url" class="form-control" placeholder="Link" id="linkResourceLink"
+                                   name="linkResourceLink" required>
                         </div>
                     </div>
 
@@ -23,7 +23,7 @@
 
                         <div class="col-sm-8">
                             <textarea class="form-control" rows="5" placeholder="Comment" id="linkResourceComment"
-                                      name="linkResourceComment"></textarea>
+                                      name="linkResourceComment" required></textarea>
                         </div>
                     </div>
 

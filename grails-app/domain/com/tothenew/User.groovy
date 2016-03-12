@@ -48,8 +48,8 @@ class User {
                       resources: Resource, resourceRatings: ResourceRating]
 
     static namedQueries = {
-        search { UserSearchCO userSearchCO->
-            eq('admin',false)
+        search { UserSearchCO userSearchCO ->
+            eq('admin', false)
             if (userSearchCO.active != null) {
                 eq("active", userSearchCO.active)
             }
@@ -170,5 +170,22 @@ class User {
             return 0;
         }
     }
+
+    static Integer updatePassword(String newPassword, String email) {
+        return executeUpdate("update User set password=:newPassword where email=:email",
+                [newPassword: newPassword, email: email])
+    }
+
+
+     List<Resource> unreadResources(){
+        return  ReadingItem.createCriteria().list{
+            projections{
+                property('resource')
+            }
+            eq('user',this)
+            eq('isRead',false)
+        }
+    }
+
 
 }

@@ -228,4 +228,12 @@ abstract class Resource {
 
     }
 
+    static List usersWithUnreadResources() {
+        return ReadingItem.createCriteria().listDistinct {
+            projections {
+                property('user')
+            }
+            eq('isRead', false)
+        }
+    }
 }

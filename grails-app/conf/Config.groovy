@@ -66,11 +66,21 @@ grails {
         host = "smtp.gmail.com"
         port = 465
         username = "vikas.verma@tothenew.com"
-
+        password ="9268236666"
         props = ["mail.smtp.auth":"true",
                  "mail.smtp.socketFactory.port":"465",
                  "mail.smtp.socketFactory.class":"javax.net.ssl.SSLSocketFactory",
                  "mail.smtp.socketFactory.fallback":"false"]
+    }
+}
+
+codenarc {
+    ruleSetFiles = "file:grails-app/conf/CodeNarcRules.groovy"
+    reports = {
+        HtmlReport('html') {                  // Report type is 'html'
+            outputFile = 'target/CodeNarcReport.html'
+            title = 'My Test Code Narc Report'
+        }
     }
 }
 

@@ -66,7 +66,12 @@ grails.project.dependency.resolution = {
         compile ":asset-pipeline:2.2.3"
         //plugin for console
         compile ":console:1.5.0"
+        //plugin for email
         compile "org.grails.plugins:mail:1.0.7"
+        //plugin for qurtz
+        compile ':quartz:1.0.1'
+        //plugin codenarc
+        compile "org.grails.plugins:codenarc:0.25.1"
         //Plugin for test
         test "org.grails.plugins:code-coverage:2.0.3-3"
         // plugins needed at runtime but not for compilation

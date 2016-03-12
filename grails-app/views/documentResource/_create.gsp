@@ -19,7 +19,7 @@
                                     Browse&hellip; <input type="file" name="file">
                                 </span>
                             </span>
-                            <input type="text" class="form-control" readonly>
+                            <input type="text" class="form-control" readonly required>
                         </div>
                     </div>
                 </div>
@@ -28,7 +28,7 @@
                     <div class="col-sm-4 "><label class="control-label" for="comment">Comment:</label></div>
 
                     <div class="col-sm-8">
-                        <textarea class="form-control" rows="5" placeholder="Comment" name="comment" id="comment"></textarea>
+                        <textarea class="form-control" rows="5" placeholder="Comment" name="comment" id="comment" required></textarea>
                     </div>
                 </div>
 

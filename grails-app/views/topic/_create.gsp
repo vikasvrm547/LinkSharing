@@ -14,7 +14,7 @@
 
                         <div class="col-sm-6">
                             <input type="text" class="form-control topicName" placeholder="Topic Name" id="topicName"
-                                   name="topicName">
+                                   name="topicName" required>
                         </div>
                     </div>
 

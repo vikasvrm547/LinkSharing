@@ -30,10 +30,10 @@ class DocumentResourceController extends ResourceController {
             File fileDest = new File(path)
             params.file.transferTo(fileDest)
             flash.message = "Document successfully created"
+            addToReadingItems(documentResource)
         } else {
             flash.error = "validation failed"
         }
-        addToReadingItems(documentResource)
     }
 
     def download(Long resourceId) {

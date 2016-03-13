@@ -10,12 +10,4 @@ import spock.lang.Specification
 @TestMixin(GrailsUnitTestMixin)
 class DemoJobSpec extends Specification {
 
-    def setup() {
-    }
-
-    def cleanup() {
-    }
-
-    void "test something"() {
-    }
 }

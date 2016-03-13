@@ -26,7 +26,6 @@ abstract class Resource {
     static hasMany = [readingItems: ReadingItem, ratings: ResourceRating]
 
     static namedQueries = {
-
         search {
             ResourceSearchCO resourceSearchCO ->
                 if (resourceSearchCO.q) {
@@ -48,9 +47,7 @@ abstract class Resource {
                 }
         }
         userResources {
-
         }
-
     }
 
     RatingInfoVO getRatingInfo() {
@@ -66,7 +63,6 @@ abstract class Resource {
         }
         return new RatingInfoVO(totalScore: result[0], totalVotes: result[1], averageScore: result[2])
     }
-
 
     public List<PostVO> getTopicPosts() {
         List<PostVO> topicPosts = []
@@ -98,7 +94,6 @@ abstract class Resource {
 
         return topicPosts
     }
-
 
     public static List<Resource> getRecentShares() {
         List<PostVO> recentPosts = []
@@ -153,31 +148,17 @@ abstract class Resource {
                     property('lastUpdated')
                 }
             }
-
             groupProperty('resource.id')
             avg('score', 'rating')
             order('rating', 'desc')
+            order('lastUpdated', 'desc')
         }?.each {
             topPosts.add(new PostVO(resourceID: it[0], description: it[1], url: it[2], filePath: it[3], topicId:
                     it[4], topicName: it[5], userId: it[6], userUserName: it[7], userFirstName: it[8], userLastName: it[9],
                     lastUpdated: it[10]))
         }
         return topPosts
-
     }
-
-    /*public static List<Resource> getTopPosts() {
-        def result = ResourceRating.createCriteria().list(max: 5) {
-            createAlias('resource', 'r')
-            createAlias('r.topic', 't')
-            eq('t.visibility', Visibility.PUBLIC)
-            avg('score', 'rating')
-            groupProperty('r.id')
-            order('rating', 'desc')
-        }
-        List list = result.collect { it[0] }
-        return Resource.getAll(list)
-    }*/
 
     static String checkResourceType(Long id) {
         Resource resource = Resource.get(id)
@@ -225,12 +206,10 @@ abstract class Resource {
         return false
     }
 
-    Boolean canViewBy() {
+    static Integer updateDescription(Long resourceId, String description) {
+        return executeUpdate("update Resource set description=:description where id=:id", [description: description, id: resourceId])
+    }
 
-    }
-    static Integer updateDescription(Long resourceId,String description){
-        return executeUpdate("update Resource set description=:description where id=:id",[description:description,id:resourceId])
-    }
     static List usersWithUnreadResources() {
         return ReadingItem.createCriteria().listDistinct {
             projections {

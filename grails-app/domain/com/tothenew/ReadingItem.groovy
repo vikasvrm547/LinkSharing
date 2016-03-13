@@ -19,6 +19,5 @@ class ReadingItem {
             eq('resource.id',resourceId)
             eq('user.id',userId)
         }
-
     }
 }

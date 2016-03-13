@@ -1,8 +1,6 @@
 package com.tothenew
 
 import com.tothenew.constants.Constants
-
-import static org.springframework.http.HttpStatus.*
 import grails.transaction.Transactional
 
 class DocumentResourceController extends ResourceController {

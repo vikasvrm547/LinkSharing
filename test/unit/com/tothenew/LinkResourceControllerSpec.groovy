@@ -9,12 +9,4 @@ import spock.lang.Specification
 @TestFor(LinkResourceController)
 class LinkResourceControllerSpec extends Specification {
 
-    def setup() {
-    }
-
-    def cleanup() {
-    }
-
-    void "test something"() {
-    }
 }

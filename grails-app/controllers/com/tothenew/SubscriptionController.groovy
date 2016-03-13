@@ -10,10 +10,9 @@ class SubscriptionController {
         Map resultInfo = [:]
         User currentUser = session.user
         Topic topic = Topic.get(topicId)
-        if (topic.createdBy.equals(session.user)){
+        if (topic.createdBy.equals(session.user)) {
             resultInfo.error = "Creator of topic cannot delete subscription"
-        }
-        else if (topic && currentUser) {
+        } else if (topic && currentUser) {
             Subscription subscription = Subscription.findByTopicAndUser(topic, currentUser)
 
             if (subscription) {
@@ -50,8 +49,8 @@ class SubscriptionController {
         Map resultInfo = [:]
         Seriousness seriousnessEnum = Seriousness.convertToEnum(seriousnessString);
         Subscription subscription = Subscription.createCriteria().get {
-            eq('topic.id',topicId)
-            eq('user.id',session.user.id)
+            eq('topic.id', topicId)
+            eq('user.id', session.user.id)
         }
         if (seriousnessEnum) {
             if (subscription) {
@@ -67,7 +66,7 @@ class SubscriptionController {
         } else {
             resultInfo.error = "Seriousness not valid"
         }
-        render( resultInfo as JSON)
+        render(resultInfo as JSON)
     }
 
 }

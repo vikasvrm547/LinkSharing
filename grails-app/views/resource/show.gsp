@@ -15,9 +15,11 @@
                 onSet: function (rating, rateYoInstance) {
 
                     $.ajax({
-                        url:"/resourceRating/save",
-                        data:{userId:$("#hidden-user-id").val(),resourceId:$("#hidden-resource-id").val(),
-                            score:rating},
+                        url: "/resourceRating/save",
+                        data: {
+                            userId: $("#hidden-user-id").val(), resourceId: $("#hidden-resource-id").val(),
+                            score: rating
+                        },
                     })
                 }
             });
@@ -41,7 +43,10 @@
 
                 <div class="col-xs-9">
                     <div class="row">
-                        <h5 class="col-xs-6">${postVO?.getNameOfUser()}<small>@${postVO?.userUserName} 5min</small></h5>
+                        <h5 class="col-xs-6">
+                            <g:link controller="user" action="profile"
+                                    params='[id: "${postVO.userId}"]'>${postVO?.getNameOfUser()}</g:link>
+                            <small>@${postVO?.userUserName}</small></h5>
                         <a class="col-xs-6 input-top-right-anchor">
                             <g:link name="topicName" controller="topic" action="show"
                                     class="col-xs-6 input-top-right-anchor"
@@ -50,14 +55,17 @@
                             </g:link>
                         </a>
                     </div>
-
+                    <div class="row"  style="text-align: right">
+                        <g:formatDate format="hh:mm a dd MMM yyyy" date="${postVO?.lastUpdated}"/>
+                    </div>
                     <div class="row">
-                        <div id="rateYo"></div>
-                        <div class="counter"></div>
+
                         <g:if test="${session.user}">
-                            <input type="hidden" id="default-hidden-resource-rating" value="${currentUser?.getScore(postVO?.resourceID)}" />
-                            <input type="hidden" id="hidden-user-id" value="${currentUser?.id}" />
-                            <input type="hidden" id="hidden-resource-id" value="${postVO?.resourceID}" />
+                            <div id="rateYo" class="pull-right"></div>
+                            <input type="hidden" id="default-hidden-resource-rating"
+                                   value="${currentUser?.getScore(postVO?.resourceID)}"/>
+                            <input type="hidden" id="hidden-user-id" value="${currentUser?.id}"/>
+                            <input type="hidden" id="hidden-resource-id" value="${postVO?.resourceID}"/>
                         </g:if>
 
                     </div>
@@ -70,19 +78,19 @@
                 <div class="row">
                     <div class="col-xs-5">
                         <a href="#">
-                            <div class="fa fa-facebook-official"></div>
+                            <div class="fa fa-facebook-official" style= "font-size: large;margin-left: 10px"></div>
                         </a>
                         <a href="#">
-                            <div class="fa fa-twitter inline"></div>
+                            <div class="fa fa-twitter inline" style= "font-size: large;margin-left: 10px"></div>
                         </a>
                         <a href="#">
-                            <div class="fa fa-google-plus inline"></div>
+                            <div class="fa fa-google-plus inline" style= "font-size: large;margin-left: 10px"></div>
                         </a>
                     </div>
 
                     <div class="col-xs-7 post-footer-links">
                         <ls:canEditResource currentUser="${currentUser}" resourceId="${postVO?.resourceID}">
-                            <a onclick='showResourceEditModal(${postVO?.resourceID},"${postVO?.description}")'>Edit</a>
+                            <a onclick='showResourceEditModal(${postVO?.resourceID}, "${postVO?.description}")'>Edit</a>
 
                         </ls:canEditResource>
                         <ls:resourceTypeLink resourceId="${postVO?.resourceID}" url="${postVO?.url}"

@@ -21,11 +21,11 @@ class LinkSharingTagLib {
     }
 
     def topPosts = { attr, body ->
-        List topPostList = attr.topPosts;
+        List topPostList = attr.topPosts
         out << g.render(template: "/resource/topPost", model: [topPosts: topPostList])
     }
     def trendingTopics = { attr, body ->
-        List trendingTopicList = attr.tendingTopics;
+        List trendingTopicList = attr.tendingTopics
         out << g.render(template: "/topic/tendingTopic", model: [tendingTopics: trendingTopicList])
     }
     def resourceTypeLink = { attr, body ->
@@ -92,7 +92,7 @@ class LinkSharingTagLib {
         if (session.user && topicId) {
             Subscription subscription = session.user.getSubscription(topicId)
             if (subscription) {
-                out << g.link(class: attr.class)
+                out << g.link(class: attr.class,title: attr.title,style: "font-size: large")
             }
         }
     }
@@ -128,7 +128,7 @@ class LinkSharingTagLib {
     }
 
     def subscriptionCount = { attr, body ->
-        Long count = 0;
+        Long count = 0
         if (attr.topicId) {
             count = Subscription.createCriteria().count {
                 eq('topic.id', attr.topicId)
@@ -143,6 +143,17 @@ class LinkSharingTagLib {
     def userImage = { attr, body ->
         String url = g.createLink(controller: 'user', action: 'image', params: [userId: "${attr.userId}"])
         out << g.img([uri: url, class: "${attr.class}", height: attr.height, width: attr.width])
+    }
+
+    def canSeeCreateTopicHeaderIcon = { attr, body ->
+        if(controllerName.equals("user")&& (actionName.equals("show")||actionName.equals("list"))){
+            out<< body()
+        }
+    }
+    def canSeeInviteHeaderIcon = { attr, body ->
+        if(controllerName.equals("user")&& (actionName.equals("show")||actionName.equals("list"))){
+            out<< body()
+        }
     }
 
 }

@@ -7,13 +7,6 @@ import spock.lang.Specification
 @TestFor(DocumentResource)
 class DocumentResourceSpec extends Specification {
 
-    def setup() {
-    }
-
-    def cleanup() {
-    }
-
-
     def "check constraints of document resources"() {
         given:
         DocumentResource documentResourceObj = new DocumentResource(description: description, createdBy: creator, topic: topic, filePath: filePath);

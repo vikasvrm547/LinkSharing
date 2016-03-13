@@ -2,7 +2,6 @@ package com.tothenew.co
 
 import com.tothenew.User;
 import grails.validation.Validateable
-import org.grails.datastore.mapping.query.Query
 import org.springframework.web.multipart.MultipartFile
 
 @Validateable

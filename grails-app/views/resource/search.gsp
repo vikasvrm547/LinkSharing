@@ -3,6 +3,7 @@
 <head>
     <title>Search</title>
     <meta name="layout" content="main"/>
+    <asset:stylesheet src="search.css"/>
 </head>
 <body>
 <div class="col-xs-5 page-container-inner-left-div">
@@ -15,7 +16,7 @@
             <h3 class="panel-title">Search result</h3>
         </div>
 
-        <div class="panel-body inbox-panel-body">
+        <div class="panel-body search-result-panel-body">
             <g:if test="${postVOList.size() == 0}">
                 <h1 >No resource found</h1>
             </g:if>

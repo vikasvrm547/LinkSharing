@@ -33,26 +33,6 @@ class TopicController {
         }
     }
 
-    /*def save(TopicCO topicCO) {
-        Map resultInfo = [:]
-        User user = topicCO.getUser()
-        if (user?.hasTopicRight(topicCO.topicId)) {
-            Topic topic = Topic.findOrCreateByNameAndCreatedBy(topicCO.topicName, user)
-            if (topicCO.topicUpdatedName) {
-                topic.name = topicCO.topicUpdatedName
-            }
-            if (topicCO.visibilityString) {
-                topic.visibility = Visibility.convertToEnum(topicCO.visibilityString)
-            }
-            if (topic.save(flush: true)) {
-                resultInfo.message = "Topic saved/updated successfully"
-            } else {
-                resultInfo.error = "Topic not saved/update successfully"
-            }
-        } else resultInfo.error = "Topic not saved/update successfully"
-         render(resultInfo as JSON)
-    }*/
-
     def save(TopicCO topicCO) {
         Map resultInfo = [:]
 

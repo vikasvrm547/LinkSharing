@@ -3,14 +3,14 @@
 
         <ls:userImage userId="${post.userId}" class="img-rounded" height="100" width="100"/>
 
-
     </div>
 
     <div class="col-xs-9">
         <div class="row">
             <h5 class="col-xs-6">
-                <g:link controller="user" action="profile" params='[id:"${post.userId}"]'>${post?.getNameOfUser()}</g:link>
-                    <small>@${post?.userUserName} 5min</small>
+                <g:link controller="user" action="profile"
+                        params='[id: "${post.userId}"]'>${post?.getNameOfUser()}</g:link>
+                <small>@${post?.userUserName}</small>
             </h5>
             <g:link name="topicName" controller="topic" action="show" class="col-xs-6 input-top-right-anchor"
                     params='[topicId: "${post?.topicId}"]'>${post?.topicName}</g:link>
@@ -23,19 +23,21 @@
         <div class="row">
             <div class="col-xs-3">
                 <a href="#">
-                    <div class="fa fa-facebook-official"></div>
+                    <div class="fa fa-facebook-official" style= "font-size: medium;margin-right: 5px"></div>
                 </a>
                 <a href="#">
-                    <div class="fa fa-twitter inline"></div>
+                    <div class="fa fa-twitter inline" style= "font-size: medium;margin-right: 5px"></div>
                 </a>
                 <a href="#">
-                    <div class="fa fa-google-plus inline"></div>
+                    <div class="fa fa-google-plus inline" style= "font-size: medium;margin-right: 5px"></div>
                 </a>
             </div>
 
             <div class="col-xs-9 post-footer-links">
-                <ls:readLink resourceId="${post?.resourceID}" isRead="${post?.isRead}"
-                             user="${currentUser ?: null}"/>
+                <g:if test="${controllerName.equals("user") && actionName.equals("show")}">
+                    <ls:readLink resourceId="${post?.resourceID}" isRead="${post?.isRead}"
+                                 user="${currentUser ?: null}"/>
+                </g:if>
                 <g:link controller="resource" action="show"
                         params='[resourceId: "${post?.resourceID}"]'>View post</g:link>
 

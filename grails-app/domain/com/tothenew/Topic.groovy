@@ -4,7 +4,6 @@ import com.tothenew.enums.Seriousness
 import com.tothenew.enums.Visibility
 import com.tothenew.vo.PostVO
 import com.tothenew.vo.TopicVO
-import org.apache.xpath.operations.Bool
 
 class Topic {
     String name
@@ -83,25 +82,6 @@ class Topic {
             eq('topic', this)
         }
     }
-  /*  def getTopicPosts(Long  topicId) { in complete
-        // User currentUser = session.user
-        List<PostVO> posts = [];
-        Topic topic = Topic.get(topicId)
-        if(topic){
-
-            topic.resources.each{ posts.add(new PostVO(resourceID: it.id, description: it.description,
-                    topicName: topic.name,userId: topic.createdBy.id, userUserName: topic.createdBy.userName,
-                    userFirstName: topic.createdBy.firstName, userLastName: topic.createdBy.lastName,
-                    userPhoto: topic.createdBy.photo, isRead: it.isRead,
-                    url: it.resource.class.toString().equals("class com.tothenew.LinkResource") ? it.resource.toString() : "",
-                    filePath: it.resource.class.toString().equals("class com.tothenew.DocumentResource") ? it.resource.toString() : ""))
-
-
-            }
-        }
-
-        return posts
-    }*/
 
     public List<PostVO> getTopicPosts() {
         List<PostVO> topicPosts = []
@@ -128,7 +108,7 @@ class Topic {
         }.each {
             topicPosts.add(new PostVO(resourceID: it[0], description: it[1], url: it[2], filePath: it[3], topicId:
                     it[4], topicName: it[5], userId: it[6], userUserName: it[7], userFirstName: it[8], userLastName: it[9],
-                      lastUpdated: it[10],isRead: ReadingItem.getIsRead(it[0],it[6])))
+                    lastUpdated: it[10], isRead: ReadingItem.getIsRead(it[0], it[6])))
         }
 
         return topicPosts

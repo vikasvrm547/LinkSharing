@@ -1,0 +1,5 @@
+.search-result-panel-body{
+    margin: 5px;
+    overflow-y: auto;
+    max-height: 950px;
+}

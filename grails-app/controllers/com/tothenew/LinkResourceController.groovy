@@ -2,7 +2,7 @@ package com.tothenew
 
 import com.tothenew.co.LinkResourceCO
 
-class LinkResourceController extends ResourceController{
+class LinkResourceController extends ResourceController {
 
     def save(LinkResourceCO linkResourceCO) {
 

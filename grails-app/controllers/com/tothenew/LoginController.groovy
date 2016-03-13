@@ -1,7 +1,5 @@
 package com.tothenew
 
-import grails.converters.JSON
-
 class LoginController {
 
     def index() {
@@ -35,6 +33,7 @@ class LoginController {
         Boolean valid = User.countByEmail(params.email) ? false : true
         render valid
     }
+
     def validateUserName() {
         Boolean valid = User.countByUserName(params.userName) ? false : true
         render valid

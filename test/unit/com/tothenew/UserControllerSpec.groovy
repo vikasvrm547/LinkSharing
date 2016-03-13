@@ -12,11 +12,6 @@ import spock.lang.Specification
 @TestFor(UserController)
 class UserControllerSpec extends Specification {
 
-    def setup() {
-    }
-
-    def cleanup() {
-    }
 
     void "check show action"() {
         given:

@@ -9,12 +9,4 @@ import spock.lang.Specification
 @TestFor(LinkSharingTagLib)
 class LinkSharingTagLibSpec extends Specification {
 
-    def setup() {
-    }
-
-    def cleanup() {
-    }
-
-    void "test something"() {
-    }
 }

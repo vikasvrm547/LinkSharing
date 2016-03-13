@@ -2,12 +2,8 @@ package com.tothenew
 
 import com.tothenew.co.SearchCO
 import com.tothenew.co.UserSearchCO
-import com.tothenew.enums.Seriousness
 import com.tothenew.vo.PostVO
-import com.tothenew.vo.UserVO
-import org.grails.datastore.mapping.query.Query
 
-import javax.websocket.Session
 
 class User {
     String email
@@ -79,17 +75,6 @@ class User {
         return userName
     }
 
-    /*static List<UserVO> getNormalUsers(UserSearchCO userSearchCO){
-        List<UserVO>  userVOList= []
-        findAllByAdminNotEqual(true,[sort:userSearchCO.sort,order:userSearchCO.order]).each { user ->
-            userVOList.add(new UserVO(id: user.id,userName: user.userName, email: user.email, firstName: user.firstName,
-                    lastName: user.lastName,active: user.active))
-
-        }
-        return userVOList
-    }*/
-
-
     List getSubscribedTopics() {
         List<Topic> topics = Subscription.createCriteria().list() {
             projections {
@@ -113,9 +98,8 @@ class User {
     }
 
     List<PostVO> getInboxItems(SearchCO searchCO) {
-        // User currentUser = session.user
         List<PostVO> readingItemsList = [];
-        ReadingItem.findAllByUser(this, [max: searchCO.max, offset: searchCO.offset]).each {
+        ReadingItem.findAllByUser(this, [max: searchCO.max, offset: searchCO.offset, sort: 'lastUpdated', order: 'desc']).each {
             readingItemsList.add(new PostVO(topicId: it.resource.topic.id, resourceID: it.resource.id, description: it.resource.description,
                     topicName: it.resource.topic.name, userId: it.resource.createdBy.id, userUserName: it.resource.createdBy.userName,
                     userFirstName: it.resource.createdBy.firstName, userLastName: it.resource.createdBy.lastName,
@@ -176,7 +160,6 @@ class User {
                 [newPassword: newPassword, email: email])
     }
 
-
     List<Resource> unreadResources() {
         return ReadingItem.createCriteria().list {
             projections {
@@ -186,6 +169,4 @@ class User {
             eq('isRead', false)
         }
     }
-
-
 }

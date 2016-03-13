@@ -7,9 +7,6 @@ import grails.test.mixin.TestFor
 import spock.lang.Specification
 import spock.util.mop.ConfineMetaClassChanges
 
-/**
- * See the API for {@link grails.test.mixin.web.ControllerUnitTestMixin} for usage instructions
- */
 @Mock([Subscription, Topic])
 
 @TestFor(TopicController)
@@ -18,7 +15,6 @@ class TopicControllerSpec extends Specification {
     @ConfineMetaClassChanges(Subscription)
     void "check show action with error conditions"() {
         given:
-        Topic topic = new Topic(name: "topic", createdBy: new User(), visibility: visibility).save(flush: true)
         ResourceSearchCO resourceSearchCo = new ResourceSearchCO([topicId: topicId])
 
         Subscription.metaClass.static.countByUserAndTopic = { User user, Topic topic1 ->
@@ -39,13 +35,9 @@ class TopicControllerSpec extends Specification {
 
     }
 
-    void "check show action with valid conditions"() {
-
-    }
 
     void "check save action"() {
         given:
-        //Topic topic = new Topic(name: "topic", createdBy: new User(), visibility: visibility).save(flush: true)
         String userName = "vikasvrm";
         String password = "vikas12345";
         String firstName = "vikas";

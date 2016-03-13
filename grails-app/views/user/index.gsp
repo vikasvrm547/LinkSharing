@@ -20,8 +20,7 @@
     <!-- panel subscription start -->
     <div class="panel panel-primary">
         <div class="panel-heading">
-            Subscriptions <a href="#" class="inline subscription-header-top-left-anchor"
-                             style="float:right">view all</a>
+            Subscriptions 
         </div>
 
         <div class="panel-body subscription-panel-body">

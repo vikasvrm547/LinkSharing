@@ -64,13 +64,14 @@
             <ls:canUpdateTopic topicId="${topic?.id}" currentUser="${session.user}">
                 <ls:showVisibility topicName="${topic?.name}" visibility="${topic?.visibility}"
                                    class="btn btn-primary visibility" topicId = "${topic?.id}"/>
-                <i class="glyphicon glyphicon-edit nav_icon" onclick="toggleTopicEditName(${uniqueIdForTopicEdit})"></i>
+                <i class="glyphicon glyphicon-edit nav_icon" style="color: #337ab7;"
+                   onclick="toggleTopicEditName(${uniqueIdForTopicEdit})"></i>
 
                 <g:link controller="topic" action="delete" params='[topicId: "${topic?.id}"]'
-                        class="glyphicon glyphicon-trash nav_icon">
+                        class="glyphicon glyphicon-trash nav_icon" title="Delete topic">
                 </g:link>
             </ls:canUpdateTopic>
-            <ls:showInvitation class="fa fa-envelope-o nav_icon" topicId="${topic?.id}"/>
+            <ls:showInvitation class="fa fa-envelope-o nav_icon" topicId="${topic?.id}" title="Invite friends"/>
         </div>
     </g:if>
     <input type="hidden" id="hidden-current-user-id"  value="${session.user?.id}"/>

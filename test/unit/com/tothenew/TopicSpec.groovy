@@ -1,7 +1,5 @@
 package com.tothenew
 
-import com.tothenew.constants.Constants
-import com.tothenew.enums.Seriousness
 import com.tothenew.enums.Visibility
 import grails.test.mixin.Mock
 import grails.test.mixin.TestFor

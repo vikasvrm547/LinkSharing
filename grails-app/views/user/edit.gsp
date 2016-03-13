@@ -10,7 +10,11 @@
 <body>
 
 <div class="col-xs-5 page-container-inner-left-div">
-
+    <div class="panel panel-primary">
+        <div class="panel-body">
+            <g:render template="/user/show" model="[user: currentUser ?: null]"/>
+        </div>
+    </div>
 </div>
 
 <div class="col-xs-7 page-container-inner-right-div">
@@ -22,35 +26,42 @@
         </div>
 
         <div class="panel-body">
-            <g:form class="form-horizontal" controller="user" action="save" enctype="multipart/form-data" >
+            <g:form class="form-horizontal" controller="user" action="save" enctype="multipart/form-data">
                 <input type="hidden" name="userId" value="${currentUser?.id}"/>
+
                 <div class="form-group">
-                    <div class="col-sm-4"><label id="fname" class="register_label control-label">First name<small class="asterisk"> *</small></label>
+                    <div class="col-sm-4"><label id="fname" class="register_label control-label">First name<small
+                            class="asterisk">*</small></label>
                     </div>
 
                     <div class="col-sm-8">
                         <input type="text" class="form-control" placeholder="First name" id="firstName" name="firstName"
                                value="${currentUser?.firstName}">
+
                         <div class="error"><g:fieldError field="firstName" bean="${user}"/></div>
                     </div>
                 </div>
 
                 <div class="form-group">
-                    <div class="col-sm-4"><label class="control-label">Last name<small class="asterisk"> *</small></label></div>
+                    <div class="col-sm-4"><label class="control-label">Last name<small class="asterisk">*</small>
+                    </label></div>
 
                     <div class="col-sm-8">
                         <input type="text" class="form-control" placeholder="Last name" id="lastname" name="lastName"
                                value="${currentUser?.lastName}">
+
                         <div class="error"><g:fieldError field="lastName" bean="${user}"/></div>
                     </div>
                 </div>
 
                 <div class="form-group">
-                    <div class="col-sm-4"><label class="control-label">User name<small class="asterisk"> *</small></label></div>
+                    <div class="col-sm-4"><label class="control-label">User name<small class="asterisk">*</small>
+                    </label></div>
 
                     <div class="col-sm-8">
                         <input type="text" class="form-control" placeholder="User name" name="userName" id="username"
                                value="${currentUser?.userName}">
+
                         <div class="error"><g:fieldError field="userName" bean="${user}"/></div>
                     </div>
                 </div>
@@ -100,7 +111,8 @@
                 <input type="hidden" name="userId" value="${currentUser?.id}"/>
 
                 <div class="form-group">
-                    <div class="col-sm-4"><label class="control-label">Old Password<small class="asterisk"> *</small></label></div>
+                    <div class="col-sm-4"><label class="control-label">Old Password<small class="asterisk">*</small>
+                    </label></div>
 
                     <div class="col-sm-8">
                         <input type="password" class="form-control" name="oldPassword" placeholder="Password">
@@ -108,7 +120,8 @@
                 </div>
 
                 <div class="form-group">
-                    <div class="col-sm-4"><label class="control-label">Password<small class="asterisk"> *</small></label></div>
+                    <div class="col-sm-4"><label class="control-label">Password<small class="asterisk">*</small></label>
+                    </div>
 
                     <div class="col-sm-8">
                         <input type="password" class="form-control" name="password" placeholder="Password">

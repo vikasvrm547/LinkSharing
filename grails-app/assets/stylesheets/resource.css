@@ -16,3 +16,6 @@
     word-wrap: break-word;
     height: auto;
 }
+.post-panel-body{
+    margin-left: 10px;
+}

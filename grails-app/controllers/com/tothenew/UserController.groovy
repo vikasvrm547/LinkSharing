@@ -10,7 +10,6 @@ import com.tothenew.co.UserSearchCO
 import com.tothenew.dto.EmailDTO
 import com.tothenew.enums.Visibility
 import com.tothenew.util.Utility
-import com.tothenew.vo.TopicVO
 import com.tothenew.vo.UserVO
 
 class UserController {
@@ -76,13 +75,10 @@ class UserController {
 
     def profile(ResourceSearchCO resourceSearchCO) {
         if (resourceSearchCO.id) {
-            resourceSearchCO.max = resourceSearchCO.max ?: 10
-            resourceSearchCO.offset = resourceSearchCO.offset ?: 0
             User user = User.get(resourceSearchCO.id)
             User currentUser = session.user
-            List resources = resourceService.search(resourceSearchCO)
-            render(view: 'profile', model: [currentUser: currentUser, user: user,resources  : resources,
-                                            resourcesCount:resources.totalCount,resourceSearchCO:resourceSearchCO])
+            render(view: 'profile', model: [currentUser: currentUser, user: user,
+                                            resources  : resourceService.search(resourceSearchCO)])
         } else render("nooooooooo")
     }
 
@@ -148,7 +144,6 @@ class UserController {
                         firstName: user.firstName,
                         lastName: user.lastName, active: user.active))
             }
-            println(users.totalCount)
             render(view: 'list', model: [users: userVOList, userSearchCO: userSearchCO, totalCount: users.totalCount])
         } else {
             redirect(controller: 'login', action: 'index')
@@ -184,7 +179,6 @@ class UserController {
             user.firstName = updateUserCO.firstName
             user.lastName = updateUserCO.lastName
             user.userName = updateUserCO.userName
-            println updateUserCO.userPhoto.bytes
             if (updateUserCO.userPhoto.bytes) {
                 if (checkImageType(updateUserCO.userPhoto.contentType))
                     user.photo = updateUserCO.userPhoto.bytes
@@ -192,7 +186,6 @@ class UserController {
                     user.errors.rejectValue('photo', 'nullable')
             }
             user.confirmPassword = user.password
-            println user.hasErrors()
             if ((!user.hasErrors()) && user.save(flush: true)) {
                 session.user = user
                 flash.message = "successfully update your details"

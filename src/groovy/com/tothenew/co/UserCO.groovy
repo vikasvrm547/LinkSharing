@@ -1,6 +1,5 @@
 package com.tothenew.co
 
-import com.tothenew.User
 import grails.validation.Validateable
 import org.springframework.web.multipart.MultipartFile
 

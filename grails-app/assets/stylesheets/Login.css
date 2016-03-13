@@ -24,10 +24,6 @@ hr{
 	text-align: right;
 }
 
-a{
-	text-decoration: underline;
-}
-
 .top-post,.recent-post{
 	margin: 5px;
 	border-bottom:1px solid blue

@@ -1,7 +1,6 @@
 package com.tothenew
 
 
-
 class UnreadItemEmailJob {
     def userService
     static triggers = {
@@ -9,6 +8,6 @@ class UnreadItemEmailJob {
     }
 
     def execute() {
-      userService.sendUnreadItemsEmail()
+        userService.sendUnreadItemsEmail()
     }
 }

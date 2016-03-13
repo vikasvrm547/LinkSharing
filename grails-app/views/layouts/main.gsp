@@ -52,12 +52,17 @@
                 </div>
 
                 <g:if test="${session.user}">
-                    <g:if test="${!controllerName.equals("topic")}">
-                        <i class="form-group fa fa-comment nav_icon "></i>
-                        <i class="form-group fa fa-envelope-o nav_icon "></i>
+
+                    <g:if test="${controllerName.equals("user")}">
+                     <ls:canSeeCreateTopicHeaderIcon >
+                         <i class="form-group fa fa-comment nav_icon" title="Create Topic"></i>
+                     </ls:canSeeCreateTopicHeaderIcon>
+                     <ls:canSeeInviteHeaderIcon>
+                         <i class="form-group fa fa-envelope-o nav_icon " title="Send Invitation"></i>
+                     </ls:canSeeInviteHeaderIcon>
                     </g:if>
-                    <span class="form-group glyphicon glyphicon-link  nav_icon "></span>
-                    <i class="form-group fa fa-file-o nav_icon" data-toggle="modal" data-target="#gridSystemModal"></i>
+                    <span class="form-group glyphicon glyphicon-link  nav_icon " title="Create Link Resource"></span>
+                    <i class="form-group fa fa-file-o nav_icon" title="Create Document Resource" data-toggle="modal" data-target="#gridSystemModal"></i>
 
                     <div class="dropdown form-group">
 
@@ -72,7 +77,7 @@
                             <option value="<g:createLink controller='user' action='edit'/>">
                                 Edit
                             </option>
-                            <g:if test="${controllerName.equals('user')}">
+                            <g:if test="${session.user?.admin}">
                                 <option value="<g:createLink controller='user' action='list'/>">Users</option>
                             </g:if>
                             <option value="<g:createLink controller='login' action='logout'/> ">Logout</option>

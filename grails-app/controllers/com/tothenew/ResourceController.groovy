@@ -37,7 +37,7 @@ class ResourceController {
                 Integer score = currentUser?.getScore(resourceId)
                 render(view: 'show', model: [postVO: postVO, currentUser: currentUser,
                                              score : score, tendingTopics: Topic?.getTrendingTopics()])
-            }else {
+            } else {
                 flash.error = "You cannot vieww this topic"
                 redirect(url: request.getHeader("referer"))
             }
@@ -68,14 +68,12 @@ class ResourceController {
     }
 
     def update(Long resourceId, String description) {
-        println(request.forwardURI)
-        println(request.getHeader("referer"))
         if (Resource.updateDescription(resourceId, description)) {
             flash.message = "Successfully update description"
         } else {
             flash.error = "Failed to update description "
         }
-        redirect(url:  request.getHeader("referer"))
+        redirect(url: request.getHeader("referer"))
     }
 
     void addToReadingItems(Resource resource) {

@@ -91,7 +91,6 @@
             <g:each in="${resources}" var="post">
                 <g:render template="/resource/show" model="[post: post]"/>
             </g:each>
-            <g:paginate total="${resourcesCount}" max="${resourceSearchCO?.max}" offset="${resourceSearchCO.offset}"></g:paginate>
         </div>
     </div>
 </div>

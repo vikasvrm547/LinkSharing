@@ -11,6 +11,6 @@ class ReadingItemController {
         } else {
             flash.error = "Reading item could not update successfully"
         }
-        redirect(controller: 'login' ,action: 'index')
+        redirect(url: request.getHeader("referer"))
     }
 }

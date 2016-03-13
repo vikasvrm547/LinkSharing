@@ -11,3 +11,8 @@
 .post-panel-body{
     margin: 5px;
 }
+
+.post-content{
+    word-wrap: break-word;
+    height: auto;
+}

@@ -3,7 +3,27 @@
 <head>
     <title>Post</title>
     <asset:stylesheet src="resource.css"/>
+    <asset:javascript src="starRating.js"/>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/rateYo/2.0.1/jquery.rateyo.min.css">
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/rateYo/2.0.1/jquery.rateyo.min.js"></script>
     <meta name="layout" content="main"/>
+    <script>
+        $(function () {
+
+            $("#rateYo").rateYo({
+                fullStar: true,
+                onSet: function (rating, rateYoInstance) {
+
+                    $.ajax({
+                        url:"/resourceRating/save",
+                        data:{userId:$("#hidden-user-id").val(),resourceId:$("#hidden-resource-id").val(),
+                            score:rating},
+                    })
+                }
+            });
+            $("#rateYo").rateYo("rating", $("#default-hidden-resource-rating").val());
+        });
+    </script>
 </head>
 
 <body>
@@ -32,14 +52,12 @@
                     </div>
 
                     <div class="row">
-                        <p class="col-xs-12">hello vikassss</p>
+                        <div id="rateYo"></div>
+                        <div class="counter"></div>
                         <g:if test="${session.user}">
-                            <g:form controller="resourceRating" action="save" params="[userId    : currentUser?.id,
-                                                                                       resourceId: postVO?.resourceID]">
-                                <g:select name="score" from="${1..5}"
-                                          value="${currentUser?.getScore(postVO?.resourceID) ?: 1}"/>
-                                <g:submitButton name="submit"/>
-                            </g:form>
+                            <input type="hidden" id="default-hidden-resource-rating" value="${currentUser?.getScore(postVO?.resourceID)}" />
+                            <input type="hidden" id="hidden-user-id" value="${currentUser?.id}" />
+                            <input type="hidden" id="hidden-resource-id" value="${postVO?.resourceID}" />
                         </g:if>
 
                     </div>
@@ -63,12 +81,13 @@
                     </div>
 
                     <div class="col-xs-7 post-footer-links">
-                        <g:if test="${session.user}">
-                            <a>Edit</a>
-                        </g:if>
+                        <ls:canEditResource currentUser="${currentUser}" resourceId="${postVO?.resourceID}">
+                            <a onclick='showResourceEditModal(${postVO?.resourceID},"${postVO?.description}")'>Edit</a>
+
+                        </ls:canEditResource>
                         <ls:resourceTypeLink resourceId="${postVO?.resourceID}" url="${postVO?.url}"
                                              filePath="${postVO?.filePath}"/>
-                        <ls:canDeleteResource currentUser="${currentUser}" resourceId="${postVO.resourceID}"
+                        <ls:canDeleteResource currentUser="${currentUser}" resourceId="${postVO?.resourceID}"
                                               class="inline post-panel-anchor">Delete</ls:canDeleteResource>
 
                     </div>
@@ -83,5 +102,6 @@
 <div class="col-xs-5 page-container-inner-right-div">
     <ls:trendingTopics tendingTopics="${tendingTopics}"/>
 </div>
+
 </body>
 </html>

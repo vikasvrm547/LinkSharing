@@ -2,6 +2,8 @@ package com.tothenew
 
 import com.tothenew.co.ResourceSearchCO
 import com.tothenew.co.TopicSearchCO
+import com.tothenew.co.UpdatePasswordCO
+import com.tothenew.co.UpdateUserCO
 import com.tothenew.co.UserCO
 import com.tothenew.co.SearchCO
 import com.tothenew.co.UserSearchCO
@@ -24,10 +26,12 @@ class UserController {
 
         User currentUser = session.user
 
-        render(view: 'index', model: [linkResourceCO  : null, tendingTopics: Topic.getTrendingTopics(),
-                                      subscribedTopics: currentUser?.getSubscribedTopics(), currentUser: currentUser ?: null,
-                                      readingItems    : currentUser?.getInboxItems(searchCO), totalReadingItems: currentUser.getTotalReadingItem(),
-                                      searchCO        : searchCO])
+        render(view: 'index', model: [linkResourceCO   : null, tendingTopics: Topic?.getTrendingTopics(),
+                                      subscribedTopics : currentUser?.getSubscribedTopics(),
+                                      currentUser      : currentUser ?: null,
+                                      readingItems     : currentUser?.getInboxItems(searchCO),
+                                      totalReadingItems: currentUser?.getTotalReadingItem(),
+                                      searchCO         : searchCO])
     }
 
     def image(Long userId) {
@@ -45,25 +49,25 @@ class UserController {
     def register(UserCO registerCO) {
         if (registerCO.hasErrors()) {
             flash.error = "validations not pass"
-
-            // println(g.createLink(controller: 'login',action: 'index')) incomplete
             render(view: '/login/index', model: [topPosts  : Resource.getTopPosts(), recentShares: Resource.getRecentShares(),
                                                  registerCO: registerCO])
-        } else {
+        } else if ((!registerCO.userPhoto.bytes) || checkImageType(registerCO.userPhoto.contentType)) {
             User newUser = new User(registerCO.properties)
-            newUser.active = true; // Just for checking
             newUser.photo = registerCO.userPhoto.bytes
-
             if (!newUser.save()) {
                 flash.error = "validations not pass"
                 render(view: '/login/index', model: [topPosts  : Resource.getTopPosts(), recentShares: Resource.getRecentShares(),
                                                      registerCO: newUser])
             } else {
                 flash.message = "User successfully created"
-                session.user = newUser
                 redirect(controller: 'login', action: 'index')
             }
+        } else {
+            registerCO.errors.rejectValue('userPhoto', 'nullable')
+            render(view: '/login/index', model: [topPosts  : Resource.getTopPosts(), recentShares: Resource.getRecentShares(),
+                                                 registerCO: registerCO])
         }
+
     }
 
     def subscribedTopics() {
@@ -71,12 +75,14 @@ class UserController {
     }
 
     def profile(ResourceSearchCO resourceSearchCO) {
-        //  ResourceSearchCO resourceSearchCO = new ResourceSearchCO(id: 1l)
         if (resourceSearchCO.id) {
+            resourceSearchCO.max = resourceSearchCO.max ?: 10
+            resourceSearchCO.offset = resourceSearchCO.offset ?: 0
             User user = User.get(resourceSearchCO.id)
             User currentUser = session.user
-            render(view: 'profile', model: [currentUser: currentUser, user: user,
-                                            resources  : resourceService.search(resourceSearchCO)])
+            List resources = resourceService.search(resourceSearchCO)
+            render(view: 'profile', model: [currentUser: currentUser, user: user,resources  : resources,
+                                            resourcesCount:resources.totalCount,resourceSearchCO:resourceSearchCO])
         } else render("nooooooooo")
     }
 
@@ -102,7 +108,8 @@ class UserController {
         User currentUser = session.user
         if (currentUser) {
             if (!(currentUser.admin || currentUser.id == id)) {
-                topicSearchCO.visibility = Visibility.PUBLIC
+                topicSearchCO.visibility = null
+                // topicSearchCO.visibility = Visibility.PUBLIC
             }
         } else
             topicSearchCO.visibility = Visibility.PUBLIC
@@ -131,12 +138,18 @@ class UserController {
 
     def list(UserSearchCO userSearchCO) {
         List<UserVO> userVOList = []
+        userSearchCO.max = userSearchCO.max ?: 20
+        userSearchCO.offset = userSearchCO.offset ?: 0
         if (session.user?.admin) {
-            User.search(userSearchCO).list([sort: userSearchCO.sort, order: userSearchCO.order]).each { user ->
-                userVOList.add(new UserVO(id: user.id, userName: user.userName, email: user.email, firstName: user.firstName,
+            List users = User.search(userSearchCO).list([sort  : userSearchCO.sort, order: userSearchCO.order, max: userSearchCO.max,
+                                                         offset: userSearchCO.offset])
+            users.each { user ->
+                userVOList.add(new UserVO(id: user.id, userName: user.userName, email: user.email,
+                        firstName: user.firstName,
                         lastName: user.lastName, active: user.active))
             }
-            render(view: 'list', model: [users: userVOList])
+            println(users.totalCount)
+            render(view: 'list', model: [users: userVOList, userSearchCO: userSearchCO, totalCount: users.totalCount])
         } else {
             redirect(controller: 'login', action: 'index')
         }
@@ -151,7 +164,7 @@ class UserController {
                     view: '/email/_password', model: [newPassword: newPassword])
             emailService.sendMail(emailDTO)
             if (User.updatePassword(newPassword, email)) {
-                flash.message = "${user.password}If your Email id is valid and you are active user then you will get your new password via mail"
+                flash.message = "If your Email id is valid and you are active user then you will get your new password via mail"
             } else {
                 flash.error = "Please try again"
             }
@@ -159,5 +172,59 @@ class UserController {
             flash.error = "You are not authorized user"
         }
         redirect(controller: "login", action: "index")
+    }
+
+    def edit() {
+        [currentUser: session.user]
+    }
+
+    def save(UpdateUserCO updateUserCO) {
+        User user = updateUserCO.getUser()
+        if (user) {
+            user.firstName = updateUserCO.firstName
+            user.lastName = updateUserCO.lastName
+            user.userName = updateUserCO.userName
+            println updateUserCO.userPhoto.bytes
+            if (updateUserCO.userPhoto.bytes) {
+                if (checkImageType(updateUserCO.userPhoto.contentType))
+                    user.photo = updateUserCO.userPhoto.bytes
+                else
+                    user.errors.rejectValue('photo', 'nullable')
+            }
+            user.confirmPassword = user.password
+            println user.hasErrors()
+            if ((!user.hasErrors()) && user.save(flush: true)) {
+                session.user = user
+                flash.message = "successfully update your details"
+            } else flash.error = "Failed to update your details"
+        } else flash.error = "Something went wrong"
+        render(view: "/user/edit", model: [currentUser: session.user, user: user])
+    }
+
+    def updatePassword(UpdatePasswordCO updatePasswordCO) {
+        User user = updatePasswordCO.getUser()
+        if (user) {
+            if (user.password.equals(updatePasswordCO.oldPassword)) {
+                user.password = updatePasswordCO.password
+                user.confirmPassword = updatePasswordCO.password
+                if (user.save(flush: true)) {
+                    session.user = user
+                    flash.message = "Successfully update password"
+                } else {
+                    flash.error = "Could not update password"
+                }
+            } else {
+                flash.error = "Old password is not correct"
+            }
+        } else {
+            flash.error = "User not exist"
+        }
+        render(view: "/user/edit", model: [currentUser: session.user, user: user])
+    }
+
+    Boolean checkImageType(String type) {
+        def imageContentTypes = ['image/png', 'image/jpeg', 'image/jpg', 'image/gif']
+        if (imageContentTypes.contains(type)) return true
+        else return false
     }
 }

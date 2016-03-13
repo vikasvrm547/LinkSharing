@@ -9,7 +9,7 @@ class ResourceService {
 
     def search(ResourceSearchCO resourceSearchCO){
         List<PostVO> resources = []
-         Resource.search(resourceSearchCO).list().each { resource ->
+         Resource.search(resourceSearchCO).list([max:resourceSearchCO.max,offset:resourceSearchCO.offset]).each { resource ->
             resources.add(Resource.getPost(resource.id))
          }
         return resources

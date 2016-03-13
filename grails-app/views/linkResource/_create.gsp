@@ -32,8 +32,6 @@
                         </div>
 
                         <div class="col-xs-8 modal-topic-drop-down">
-                           %{-- <g:render template="/share/topicsDropDown"/>--}%
-                            %{--<ls:showSubscribedTopics class="btn btn-primary form-control create-topic-modal-dropdown"/>--}%
                         </div>
                     </div>
 

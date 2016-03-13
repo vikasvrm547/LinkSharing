@@ -1,25 +1,24 @@
-<%--
-  Created by IntelliJ IDEA.
-  User: vikas
-  Date: 11/3/16
-  Time: 11:54 AM
---%>
 
 <%@ page contentType="text/html;charset=UTF-8" %>
 <html>
 <head>
     <title>Profile</title>
+    <asset:stylesheet src="profile.css"/>
     <meta name="layout" content="main"/>
     <script>
         $(document).ready(function(){
-
             $.ajax({
                 url: "/user/topics",
                 data:{id: $("#userId").val()},
                 success: function(result){
-                     $("#createdTopics").html(result);
-                }
+                    $("#createdTopics").html(result);
+                    setVisibilityOnChangeEvent();
+                    setSeriousnessOnchangeEvent();
+                    setSubscriptionOnTopicDelete();
+                    setInviteModal();
+                    setSubscriptionUpdateEvent();
 
+                }
             });
 
             $.ajax({
@@ -27,6 +26,12 @@
                 data:{id: $("#userId").val()},
                 success: function(result){
                     $("#subscribedTopics").html(result);
+                    setVisibilityOnChangeEvent();
+                    setSeriousnessOnchangeEvent();
+                    setSubscriptionOnTopicDelete();
+                    setInviteModal();
+                    setSubscriptionUpdateEvent();
+
                 }
             });
         });
@@ -79,23 +84,6 @@
                 <div class="col-sm-3">
                     Posts
                 </div>
-
-                %{--<div class="col-sm-6 col-sm-offset-3">
-                    <div id="custom-search-input" style="margin: 1px;">
-                        <div class="input-group col-md-12">
-                            <input type="text" id="topic-post-search-textbox" class="form-control input-lg" placeholder="Search.."/>
-                            <span class="input-group-btn">
-                                <button class="btn btn-info btn-lg" id="topic-post-search-button" type="button">
-                                    <i class="glyphicon glyphicon-search"></i>
-                                </button>
-                                <button class="btn btn-info btn-lg" id="topic-post-search-clear-button" type="button">
-                                    <i class="glyphicon glyphicon-remove"></i>
-                                </button>
-                            </span>
-                        </div>
-                    </div>
-                    <input type="hidden" value="${topic.id}" id="hidden-topic-id"/>
-                </div>--}%
             </div>
         </div>
 
@@ -103,11 +91,12 @@
             <g:each in="${resources}" var="post">
                 <g:render template="/resource/show" model="[post: post]"/>
             </g:each>
+            <g:paginate total="${resourcesCount}" max="${resourceSearchCO?.max}" offset="${resourceSearchCO.offset}"></g:paginate>
         </div>
     </div>
 </div>
 
-<input type="hidden" value="${currentUser.id}" id="userId"/>
+<input type="hidden" value="${user.id}" id="userId"/>
 </body>
 
 </html>

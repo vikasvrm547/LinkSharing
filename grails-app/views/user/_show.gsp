@@ -4,7 +4,9 @@
 
 <div class="col-xs-9">
     <div class="row">
-        <p class="topic-show-user-name" >${user?.name}</p>
+        <p class="topic-show-user-name" >
+            <g:link controller="user" action="profile" params='[id:"${user?.id}"]'> ${user?.name}</g:link>
+           </p>
         <small class="col-xs-12">@${user?.firstName}</small>
     </div>
     <br/>

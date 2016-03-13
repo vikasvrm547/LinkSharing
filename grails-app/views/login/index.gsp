@@ -10,13 +10,13 @@
 
 <body>
 
-<div class="col-xs-7 page-container-inner-left-div">
+<div class="col-xs-6 page-container-inner-left-div">
    <g:render template="/resource/recentPost"/>
     <ls:topPosts topPosts="${topPosts}"/>
 
 </div>
 
-<div class="col-xs-5 page-container-inner-right-div">
+<div class="col-xs-6 page-container-inner-right-div">
 
     <g:render template="/user/login"/>
     <g:render template="/user/register"/>

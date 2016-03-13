@@ -65,23 +65,35 @@ $(function () {
         }
     });
 
-    jQuery.validator.addMethod("confirm", function (value, element) {
-        var result = false;
-        var password = $("#password").val();
-        if (password === value) {
-            result = true;
+   $('#change-password-form').validate({
+        rules: {
+            'oldPassword': {
+                required: true
+            },
+            'password': {
+                required: true,
+                minlength: 5
+            }
+        },
+        messages: {
+            'oldPassword': {
+                required: "oldPassword can't be blank",
+            },
+            'password': {
+                required: "Password can't be blank",
+                minlength: "Password should be atleast 5 character long"
+            }
         }
-        return result;
-    }, "Confirm password not matched with password");
+
+    });
 
 });
 
 function globalSearchBoxValidation() {
 
     var searchText = $("#global-search-textbox").val();
-    var regex = /\s/g;
 
-    if (searchText == "" || searchText.test(regex)) {// test not working..
+    if (/\s/.test(searchText)) {// test not working..
         return false
     } else {
         return true

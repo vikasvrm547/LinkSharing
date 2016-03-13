@@ -24,7 +24,7 @@
 
     <div class="panel panel-primary">
         <div class="panel-heading">
-            <h3 class="panel-title">Users:${topic}</h3>
+            <h3 class="panel-title">Users:${topic?.createdBy}</h3>
         </div>
 
         <div class="panel-body show-users-panel-body">

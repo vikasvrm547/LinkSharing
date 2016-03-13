@@ -15,12 +15,12 @@ class ResourceController {
             })
         }
         if (resourceSearchCO.visibility == Visibility.PUBLIC) {
-            render(view: 'search', model: [postVOList: postVOList, trendingTopics: Topic.getTrendingTopics()])
+            render(view: 'search', model: [postVOList: postVOList, trendingTopics: Topic?.getTrendingTopics()])
         } else {
             postVOList.each {
                 result += g.render(template: g.createLink(controller: 'resource', action: 'show'), model: [post: it])
             }
-            if (postVOList.size()==0){
+            if (postVOList.size() == 0) {
                 result = "<h1>No resource found<h1>"
             }
             render(result)
@@ -31,19 +31,19 @@ class ResourceController {
 
         User currentUser = session.user
         Resource resource = Resource.findById(resourceId)
-        //render(resource)
         if (resource) {
             if (resource.topic.canViewedBy(currentUser)) {
-                //use get trending topics here
-                //  render(resource.getRatingInfo())
+                PostVO postVO = Resource?.getPost(resourceId);
                 Integer score = currentUser?.getScore(resourceId)
-
-                // session.userScore = score
-                render(view: 'show', model: [postVO: Resource.getPost(resourceId), currentUser: currentUser,
-                                             score : score, tendingTopics: Topic.getTrendingTopics()])
+                render(view: 'show', model: [postVO: postVO, currentUser: currentUser,
+                                             score : score, tendingTopics: Topic?.getTrendingTopics()])
+            }else {
+                flash.error = "You cannot vieww this topic"
+                redirect(url: request.getHeader("referer"))
             }
         } else {
-            render("Resource not found")
+            flash.error = "Resource not found"
+            redirect(url: request.getHeader("referer"))
         }
     }
 
@@ -53,7 +53,6 @@ class ResourceController {
             Resource resource = Resource.load(id);
             if (resource) {
                 try {
-                    //resource.delete(flush: true)
                     if (resource.deleteFile())
                         flash.message = "Resource successfully deleted"
                     else
@@ -66,6 +65,17 @@ class ResourceController {
                 }
             }
         }
+    }
+
+    def update(Long resourceId, String description) {
+        println(request.forwardURI)
+        println(request.getHeader("referer"))
+        if (Resource.updateDescription(resourceId, description)) {
+            flash.message = "Successfully update description"
+        } else {
+            flash.error = "Failed to update description "
+        }
+        redirect(url:  request.getHeader("referer"))
     }
 
     void addToReadingItems(Resource resource) {

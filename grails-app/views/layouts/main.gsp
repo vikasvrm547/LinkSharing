@@ -9,11 +9,11 @@
     <title><g:layoutTitle default="Link Sharing"/></title>
     <asset:stylesheet src="main.css"/>
     <asset:javascript src="main.js"/>
-
+    <asset:javascript src="jquery.validate.js"/>
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.12.0/jquery.min.js"></script>
     <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/js/bootstrap.min.js"></script>
-    <link rel="stylesheet" href="http://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/css/bootstrap.min.css">
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.5.0/css/font-awesome.css">
+    <link rel="stylesheet" href="http://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/css/bootstrap.min.css"/>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.5.0/css/font-awesome.css"/>
 
     <g:layoutHead/>
 </head>
@@ -69,6 +69,9 @@
                                                          params="[id: session.user?.id]"/>">
                                 Profile
                             </option>
+                            <option value="<g:createLink controller='user' action='edit'/>">
+                                Edit
+                            </option>
                             <g:if test="${controllerName.equals('user')}">
                                 <option value="<g:createLink controller='user' action='list'/>">Users</option>
                             </g:if>
@@ -101,6 +104,7 @@
     <g:render template="/topic/email"/>
     <g:render template="/linkResource/create"/>
     <g:render template="/documentResource/create"/>
+    <g:render template="/resource/edit"/>
     <asset:javascript src="validation.js"/>
     <asset:javascript src="application.js"/>
 </div>

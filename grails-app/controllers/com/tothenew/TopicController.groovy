@@ -2,6 +2,7 @@ package com.tothenew
 
 import com.tothenew.co.InvitationCO
 import com.tothenew.co.ResourceSearchCO
+import com.tothenew.co.TopicCO
 import com.tothenew.dto.EmailDTO
 import com.tothenew.enums.Seriousness
 import com.tothenew.enums.Visibility
@@ -12,16 +13,15 @@ class TopicController {
     def emailService
 
     def show(ResourceSearchCO resourceSearchCO) {
-        //Topic.get(1)
         Topic topic = Topic.read(resourceSearchCO.topicId)
         if (topic) {
             if (topic.visibility == Visibility.PUBLIC) {
-                render(view: 'show', model: [subscribedUsers: topic.getSubscribedUsers(), topic: topic, currentUser: session.user, topicPosts: topic.getTopicPosts()])
-                // render("Success")
+                render(view: 'show', model: [subscribedUsers: topic?.getSubscribedUsers(), topic: topic,
+                                             currentUser    : session.user, topicPosts: topic?.getTopicPosts()])
             } else {
                 if (Subscription.countByUserAndTopic(session.user, topic)) {
-                    render(view: 'show', model: [subscribedUsers: topic.getSubscribedUsers(), topic: topic, currentUser: session.user, topicPosts: topic.getTopicPosts()])
-                    // render("Success")
+                    render(view: 'show', model: [subscribedUsers: topic?.getSubscribedUsers(), topic: topic,
+                                                 currentUser    : session.user, topicPosts: topic?.getTopicPosts()])
                 } else {
                     flash.error = "Without subscription user cannot see private topics"
                     redirect(controller: "login", action: "index")
@@ -33,10 +33,36 @@ class TopicController {
         }
     }
 
-    def save(String topicName, String visibilityString) {
+    /*def save(TopicCO topicCO) {
         Map resultInfo = [:]
-        Topic topic = Topic.findOrCreateByNameAndCreatedBy(topicName, session.user)
-        topic.visibility = Visibility.convertToEnum(visibilityString);
+        User user = topicCO.getUser()
+        if (user?.hasTopicRight(topicCO.topicId)) {
+            Topic topic = Topic.findOrCreateByNameAndCreatedBy(topicCO.topicName, user)
+            if (topicCO.topicUpdatedName) {
+                topic.name = topicCO.topicUpdatedName
+            }
+            if (topicCO.visibilityString) {
+                topic.visibility = Visibility.convertToEnum(topicCO.visibilityString)
+            }
+            if (topic.save(flush: true)) {
+                resultInfo.message = "Topic saved/updated successfully"
+            } else {
+                resultInfo.error = "Topic not saved/update successfully"
+            }
+        } else resultInfo.error = "Topic not saved/update successfully"
+         render(resultInfo as JSON)
+    }*/
+
+    def save(TopicCO topicCO) {
+        Map resultInfo = [:]
+
+        Topic topic = Topic.findOrCreateByNameAndCreatedBy(topicCO.topicName, session.user)
+        if (topicCO.topicUpdatedName) {
+            topic.name = topicCO.topicUpdatedName
+        }
+        if (topicCO.visibilityString) {
+            topic.visibility = Visibility.convertToEnum(topicCO.visibilityString)
+        }
         if (topic.save(flush: true)) {
             resultInfo.message = "Topic saved/updated successfully"
         } else {
@@ -69,7 +95,7 @@ class TopicController {
         } else {
             flash.error = "Can't sent invitation"
         }
-        redirect(controller: "login", action:"index")
+        redirect(url: request.getHeader("referer"))
     }
 
     def join(Long topicId) {

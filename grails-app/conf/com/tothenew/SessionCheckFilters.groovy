@@ -3,32 +3,23 @@ package com.tothenew
 class SessionCheckFilters {
 
     def filters = {
-        /*userShowLoginCheck(uri:"/user/show") {
+        loginCheck(controller: '*', action: 'save|delete|update|changeIsRead|join|invite') {
             before = {
-                if (!session.user) {
-                    redirect(controller: 'login', action: 'index')
-                }
+                if (!session.user)
+                    redirect(controller: "login", action: "index")
             }
-        }*/
 
-        /*readingItemLoginCheck(uri:"/readingItem/save") {
-            before = checkSession
         }
-        resourceDeleteLoginCheck(uri:"/resource/delete") {
-            before = checkSession
+
+        userIndexcheck(controller: 'user', action: 'show|toggleActive|edit|updatePassword') {
+            before = {
+
+                if (!session.user)
+                    redirect(controller: "login", action: "index")
+            }
         }
-        userShowLoginCheck(uri:"/resourceRating/save") {
-            before = checkSession
-        }
-        subscriptionSaveLoginCheck(uri:"/subscription*//**") {
-         before = checkSession
-         }
-         linkResourceSaveLoginCheck(uri:"/linkResource/save") {
-         before = checkSession
-         }
-         topicSaveLoginCheck(uri:"/topic/save") {
-         before = checkSession
-         }*/
+
     }
+
 
 }

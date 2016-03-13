@@ -14,9 +14,6 @@
             </div>
             <g:form controller="user" action="list">
                 <div class="col-md-3">
-                    %{--  <g:select class="btn btn-default" name="active"
-                                  from="${com.tothenew.enums.ActiveStatus.values()}"
-                                  optionKey="key"/>--}%
                     <select class="btn btn-default" name="active">
                         <option value="null">All user</option>
                         <option value="true">Active</option>
@@ -29,7 +26,7 @@
                     <div id="custom-search-input" style="margin: 1px;">
                         <div class="input-group col-md-12">
                             <input type="text" id="topic-post-search-textbox" name="q" class="form-control input-lg"
-                                   placeholder="Search.."/>
+                                   placeholder="Search.." value="${userSearchCO?.q}"/>
                             <span class="input-group-btn">
                                 <button class="btn btn-info btn-lg" type="submit">
                                     <i class="glyphicon glyphicon-search"></i>
@@ -50,12 +47,18 @@
             <table class="table table-condensed table-hover">
                 <thead>
                 <tr>
-                    <g:sortableColumn property="id" title="Id"/>
-                    <g:sortableColumn property="userName" title="User name"/>
-                    <g:sortableColumn property="email" title="Email"/>
-                    <g:sortableColumn property="firstName" title="First name"/>
-                    <g:sortableColumn property="lastName" title="Last name"/>
-                    <g:sortableColumn property="active" title="Active"/>
+                    <g:sortableColumn property="id" title="Id"
+                                      params="[q:userSearchCO?.q,max:userSearchCO.max,offset:userSearchCO.offset]"/>
+                    <g:sortableColumn property="userName" title="User name"
+                                      params="[q:userSearchCO?.q,max:userSearchCO.max,offset:userSearchCO.offset]"/>
+                    <g:sortableColumn property="email" title="Email"
+                                      params="[q:userSearchCO?.q,max:userSearchCO.max,offset:userSearchCO.offset]"/>
+                    <g:sortableColumn property="firstName" title="First name"
+                                      params="[q:userSearchCO?.q,max:userSearchCO.max,offset:userSearchCO.offset]"/>
+                    <g:sortableColumn property="lastName" title="Last name"
+                                      params="[q:userSearchCO?.q,max:userSearchCO.max,offset:userSearchCO.offset]"/>
+                    <g:sortableColumn property="active" title="Active"
+                                      params="[q:userSearchCO?.q,max:userSearchCO.max,offset:userSearchCO.offset]"/>
                     <th>Manage</th>
                 </tr>
                 </thead>
@@ -83,11 +86,11 @@
                                 <g:link controller="user" action="toggleActive"
                                         params='[id: "${user.id}"]'>Activate</g:link>
                             </g:else>
-
                         </td>
                     </tr>
                 </g:each>
             </table>
+            <g:paginate total="${totalCount}" max="${userSearchCO?.max}" offset="${userSearchCO?.offset}" />
         </div>
     </div>
 </div>

@@ -46,6 +46,13 @@ class LinkSharingTagLib {
             out << g.link([class: attr.class, controller: 'resource', action: 'delete', params: [id: "${attr.resourceId}"]], body())
         }
     }
+    def canEditResource = { attr, body ->
+
+        Boolean canEdit = attr.currentUser?.canDeleteResource(attr.resourceId)
+        if (canEdit) {
+            out << body()
+        }
+    }
 
     def canUpdateTopic = { attr, body ->
         Boolean canDelete = attr.currentUser?.hasTopicRight(attr.topicId)
@@ -74,7 +81,7 @@ class LinkSharingTagLib {
         if (session.user && topicId) {
             Subscription subscription = session.user.getSubscription(topicId)
             if (subscription) {
-                out << g.select(from: Seriousness.values(),optionKey: "key", value: subscription?.seriousness,
+                out << g.select(from: Seriousness.values(), optionKey: "key", value: subscription?.seriousness,
                         name: "seriousness", class: attr.class, topicId: topicId)
             }
         }
@@ -100,12 +107,13 @@ class LinkSharingTagLib {
     }
 
     def showVisibility = { attr, body ->
-        out << g.select(from: Visibility.values(),optionKey: "key", value: attr.visibility,
-                name: "visibility", class: attr.class, topicName: attr.topicName)
+        out << g.select(from: Visibility.values(), optionKey: "key", value: attr.visibility,
+                name: "visibility", class: attr.class, topicName: attr.topicName, topicId: attr.topicId)
 
     }
 
     def resourceCount = { attr, body ->
+
         Long resourceCount = Resource.createCriteria().count {
             eq('topic.id', attr.topicId)
         }

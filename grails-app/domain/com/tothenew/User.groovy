@@ -117,7 +117,7 @@ class User {
         List<PostVO> readingItemsList = [];
         ReadingItem.findAllByUser(this, [max: searchCO.max, offset: searchCO.offset]).each {
             readingItemsList.add(new PostVO(topicId: it.resource.topic.id, resourceID: it.resource.id, description: it.resource.description,
-                    topicName: it.resource.topic.name, userId: it.user.id, userUserName: it.resource.createdBy.userName,
+                    topicName: it.resource.topic.name, userId: it.resource.createdBy.id, userUserName: it.resource.createdBy.userName,
                     userFirstName: it.resource.createdBy.firstName, userLastName: it.resource.createdBy.lastName,
                     isRead: it.isRead,
                     url: it.resource.class.toString().equals("class com.tothenew.LinkResource") ? it.resource.toString() : "",
@@ -129,7 +129,7 @@ class User {
 
     Boolean canDeleteResource(Long id) {
         Resource resource = Resource.get(id)
-        if (this.admin || this.equals(resource.createdBy.id)) {
+        if (this.admin || this.equals(resource.createdBy)) {
             return true
         } else {
             return false
@@ -177,13 +177,13 @@ class User {
     }
 
 
-     List<Resource> unreadResources(){
-        return  ReadingItem.createCriteria().list{
-            projections{
+    List<Resource> unreadResources() {
+        return ReadingItem.createCriteria().list {
+            projections {
                 property('resource')
             }
-            eq('user',this)
-            eq('isRead',false)
+            eq('user', this)
+            eq('isRead', false)
         }
     }
 

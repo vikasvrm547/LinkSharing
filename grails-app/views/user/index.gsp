@@ -26,7 +26,7 @@
 
         <div class="panel-body subscription-panel-body">
             <g:each in="${subscribedTopics}">
-                <g:render template="/topic/show" model='[topic: it]'/>
+                <g:render template="/topic/show" model='[topic: it,uniqueIdForTopicEdit:"${session.uniqueIdForTopicEdit++}"]'/>
             </g:each>
         </div>
     </div>

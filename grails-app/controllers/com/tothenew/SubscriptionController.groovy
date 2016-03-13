@@ -70,9 +70,4 @@ class SubscriptionController {
         render( resultInfo as JSON)
     }
 
-    def demo() {
-        Map m = ["1": "one", "2": "two"]
-
-        render(m as JSON)
-    }
 }

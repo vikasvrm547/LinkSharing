@@ -181,6 +181,7 @@ abstract class Resource {
 
     static String checkResourceType(Long id) {
         Resource resource = Resource.get(id)
+
         if (resource.class.toString().equals("class com.tothenew.LinkResource")) {
             return "LinkResource"
         } else if (resource.class.toString().equals("class com.tothenew.DocumentResource")) {
@@ -227,7 +228,9 @@ abstract class Resource {
     Boolean canViewBy() {
 
     }
-
+    static Integer updateDescription(Long resourceId,String description){
+        return executeUpdate("update Resource set description=:description where id=:id",[description:description,id:resourceId])
+    }
     static List usersWithUnreadResources() {
         return ReadingItem.createCriteria().listDistinct {
             projections {

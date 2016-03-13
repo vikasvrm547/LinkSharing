@@ -1,8 +1,6 @@
 package com.tothenew
 
 import grails.converters.JSON
-import org.apache.xpath.operations.Bool
-
 
 class LoginController {
 
@@ -23,11 +21,12 @@ class LoginController {
         if (user) {
             if (user.active) {
                 session.user = user
+                session.uniqueIdForTopicEdit = 1
             } else {
                 flash.error = "user is not active"
             }
         } else {
-            flash.error = "User not found"
+            flash.error = "Incorrect credentials"
         }
         redirect(action: 'index')
     }
@@ -45,6 +44,4 @@ class LoginController {
         session.invalidate()
         forward(action: 'index')
     }
-
-
 }

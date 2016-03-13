@@ -5,7 +5,8 @@
 
     <div class="panel-body tending-topic-panel-body">
         <g:each in="${tendingTopics}">
-            <g:render template="/topic/show" model="[topic: it]"/>
+            <g:render template="/topic/show" model='[topic: it,
+                              uniqueIdForTopicEdit:"${session.uniqueIdForTopicEdit?session.uniqueIdForTopicEdit++:null}"]'/>
         </g:each>
     </div>
 </div>

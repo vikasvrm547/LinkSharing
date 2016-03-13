@@ -19,7 +19,8 @@ class DocumentResourceController extends ResourceController {
                 flash.error = "Topic is not valid"
             }
         }
-        redirect(controller: 'login', action: 'index')
+        redirect(url: request.getHeader("referer"))
+
     }
 
     void saveDocumentResource(def params, Topic topic) {
@@ -50,6 +51,6 @@ class DocumentResourceController extends ResourceController {
         } else {
             flash.error = "resource not found"
         }
-        redirect(controller: 'login',action: 'index')
+        redirect(url: request.getHeader("referer"))
     }
 }

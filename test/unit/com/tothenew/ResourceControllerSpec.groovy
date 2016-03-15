@@ -13,14 +13,18 @@ class ResourceControllerSpec extends Specification {
         given:
         LinkResource linkResource = new LinkResource(description: "s1",createdBy: new User(),
                 url: 'http://www.tothenew.com/',topic: new Topic())
+
+        session.user = new User(id: 1l)
+        session.user.metaClass.canDeleteResource = {Long id-> true}
         linkResource.save(flush: true)
+
         when:
         controller.delete(resourceId)
         then:
-        response.text == rText
+        response.redirectedUrl == rUrl
         where:
-        sno | resourceId | rText
-        1   | 1l         | "Resource successfully deleted"
-        2   | 2l         | "Resource not found"
+        sno | resourceId | rUrl
+        1   | 1l         | "/login/index"
+        2   | 2l         | "/login/index"
     }
 }

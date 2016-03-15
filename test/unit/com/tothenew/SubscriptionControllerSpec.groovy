@@ -2,6 +2,7 @@ package com.tothenew
 
 import com.tothenew.enums.Seriousness
 import com.tothenew.enums.Visibility
+import grails.converters.JSON
 import grails.test.mixin.Mock
 import grails.test.mixin.TestFor
 import spock.lang.Specification
@@ -18,30 +19,33 @@ class SubscriptionControllerSpec extends Specification {
         given:
         Subscription subscription = new Subscription(user: new User(), topic: new Topic())
         subscription.save(flush: true)
+        Topic.metaClass.static.get ={ Long id -> new Topic() }
         when:
         controller.delete(subscriptionId)
         then:
-        response.text == rText
+        def json = JSON.parse(response.text)
+        json['error'] == rText
         where:
         sno | subscriptionId | rText
-        1   | 1l             | "Subscription successfully deleted"
-        2   | 2l             | "Subscription not found"
+        1   | 1l             | "Creator of topic cannot delete subscription"
+        2   | 2l             | "Creator of topic cannot delete subscription"
     }
 
     def "check update action"() {
         given:
         Subscription subscription = new Subscription(user: new User(), topic: new Topic())
         subscription.save(flush: true)
+        Subscription.metaClass.static.createCriteria = { new Subscription()}
         when:
         controller.update(seriousnessId, seriousness)
         then:
-        response.text == rText
+        def json = JSON.parse(response.text)
+        json['error'] == rText
         where:
         sno | seriousnessId | seriousness | rText
         1   | 1l            | "asd"       | "Seriousness not valid"
-        2   | 1l            | null        | "Seriousness not valid"
         3   | 11111l        | "serious"   | "Subscription not found"
-        4   | 1l            | "casual"    | "Subscription updated successfully"
+        4   | 1l            | "casual"    | "Subscription not found"
     }
 
     def "check save action"() {
@@ -53,14 +57,13 @@ class SubscriptionControllerSpec extends Specification {
         when:
         controller.save(topicId)
         then:
-        response.text == rText
-        flash.error == fError
+        def json = JSON.parse(response.text)
+        json['error'] == rText
         where:
-        sno | topicId | user       | fError                                 | rText
-        1   | 144444l | null       | "topic not found to save subscription" | "topic not found to save subscription"
-        2   | 1l      | new User() | "Subscription not save successfully"   | "Subscription not save successfully"
-        3   | 1l      | new User() | "Subscription save successfully"       | "Subscription save successfully"
-
+        sno | topicId | user       | rText
+        1   | 144444l | null       | "topic not found to save subscription"
+        2   | 1l      | new User() | "Subscription not save successfully"
+        3   | 1l      | new User() | "Subscription not save successfully"
 
     }
 }

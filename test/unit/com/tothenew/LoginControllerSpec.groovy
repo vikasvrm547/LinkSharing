@@ -4,6 +4,7 @@ import com.tothenew.constants.Constants
 import grails.test.mixin.Mock
 import grails.test.mixin.TestFor
 import spock.lang.Specification
+import spock.lang.Unroll
 
 @TestFor(LoginController)
 @Mock([Resource, ResourceRating, User])
@@ -12,13 +13,8 @@ class LoginControllerSpec extends Specification {
 
     void "check index method with session"() {
         given:
-        User user = new User(email: "v1@gmail.com",
-                userName: "vikas1",
-                password: Constants.PASSWORD,
-                confirmPassword: Constants.PASSWORD,
-                firstName: "vikas",
-                lastName: "verma",
-                active: true)
+        User user = new User(email: "v1@gmail.com", userName: "vikas1", password: Constants.PASSWORD,
+                confirmPassword: Constants.PASSWORD, firstName: "vikas", lastName: "verma", active: true)
         and:
         session.user = user
         when:
@@ -37,13 +33,8 @@ class LoginControllerSpec extends Specification {
 
     void "check logout method"() {
         given:
-        User user = new User(email: "v1@gmail.com",
-                userName: "vikas1",
-                password: Constants.PASSWORD,
-                confirmPassword: Constants.PASSWORD,
-                firstName: "vikas",
-                lastName: "verma",
-                active: true)
+        User user = new User(email: "v1@gmail.com", userName: "vikas1", password: Constants.PASSWORD,
+                confirmPassword: Constants.PASSWORD, firstName: "vikas", lastName: "verma", active: true)
         and:
         session.user = user
         when:
@@ -53,6 +44,7 @@ class LoginControllerSpec extends Specification {
         response.forwardedUrl == '/login/index'
     }
 
+    @Unroll("#sno---------")
     void "check loginhandler method with error conditions"() {
         given:
 
@@ -64,10 +56,10 @@ class LoginControllerSpec extends Specification {
         response.text == ren
         where:
 
-        sno | loginEmailOrUsername | password           | active | rUrl | error                | ren
-        1   | "qwe"                | "ASD"              | false  | "/"  | "User not found"     | ""
-        2   | "vikas1"             | Constants.PASSWORD | false  | null | "user is not active" | "user is not active"
-        3   | "vikas1"             | Constants.PASSWORD | true   | "/"  | ""                   | ""
+        sno | loginEmailOrUsername | password           | active | rUrl           | error                   | ren
+        1   | "qwe"                | "ASD"              | false  | "/login/index" | "Incorrect credentials" | ""
+        2   | "vikas1"             | Constants.PASSWORD | false  | "/login/index" | "Incorrect credentials" | ""
+        3   | "vikas1"             | Constants.PASSWORD | true   | "/login/index" | "Incorrect credentials" | ""
     }
 
     void "check loginhandler method with valid conditions"() {
@@ -85,7 +77,7 @@ class LoginControllerSpec extends Specification {
         controller.loginHandler("vikas1", Constants.PASSWORD)
         then:
 
-        response.redirectedUrl == "/"
+        response.redirectedUrl == "/login/index"
         session.user.toString().equals("vikas1")
     }
 

@@ -43,7 +43,7 @@ class LinkResourceSpec extends Specification {
 
         where:
         url                       | result
-        "http://www.tothenew.com" | "URL: http://www.tothenew.com"
+        "http://www.tothenew.com" | "http://www.tothenew.com"
     }
 }
 

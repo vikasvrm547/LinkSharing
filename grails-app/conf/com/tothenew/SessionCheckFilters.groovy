@@ -19,6 +19,16 @@ class SessionCheckFilters {
             }
         }
 
+
+        consoleCheck(controller: "console", action: "*"){
+            before = {
+
+                if(!(session.user?.admin))
+                    redirect(controller: "login", action: "index")
+            }
+        }
+
+
     }
 
 

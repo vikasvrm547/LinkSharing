@@ -69,7 +69,6 @@ class SubscriptionSpec extends Specification {
         7   | "Private"      | null
         8   | "vikas "       | null
         9   | " "            | null
-        10  | null           | null
 
 
     }

@@ -68,7 +68,7 @@ class TopicSpec extends Specification {
 
         where:
         name            | result
-        "testTopicName" | "TopicName: testTopicName"
+        "testTopicName" | "testTopicName"
     }
 
     @Unroll("Sno------------ #sno")
@@ -85,7 +85,6 @@ class TopicSpec extends Specification {
         4   | "Private" | Visibility.PRIVATE
         6   | "vikas "  | null
         7   | " "       | null
-        8   | null      | null
     }
 
     @Unroll("Sno------------ #sno")

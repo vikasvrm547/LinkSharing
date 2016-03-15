@@ -153,7 +153,7 @@ class UserSpec extends Specification {
         topic.save(flush: true)
 
         expect:
-        User.get(1).isSubscribed(topic) == true
+        User.get(1).isSubscribed(topic.id) == true
     }
 
     def "check isSubscribed method with invalid result"() {
@@ -175,7 +175,7 @@ class UserSpec extends Specification {
         topic.save(flush: true)
 
         expect:
-        User.get(2).isSubscribed(topic) == false
+        User.get(2).isSubscribed(topic.id) == false
     }
 }
 

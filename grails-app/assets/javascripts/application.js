@@ -7,8 +7,8 @@ function updateTopic(uniqueIdForTopicEdit) {
 
     var topicUpdatedName = $("#topic-name-edit-textbox-" + uniqueIdForTopicEdit).val();
     var topicName = $("#topic-name-" + uniqueIdForTopicEdit).text();
-    var topicId = $("#topic-hidden-topic-id-" + uniqueIdForTopicEdit).val()
-    var userId = $("#topic-hidden-user-id-" + uniqueIdForTopicEdit).val()
+    var topicId = $("#topic-hidden-topic-id-" + uniqueIdForTopicEdit).val();
+    var userId = $("#topic-hidden-user-id-" + uniqueIdForTopicEdit).val();
     if (/\S/.test(topicUpdatedName)) {
         var url = "/topic/save";
         var data = {topicUpdatedName: topicUpdatedName, topicName: topicName, topicId: topicId, userId: userId};

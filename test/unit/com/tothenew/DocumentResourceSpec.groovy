@@ -19,7 +19,7 @@ class DocumentResourceSpec extends Specification {
 
         where:
         sno | description   | creator    | topic       | filePath       | excepted
-        1   | "description" | new User() | new Topic() | '/ home/vikas' | true
+        1   | "description" | new User() | new Topic() | '/ home/vikas' | false
         2   | " "           | new User() | new Topic() | '/home/vikas'  | false
         3   | null          | new User() | new Topic() | '/home/vikas'  | false
         4   | "description" | null       | new Topic() | '/home/vikas'  | false
@@ -41,6 +41,6 @@ class DocumentResourceSpec extends Specification {
 
         where:
         filePath     | result
-        "home/vikas" | "FilePath: home/vikas"
+        "home/vikas" | "home/vikas"
     }
 }

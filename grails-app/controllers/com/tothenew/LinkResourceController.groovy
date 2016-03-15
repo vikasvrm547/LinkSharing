@@ -7,7 +7,7 @@ class LinkResourceController extends ResourceController {
     def save(LinkResourceCO linkResourceCO) {
 
         if (linkResourceCO?.hasErrors()) {
-            flash.error = render("Failed to create link resource")
+            flash.error = "Failed to create link resource"
         } else {
             LinkResource linkResource = new LinkResource(url: linkResourceCO.linkResourceLink, description: linkResourceCO.linkResourceComment,
                     topic: Topic.get(linkResourceCO.topicId), createdBy: session.user)

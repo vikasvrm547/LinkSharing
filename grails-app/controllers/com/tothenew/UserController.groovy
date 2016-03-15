@@ -47,18 +47,18 @@ class UserController {
 
     def register(UserCO registerCO) {
         if (registerCO.hasErrors()) {
-            flash.error = "validations not pass"
+            flash.error = g.message(code: "com.tothenew.User.controller.register.validation.not.pass")
             render(view: '/login/index', model: [topPosts  : Resource.getTopPosts(), recentShares: Resource.getRecentShares(),
                                                  registerCO: registerCO])
-        } else if ((!registerCO.userPhoto.bytes) || checkImageType(registerCO.userPhoto.contentType)) {
+        } else if ((!registerCO.userPhoto?.bytes) || checkImageType(registerCO.userPhoto?.contentType)) {
             User newUser = new User(registerCO.properties)
             newUser.photo = registerCO.userPhoto.bytes
             if (!newUser.save()) {
-                flash.error = "validations not pass"
+                flash.error = g.message(code: "com.tothenew.User.controller.register.validation.not.pass")
                 render(view: '/login/index', model: [topPosts  : Resource.getTopPosts(), recentShares: Resource.getRecentShares(),
                                                      registerCO: newUser])
             } else {
-                flash.message = "User successfully created"
+                flash.message = g.message(code: "com.tothenew.User.controller.register.successfully.created")
                 redirect(controller: 'login', action: 'index')
             }
         } else {
@@ -79,7 +79,7 @@ class UserController {
             User currentUser = session.user
             render(view: 'profile', model: [currentUser: currentUser, user: user,
                                             resources  : resourceService.search(resourceSearchCO)])
-        } else render("nooooooooo")
+        } else render("Sorry")
     }
 
     def subscriptions(Long id) {
@@ -93,9 +93,7 @@ class UserController {
             topicSearchCO.visibility = Visibility.PUBLIC
 
         List subscribedTopics = subscriptionService.search(topicSearchCO)
-
-        render(template: '/topic/list', model: [topics: subscribedTopics])
-
+            render(template: '/topic/list', model: [topics: subscribedTopics])
     }
 
 
@@ -120,13 +118,14 @@ class UserController {
 
         if (user && (!user.admin)) {
             user.active = !user.active
-            if (user.save(flush: true, validate: false)) {
-                flash.message = "Toggle successfully"
+            user.confirmPassword = user.password
+            if (user.save(flush: true)) {
+                flash.message = g.message(code: "com.tothenew.User.controller.toggle.active.success")
             } else {
-                flash.error = "Can't toggle successfully ${user.errors.allErrors}"
+                flash.error = g.message(code: "com.tothenew.User.controller.toggle.active.fail")
             }
         } else {
-            flash.error = "Can't toggle successfully"
+            flash.error = g.message(code: "com.tothenew.User.controller.toggle.active.fail")
         }
         redirect(controller: 'user', action: "list")
 
@@ -159,12 +158,12 @@ class UserController {
                     view: '/email/_password', model: [newPassword: newPassword])
             emailService.sendMail(emailDTO)
             if (User.updatePassword(newPassword, email)) {
-                flash.message = "If your Email id is valid and you are active user then you will get your new password via mail"
+                flash.message = g.message(code: "com.tothenew.User.controller.forgotPassword.successfully.update")
             } else {
-                flash.error = "Please try again"
+                flash.error = g.message(code: "com.tothenew.User.controller.forgotPassword.unsuccessfully.update")
             }
         } else {
-            flash.error = "You are not authorized user"
+            flash.error = g.message(code: "com.tothenew.User.controller.forgotPassword.authorized.error")
         }
         redirect(controller: "login", action: "index")
     }

@@ -20,7 +20,7 @@ enum Seriousness {
     static Seriousness convertToEnum(String seriousness){
         try{
             return valueOf(seriousness.toUpperCase())
-        }catch (Exception e){
+        }catch (IllegalArgumentException e){
             return null
         }
     }

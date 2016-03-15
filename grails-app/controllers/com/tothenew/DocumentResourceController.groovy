@@ -29,7 +29,12 @@ class DocumentResourceController extends ResourceController {
             File fileDest = new File(path)
             params.file.transferTo(fileDest)
             flash.message = "Document successfully created"
-            addToReadingItems(documentResource)
+
+             def ctx = startAsync()
+            ctx.start {
+                addToReadingItems(documentResource)
+                ctx.complete()
+            }
         } else {
             flash.error = "validation failed"
         }

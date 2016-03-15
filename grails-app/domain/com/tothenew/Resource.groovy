@@ -50,6 +50,7 @@ abstract class Resource {
         }
     }
 
+
     RatingInfoVO getRatingInfo() {
         def criteria = ResourceRating.createCriteria()
 

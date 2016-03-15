@@ -8,7 +8,6 @@ import com.tothenew.enums.Seriousness
 import com.tothenew.enums.Visibility
 import com.tothenew.vo.TopicVO
 import grails.converters.JSON
-
 class TopicController {
     def emailService
 
@@ -70,7 +69,12 @@ class TopicController {
                     createdBy: topic.createdBy)
             EmailDTO emailDTO = new EmailDTO(to: [invitationCO.email], subject: "Invitations for topic from linksharing",
                     view: '/email/_invite', model: [currentUser: session.user, topic: topicVO])
-            emailService.sendMail(emailDTO)
+
+            def ctx = startAsync()
+            ctx.start {
+                emailService.sendMail(emailDTO)
+                ctx.complete()
+            }
             flash.message = "Successfully send invitation"
         } else {
             flash.error = "Can't sent invitation"

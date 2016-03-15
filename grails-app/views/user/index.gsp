@@ -3,7 +3,6 @@
 <head>
     <title>User Profile</title>
     <asset:stylesheet src="UserProfile.css"/>
-    <asset:stylesheet src="BrowseFile.css"/>
     <meta name="layout" content="main"/>
 </head>
 
@@ -20,7 +19,7 @@
     <!-- panel subscription start -->
     <div class="panel panel-primary">
         <div class="panel-heading">
-            Subscriptions 
+            Subscriptions
         </div>
 
         <div class="panel-body subscription-panel-body">
@@ -47,14 +46,15 @@
                 <g:render template="/resource/show" model="[post: post]"/>
 
             </g:each>
-            <g:paginate class="pagination" total="${totalReadingItems}" controller="user" action="show"
-                        max="${searchCO.max}" offset="${searchCO.offset}"/>
+            <ul class="pagination pull-right" >
+                <boots:paginate total="${totalReadingItems}" controller="user" action="show"  max="${searchCO.max}" offset="${searchCO.offset}"/>
+            </ul>
         </div>
     </div>
 </div>
 
 
 <asset:javascript src="UserProfile.js"/>
-<asset:javascript src="BrowseFile.js"/>
+
 </body>
 </html>

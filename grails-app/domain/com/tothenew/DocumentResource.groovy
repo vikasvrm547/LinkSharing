@@ -43,4 +43,18 @@ class DocumentResource extends Resource {
         return filePath
     }
 
+    boolean equals(o) {
+        if (this.is(o)) return true
+        if (getClass() != o.class) return false
+
+        DocumentResource that = (DocumentResource) o
+
+        if (id != that.id) return false
+
+        return true
+    }
+
+    int hashCode() {
+        return (id != null ? id.hashCode() : 0)
+    }
 }

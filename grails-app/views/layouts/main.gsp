@@ -10,6 +10,8 @@
     <asset:stylesheet src="main.css"/>
     <asset:javascript src="main.js"/>
     <asset:javascript src="jquery.validate.js"/>
+    <asset:stylesheet src="BrowseFile.css"/>
+
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.12.0/jquery.min.js"></script>
     <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/js/bootstrap.min.js"></script>
     <link rel="stylesheet" href="http://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/css/bootstrap.min.css"/>
@@ -69,7 +71,7 @@
                         <select class="btn btn-primary dropdown-toggle nav-dropdown" type="button"
                                 id="headerUserDropDown"
                                 onchange="location = this.options[this.selectedIndex].value;">
-                            <option value="">----${session.user}----</option>
+                            <option value="" disabled selected>${session.user}</option>
                             <option value="<g:createLink controller='user' action='profile'
                                                          params="[id: session.user?.id]"/>">
                                 Profile
@@ -111,6 +113,7 @@
     <g:render template="/documentResource/create"/>
     <g:render template="/resource/edit"/>
     <asset:javascript src="validation.js"/>
+    <asset:javascript src="BrowseFile.js"/>
     <asset:javascript src="application.js"/>
 </div>
 </body>

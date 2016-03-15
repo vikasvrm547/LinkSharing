@@ -66,8 +66,23 @@ class User {
         return [firstName, lastName].findAll { it }.join(" ")
     }
 
-    boolean equals(User user) {
+   /* boolean equals(User user) {
         return this.id == user.id
+    }*/
+
+    boolean equals(o) {
+        if (this.is(o)) return true
+        if (getClass() != o.class) return false
+
+        User user = (User) o
+
+        if (id != user.id) return false
+
+        return true
+    }
+
+    int hashCode() {
+        return (id != null ? id.hashCode() : 0)
     }
 
     @Override

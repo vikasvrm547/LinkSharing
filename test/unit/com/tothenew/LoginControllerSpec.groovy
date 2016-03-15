@@ -29,14 +29,6 @@ class LoginControllerSpec extends Specification {
 
     void "check index method without session"() {
         given:
-        User user = new User(email: "v1@gmail.com",
-                userName: "vikas1",
-                password: Constants.PASSWORD,
-                confirmPassword: Constants.PASSWORD,
-                firstName: "vikas",
-                lastName: "verma",
-                active: true)
-
         when:
         controller.index()
         then:
@@ -63,14 +55,6 @@ class LoginControllerSpec extends Specification {
 
     void "check loginhandler method with error conditions"() {
         given:
-        User user = new User(email: "v1@gmail.com",
-                userName: "vikas1",
-                password: Constants.PASSWORD,
-                confirmPassword: Constants.PASSWORD,
-                firstName: "vikas",
-                lastName: "verma",
-                active: active).save(flush: true)
-
 
         when:
         controller.loginHandler(loginEmailOrUsername, password)

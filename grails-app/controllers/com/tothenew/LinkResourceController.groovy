@@ -13,7 +13,11 @@ class LinkResourceController extends ResourceController {
                     topic: Topic.get(linkResourceCO.topicId), createdBy: session.user)
             if (linkResource.save()) {
                 flash.message = "Link resource successfully save"
-                addToReadingItems(linkResource)
+                def ctx = startAsync()
+                ctx.start {
+                    addToReadingItems(linkResource)
+                    ctx.complete()
+                }
             } else {
                 flash.error = "Failed to create link resource"
             }

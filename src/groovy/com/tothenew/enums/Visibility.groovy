@@ -18,7 +18,7 @@ enum Visibility {
     static Visibility convertToEnum(String visibility){
         try{
             return valueOf(visibility.toUpperCase())
-        }catch (Exception e){
+        }catch (IllegalArgumentException e){
             return null
         }
     }

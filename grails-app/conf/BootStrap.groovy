@@ -31,7 +31,7 @@ class BootStrap {
                 active: true,
                 admin: true)
 
-         /*   if (!User.count()) {
+         /*  if (!User.count()) {
                 createUser(user)
                 createUser(admin)
             }
@@ -41,6 +41,7 @@ class BootStrap {
             subscribeTopics()
             createReadingItems()
             createResourceRatings()*/
+
     }
 
 

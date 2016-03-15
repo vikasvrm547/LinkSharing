@@ -20,7 +20,7 @@ class UserController {
     def emailService
 
     def show(SearchCO searchCO) {
-        searchCO.max = searchCO.max ?: 10
+        searchCO.max = searchCO.max ?: 9
         searchCO.offset = searchCO.offset ?: 0
 
         User currentUser = session.user

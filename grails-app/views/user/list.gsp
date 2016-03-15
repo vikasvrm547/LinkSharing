@@ -48,17 +48,17 @@
                 <thead>
                 <tr>
                     <g:sortableColumn property="id" title="Id"
-                                      params="[q:userSearchCO?.q,max:userSearchCO.max,offset:userSearchCO.offset]"/>
+                                      params="[q: userSearchCO?.q, max: userSearchCO.max, offset: userSearchCO.offset]"/>
                     <g:sortableColumn property="userName" title="User name"
-                                      params="[q:userSearchCO?.q,max:userSearchCO.max,offset:userSearchCO.offset]"/>
+                                      params="[q: userSearchCO?.q, max: userSearchCO.max, offset: userSearchCO.offset]"/>
                     <g:sortableColumn property="email" title="Email"
-                                      params="[q:userSearchCO?.q,max:userSearchCO.max,offset:userSearchCO.offset]"/>
+                                      params="[q: userSearchCO?.q, max: userSearchCO.max, offset: userSearchCO.offset]"/>
                     <g:sortableColumn property="firstName" title="First name"
-                                      params="[q:userSearchCO?.q,max:userSearchCO.max,offset:userSearchCO.offset]"/>
+                                      params="[q: userSearchCO?.q, max: userSearchCO.max, offset: userSearchCO.offset]"/>
                     <g:sortableColumn property="lastName" title="Last name"
-                                      params="[q:userSearchCO?.q,max:userSearchCO.max,offset:userSearchCO.offset]"/>
+                                      params="[q: userSearchCO?.q, max: userSearchCO.max, offset: userSearchCO.offset]"/>
                     <g:sortableColumn property="active" title="Active"
-                                      params="[q:userSearchCO?.q,max:userSearchCO.max,offset:userSearchCO.offset]"/>
+                                      params="[q: userSearchCO?.q, max: userSearchCO.max, offset: userSearchCO.offset]"/>
                     <th>Manage</th>
                 </tr>
                 </thead>
@@ -90,7 +90,9 @@
                     </tr>
                 </g:each>
             </table>
-            <g:paginate total="${totalCount}" max="${userSearchCO?.max}" offset="${userSearchCO?.offset}" />
+            <ul class="pagination pull-right">
+                <boots:paginate total="${totalCount}" max="${userSearchCO?.max}" offset="${userSearchCO?.offset}"/>
+            </ul>
         </div>
     </div>
 </div>

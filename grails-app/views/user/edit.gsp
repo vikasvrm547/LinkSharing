@@ -31,7 +31,7 @@
 
                 <div class="form-group">
                     <div class="col-sm-4"><label id="fname" class="register_label control-label">First name<small
-                            class="asterisk">*</small></label>
+                            class="asterisk"> *</small></label>
                     </div>
 
                     <div class="col-sm-8">
@@ -43,7 +43,7 @@
                 </div>
 
                 <div class="form-group">
-                    <div class="col-sm-4"><label class="control-label">Last name<small class="asterisk">*</small>
+                    <div class="col-sm-4"><label class="control-label">Last name<small class="asterisk"> *</small>
                     </label></div>
 
                     <div class="col-sm-8">
@@ -55,7 +55,7 @@
                 </div>
 
                 <div class="form-group">
-                    <div class="col-sm-4"><label class="control-label">User name<small class="asterisk">*</small>
+                    <div class="col-sm-4"><label class="control-label">User name<small class="asterisk"> *</small>
                     </label></div>
 
                     <div class="col-sm-8">
@@ -111,7 +111,7 @@
                 <input type="hidden" name="userId" value="${currentUser?.id}"/>
 
                 <div class="form-group">
-                    <div class="col-sm-4"><label class="control-label">Old Password<small class="asterisk">*</small>
+                    <div class="col-sm-4"><label class="control-label">Old Password<small class="asterisk"> *</small>
                     </label></div>
 
                     <div class="col-sm-8">
@@ -120,7 +120,7 @@
                 </div>
 
                 <div class="form-group">
-                    <div class="col-sm-4"><label class="control-label">Password<small class="asterisk">*</small></label>
+                    <div class="col-sm-4"><label class="control-label">Password<small class="asterisk"> *</small></label>
                     </div>
 
                     <div class="col-sm-8">

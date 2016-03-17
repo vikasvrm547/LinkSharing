@@ -5,7 +5,7 @@ class RatingInfoVO {
     Long averageScore
     Long totalScore
 
-    String toString(){
+    String toString() {
         return "Total votes: $totalVotes, Average score: $averageScore, Total score: $totalScore"
     }
 }

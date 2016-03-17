@@ -30,7 +30,7 @@ class DocumentResourceController extends ResourceController {
             params.file.transferTo(fileDest)
             flash.message = "Document successfully created"
 
-             def ctx = startAsync()
+            def ctx = startAsync()
             ctx.start {
                 addToReadingItems(documentResource)
                 ctx.complete()

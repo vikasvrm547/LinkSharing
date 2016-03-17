@@ -8,6 +8,7 @@ import com.tothenew.enums.Seriousness
 import com.tothenew.enums.Visibility
 import com.tothenew.vo.TopicVO
 import grails.converters.JSON
+
 class TopicController {
     def emailService
 
@@ -94,7 +95,6 @@ class TopicController {
                     flash.error = "Subscription not save successfully"
                 }
             } else {
-
                 flash.error = "Topic not exist"
             }
         }

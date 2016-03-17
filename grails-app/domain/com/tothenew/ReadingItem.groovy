@@ -11,13 +11,14 @@ class ReadingItem {
     static constraints = {
         user(unique: 'resource')
     }
-    static Boolean getIsRead(Long resourceId, Long userId){
-        createCriteria().get{
-            projections{
+
+    static Boolean getIsRead(Long resourceId, Long userId) {
+        createCriteria().get {
+            projections {
                 property('isRead')
             }
-            eq('resource.id',resourceId)
-            eq('user.id',userId)
+            eq('resource.id', resourceId)
+            eq('user.id', userId)
         }
     }
 

@@ -14,14 +14,14 @@ class UserCO {
     String confirmPassword;
 
     static constraints = {
-        email( blank: false, email: true)
+        email(blank: false, email: true)
         password(blank: false, minSize: 5)
         firstName(blank: false)
         lastName(blank: false)
         userName(blank: false)
         userPhoto(nullable: true)
         confirmPassword(bindable: true, nullable: true, blank: true, validator: { val, user ->
-            return (val != null) && val.equals(user.password)?:"com.tothenew.co.RegisterCO.confirmPassword.validator"
+            return (val != null) && val.equals(user.password) ?: "com.tothenew.co.RegisterCO.confirmPassword.validator"
         })
     }
 

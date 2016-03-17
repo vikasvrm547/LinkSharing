@@ -1,5 +1,6 @@
 package com.tothenew
 
+import com.tothenew.constants.Constants
 import grails.test.mixin.TestFor
 import spock.lang.Specification
 
@@ -42,5 +43,45 @@ class DocumentResourceSpec extends Specification {
         where:
         filePath     | result
         "home/vikas" | "home/vikas"
+    }
+
+    def "check equals method with same reference"() {
+        given:
+        new DocumentResource(filePath: "/a/a", contentType: Constants.DOCUMENT_CONTENT_TYPE, description: "d",
+                createdBy: new User(), topic: new Topic()).save()
+        DocumentResource documentResource = DocumentResource.get(1l)
+        expect:
+        documentResource.equals(documentResource) == true
+    }
+
+    def "check equals method with different reference and same id"() {
+        given:
+        new DocumentResource(filePath: "/a/a", contentType: Constants.DOCUMENT_CONTENT_TYPE, description: "d",
+                createdBy: new User(), topic: new Topic()).save()
+        new DocumentResource(filePath: "/a/a", contentType: Constants.DOCUMENT_CONTENT_TYPE, description: "d",
+                createdBy: new User(), topic: new Topic()).save()
+        expect:
+        DocumentResource.get(1l).equals(DocumentResource.get(1l)) == true
+    }
+
+    def "check equals method with different reference and id"() {
+        given:
+        new DocumentResource(filePath: "/a/a", contentType: Constants.DOCUMENT_CONTENT_TYPE, description: "d",
+                createdBy: new User(), topic: new Topic()).save()
+        new DocumentResource(filePath: "/a/a", contentType: Constants.DOCUMENT_CONTENT_TYPE, description: "d",
+                createdBy: new User(), topic: new Topic()).save()
+        expect:
+        DocumentResource.get(1l).equals(DocumentResource.get(2l)) == false
+    }
+
+    def "check hashCode method with some hashcode"() {
+        expect:
+        new DocumentResource(filePath: "/a/a", contentType: Constants.DOCUMENT_CONTENT_TYPE, description: "d",
+                createdBy: new User(), topic: new Topic()).save().hashCode() != 0
+    }
+
+    def "check hashCode method with 0 hashcode value"() {
+        expect:
+        new DocumentResource().hashCode() == 0
     }
 }

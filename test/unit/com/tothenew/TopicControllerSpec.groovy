@@ -1,11 +1,14 @@
 package com.tothenew
 
 import com.tothenew.co.ResourceSearchCO
+import com.tothenew.co.TopicCO
 import com.tothenew.enums.Visibility
+import grails.converters.JSON
 import grails.test.mixin.Mock
 import grails.test.mixin.TestFor
 import spock.lang.Specification
 import spock.util.mop.ConfineMetaClassChanges
+
 
 @Mock([Subscription, Topic])
 
@@ -13,53 +16,133 @@ import spock.util.mop.ConfineMetaClassChanges
 class TopicControllerSpec extends Specification {
 
     @ConfineMetaClassChanges(Subscription)
-    void "check show action with error conditions"() {
+    def "check show action with error conditions"() {
         given:
-        ResourceSearchCO resourceSearchCo = new ResourceSearchCO([topicId: topicId])
-
-        Subscription.metaClass.static.countByUserAndTopic = { User user, Topic topic1 ->
-            flag
-        }
+        ResourceSearchCO resourceSearchCo = new ResourceSearchCO([topicId: 10l])
         when:
         controller.show(resourceSearchCo)
         then:
-        flash.error == error
-        response.redirectedUrl == rUrl
-        response.text == rText
+        flash.error == "There is no such topic available"
+        response.redirectedUrl == "/login/index"
+    }
 
-        where:
-        sno | topicId | error                                                 | visibility         | rUrl | rText     | flag
-        1   | 111l    | "There is no such topic available"                    | Visibility.PRIVATE | "/"  | ""        | 0
-        2   | 1l      | "Without subscription user cannot see private topics" | Visibility.PRIVATE | "/"  | ""        | 0
-        3   | 1l      | null                                                  | Visibility.PRIVATE | null | "Success" | 1
+    def "check show action with visibility public"() {
+        given:
+        Topic topic = new Topic(createdBy: new User(), name: "t", visibility: Visibility.PUBLIC).save()
+        ResourceSearchCO resourceSearchCo = new ResourceSearchCO([topicId: 1l])
+        session.user = new User()
+        and:
+        topic.metaClass.getSubscribedUsers = {[""]}
+        topic.metaClass.getTopicPosts = {[""]}
+        when:
+        controller.show(resourceSearchCo)
+        then:
+        model.currentUser != null
+        model.topic != null
+        model.topicPosts.size() != 0
+        model.subscribedUsers.size() != 0
+    }
 
+    def "check show action with 1 or more countByUserAndTopic"() {
+        given:
+        Topic topic = new Topic(createdBy: new User(), name: "t", visibility: Visibility.PRIVATE).save()
+        ResourceSearchCO resourceSearchCo = new ResourceSearchCO([topicId: 1l])
+        session.user = new User()
+        Subscription.metaClass.static.countByUserAndTopic={User u,Topic t -> 1 }
+        and:
+        topic.metaClass.getSubscribedUsers = {[""]}
+        topic.metaClass.getTopicPosts = {[""]}
+        when:
+        controller.show(resourceSearchCo)
+        then:
+        model.currentUser != null
+        model.topic != null
+        model.topicPosts.size() != 0
+        model.subscribedUsers.size() != 0
+    }
+
+    def "check show action with 0 countByUserAndTopic"() {
+        given:
+        new Topic(createdBy: new User(), name: "t", visibility: Visibility.PRIVATE).save()
+        ResourceSearchCO resourceSearchCo = new ResourceSearchCO([topicId: 1l])
+        session.user = new User()
+        Subscription.metaClass.static.countByUserAndTopic={User u,Topic t -> 0 }
+        when:
+        controller.show(resourceSearchCo)
+        then:
+        flash.error == "Without subscription user cannot see private topics"
+        response.redirectedUrl == "/login/index"
     }
 
 
-    void "check save action"() {
+    def "check save action with save successfully"() {
         given:
-        String userName = "vikasvrm";
-        String password = "vikas12345";
-        String firstName = "vikas";
-        String lastName = "verma";
-        String email = "vikas@gmail.com";
-        User userObj = new User(userName: userName, email: email, password: password, firstName: firstName, lastName: lastName);
-        session.user = userObj
+        TopicCO topicCO = new TopicCO(topicName:"t",topicUpdatedName: "tt",visibilityString: "PUBLIC")
+        User user = new User()
+        session.user = user;
+        new Topic(createdBy: user, name: "t", visibility: Visibility.PRIVATE).save()
 
         when:
-        controller.save(topicName, visibility)
+        controller.save(topicCO)
+        def json = JSON.parse(response.text)
         then:
-        flash.message == message
-        flash.error == error
-        response.redirectedUrl == rUrl
-        response.text == rText
-
-        where:
-        sno | topicName  | visibility | message                      | error                            | rUrl         | rText
-        1   | "topic007" | "PUBLIC"   | "Topic created successfully" | null                             | "/user/show" | ""
-        2   | "topic008" | "PRIVATE"  | "Topic created successfully" | null                             | "/user/show" | ""
-        3   | null       | "PUBLIC"   | null                         | "Topic not created successfully" | null         | "error"
-        4   | "topic008" | null       | null                         | "Topic not created successfully" | null         | "error"
+        json["message"] == "Topic saved/updated successfully"
 
     }
+    def "check save action with save unsuccessfully"() {
+        given:
+        TopicCO topicCO = new TopicCO(topicName:"t",topicUpdatedName: null,visibilityString: null)
+        User user = new User()
+        session.user = user;
+        new Topic().save()
+
+        when:
+        controller.save(topicCO)
+        def json = JSON.parse(response.text)
+        then:
+        json["error"] == "Topic not saved/update successfully"
+    }
+
+    def "check delete action with error condition"() {
+        given:
+        new Topic(createdBy: new User(), name: "t", visibility: Visibility.PUBLIC).save()
+        when:
+        controller.delete(1l)
+        then:
+        flash.error == "Topic not found"
+        response.redirectedUrl == "/login/index"
+    }
+    def "check delete action with save condition"() {
+        given:
+        User user = new User()
+        session.user = user
+        new Topic(createdBy: new User(), name: "t", visibility: Visibility.PUBLIC).save()
+        when:
+        controller.delete(1l)
+        then:
+        flash.message == "Successfully topic delete"
+        response.redirectedUrl == "/login/index"
+    }
+    def "check join action without topic exist"() {
+        given:
+        User user = new User()
+        session.user = user
+        when:
+        controller.join(1l)
+        then:
+        flash.error == "Topic not exist"
+        response.redirectedUrl == "/login/index"
+    }
+    def "check join action save action"() {
+        given:
+        User user = new User()
+        session.user = user
+        new Topic(createdBy: new User(), name: "t", visibility: Visibility.PUBLIC).save()
+        when:
+        controller.join(1l)
+        then:
+        flash.message == "Subscription save successfully"
+        response.redirectedUrl == "/login/index"
+    }
+
 }

@@ -9,10 +9,10 @@ class UpdatePasswordCO {
     String oldPassword
     String password
 
-
     static constraints = {
         password(blank: false, minSize: 5)
     }
+
     User getUser() {
         return User.get(userId)
     }

@@ -1,9 +1,10 @@
 package com.tothenew
 
+import grails.test.mixin.Mock
 import grails.test.mixin.TestFor
 import spock.lang.Specification
 
-
+@Mock([User, Topic, LinkResource])
 @TestFor(LinkResource)
 class LinkResourceSpec extends Specification {
 
@@ -44,6 +45,46 @@ class LinkResourceSpec extends Specification {
         where:
         url                       | result
         "http://www.tothenew.com" | "http://www.tothenew.com"
+    }
+
+    def "check equals method with same reference"() {
+        given:
+        new LinkResource(url: "https://www.google.co.in/", description: "d", createdBy: new User(),
+                topic: new Topic()).save()
+        LinkResource linkResource = LinkResource.get(1l)
+        expect:
+        linkResource.equals(linkResource) == true
+    }
+
+    def "check equals method with different reference and same id"() {
+        given:
+        new LinkResource(url: "https://www.google.co.in/", description: "d", createdBy: new User(),
+                topic: new Topic()).save()
+        new LinkResource(url: "https://www.google.co.in/", description: "d", createdBy: new User(),
+                topic: new Topic()).save()
+        expect:
+        LinkResource.get(1l).equals(LinkResource.get(1l)) == true
+    }
+
+    def "check equals method with different reference and id"() {
+        given:
+        new LinkResource(url: "https://www.google.co.in/", description: "d", createdBy: new User(),
+                topic: new Topic()).save()
+        new LinkResource(url: "https://www.google.co.in/", description: "d", createdBy: new User(),
+                topic: new Topic()).save()
+        expect:
+        LinkResource.get(1l).equals(LinkResource.get(2l)) == false
+    }
+
+    def "check hashCode method"() {
+        expect:
+        new LinkResource(url: "https://www.google.co.in/", description: "d", createdBy: new User(),
+                topic: new Topic()).save().hashCode() != 0
+    }
+
+    def "check hashCode method with 0 hashcode value"() {
+        expect:
+        new LinkResource().hashCode() == 0
     }
 }
 

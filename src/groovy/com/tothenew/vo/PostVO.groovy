@@ -14,6 +14,7 @@ class PostVO {
     String userFirstName
     String userLastName
     Date lastUpdated;
+
     String getNameOfUser() {
         return "$userFirstName $userLastName"
     }

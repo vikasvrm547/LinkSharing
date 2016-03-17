@@ -1,8 +1,10 @@
 package com.tothenew
 
+import grails.test.mixin.Mock
 import grails.test.mixin.TestFor
 import spock.lang.Specification
 
+@Mock([ReadingItem, User])
 @TestFor(ReadingItem)
 class ReadingItemSpec extends Specification {
 
@@ -44,5 +46,44 @@ class ReadingItemSpec extends Specification {
         ReadingItem.count() == 1;
         readingItemObj.errors.allErrors.size() == 1;
         readingItemObj.errors.getFieldErrorCount('user') == 1;
+    }
+
+    def "check tostring method"() {
+        given:
+        ReadingItem readingItem = new ReadingItem(user: new User(userName: "vikas"), isRead: true)
+        expect:
+        readingItem.toString() == "ReadingItem{user=vikas, isRead=true}"
+    }
+
+    def "check equals method with same reference"() {
+        given:
+        new ReadingItem(user: new User(),isRead: true,resource:  new LinkResource()).save()
+        ReadingItem readingItem = ReadingItem.get(1l)
+        expect:
+        readingItem.equals(readingItem) == true
+    }
+
+    def "check equals method with different reference and same id"() {
+        given:
+        new ReadingItem(user: new User(),isRead: true,resource:  new LinkResource()).save()
+        new ReadingItem(user: new User(),isRead: true,resource:  new LinkResource()).save()
+        expect:
+        ReadingItem.get(1l).equals(ReadingItem.get(1l)) == true
+    }
+
+    def "check equals method with different reference and id"() {
+        given:
+        new ReadingItem(user: new User(),isRead: true,resource:  new LinkResource()).save()
+        new ReadingItem(user: new User(),isRead: true,resource:  new LinkResource()).save()
+        expect:
+        ReadingItem.get(1l).equals(ReadingItem.get(2l)) == false
+    }
+    def "check hashCode method"(){
+        expect:
+        new ReadingItem(user: new User(),isRead: true,resource:  new LinkResource()).save().hashCode() != 0
+    }
+    def "check hashCode method with 0 hashcode value"(){
+        expect:
+        new ReadingItem().hashCode() == 0
     }
 }

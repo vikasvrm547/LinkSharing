@@ -93,7 +93,7 @@ class UserController {
             topicSearchCO.visibility = Visibility.PUBLIC
 
         List subscribedTopics = subscriptionService.search(topicSearchCO)
-            render(template: '/topic/list', model: [topics: subscribedTopics])
+        render(template: '/topic/list', model: [topics: subscribedTopics])
     }
 
 

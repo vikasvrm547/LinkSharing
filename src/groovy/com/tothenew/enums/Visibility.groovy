@@ -15,10 +15,10 @@ enum Visibility {
 
     String getKey() { name() }
 
-    static Visibility convertToEnum(String visibility){
-        try{
+    static Visibility convertToEnum(String visibility) {
+        try {
             return valueOf(visibility.toUpperCase())
-        }catch (IllegalArgumentException e){
+        } catch (IllegalArgumentException e) {
             return null
         }
     }

@@ -5,8 +5,6 @@ enum Seriousness {
     VERY_SERIOUS("Very serious"),
     CASUAL("Casual")
 
-
-
     final String value
 
     Seriousness(String value) {
@@ -17,10 +15,10 @@ enum Seriousness {
 
     String getKey() { name() }
 
-    static Seriousness convertToEnum(String seriousness){
-        try{
+    static Seriousness convertToEnum(String seriousness) {
+        try {
             return valueOf(seriousness.toUpperCase())
-        }catch (IllegalArgumentException e){
+        } catch (IllegalArgumentException e) {
             return null
         }
     }

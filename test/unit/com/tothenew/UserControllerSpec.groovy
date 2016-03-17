@@ -2,14 +2,12 @@ package com.tothenew
 
 import com.tothenew.co.ResourceSearchCO
 import com.tothenew.co.SearchCO
-import com.tothenew.co.TopicSearchCO
 import com.tothenew.co.UserCO
 import com.tothenew.constants.Constants
 import grails.test.mixin.Mock
 import grails.test.mixin.TestFor
 import spock.lang.Specification
 import spock.util.mop.ConfineMetaClassChanges
-import com.tothenew.User;
 
 @Mock([User, EmailService, LinkSharingTagLib, Topic, Resource, ReadingItem, ResourceService])
 @TestFor(UserController)
@@ -185,7 +183,7 @@ class UserControllerSpec extends Specification {
 
     void "check toggleActive action with user found but is admin"() {
         given:
-        User user = new User(email: "v1@gmail.com", userName: "vikas1", password: Constants.PASSWORD,
+        new User(email: "v1@gmail.com", userName: "vikas1", password: Constants.PASSWORD,
                 confirmPassword: Constants.PASSWORD, firstName: "vikas", lastName: "verma", admin: true).save(flush: true)
 
         when:
@@ -196,7 +194,7 @@ class UserControllerSpec extends Specification {
     }
     void "check toggleActive action with user found and not admin"() {
         given:
-        User user = new User(email: "v1@gmail.com", userName: "vikas1", password: Constants.PASSWORD,
+        new User(email: "v1@gmail.com", userName: "vikas1", password: Constants.PASSWORD,
                 confirmPassword: Constants.PASSWORD, firstName: "vikas", lastName: "verma", admin: false).save(flush: true)
 
         when:

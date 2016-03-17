@@ -8,7 +8,7 @@ import spock.lang.Unroll
 
 
 @TestFor(Topic)
-@Mock([Topic, User, Subscription])
+@Mock([Topic, User, Subscription,ReadingItem,Resource])
 class TopicSpec extends Specification {
 
 
@@ -129,8 +129,54 @@ class TopicSpec extends Specification {
         3   | Visibility.PRIVATE | 1      | true    | true
         4   | Visibility.PUBLIC  | 2      | true    | true
         5   | Visibility.PRIVATE | 1      | false   | false
-
-
+    }
+    def "check equals method with same reference"() {
+        given:
+        new Topic(createdBy: new User(),name: "t",visibility: Visibility.PRIVATE).save()
+        Topic topic = Topic.get(1l)
+        expect:
+        topic.equals(topic) == true
     }
 
+    def "check equals method with different reference and same id"() {
+        given:
+        new Topic(createdBy: new User(),name: "t",visibility: Visibility.PRIVATE).save()
+        new Topic(createdBy: new User(),name: "t",visibility: Visibility.PRIVATE).save()
+        expect:
+        Topic.get(1l).equals(Topic.get(1l)) == true
+    }
+
+    def "check equals method with different reference and id"() {
+        given:
+        new Topic(createdBy: new User(),name: "t",visibility: Visibility.PRIVATE).save()
+        new Topic(createdBy: new User(),name: "t",visibility: Visibility.PRIVATE).save()
+        expect:
+        Topic.get(1l).equals(Topic.get(2l)) == false
+    }
+
+    def "check getTopicPosts method"(){
+        given:
+        String userName = "vikasvrm"
+        String password = "vikas12345"
+        String firstName = "vikas"
+        String lastName = "verma"
+        String email = "vikas@gmail.com"
+        String confirmPassword = "vikas12345"
+        new User(userName: userName, email: email, password: password, confirmPassword: confirmPassword,
+                firstName: firstName, lastName: lastName).save()
+        Topic topic = new Topic(createdBy: new User(), name: "t", visibility: Visibility.PUBLIC).save()
+        new LinkResource(description: "s1",createdBy: User.get(1l),
+                url: 'http://www.tothenew.com/',topic: Topic.get(1l)).save()
+        expect:
+        topic.getTopicPosts().size() != 0
+    }
+
+    def "check hashCode method"(){
+        expect:
+        new Topic(createdBy: new User(), name: "t", visibility: Visibility.PUBLIC).save().hashCode() != 0
+    }
+    def "check hashCode method with 0 hashcode value"(){
+        expect:
+        new Topic().hashCode() == 0
+    }
 }

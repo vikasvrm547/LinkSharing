@@ -9,7 +9,8 @@ class TopicCO {
     String topicName
     String topicUpdatedName
     String visibilityString
-    User getUser(){
+
+    User getUser() {
         return User.get(userId)
     }
 }

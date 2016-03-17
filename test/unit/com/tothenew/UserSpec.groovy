@@ -8,17 +8,18 @@ import spock.lang.Unroll
 
 
 @TestFor(User)
-@Mock([Topic, User,Subscription])
+@Mock([Topic, User, Subscription])
 class UserSpec extends Specification {
 
     @Unroll("check user constraints sno---------#sno")
     def "check user constraints excluding email uniqueness verification"() {
         given:
-        User userObj = new User(userName: userName, email: email, password: password, confirmPassword: confirmPassword, firstName: firstName, lastName: lastName, photo: photo, admin: isAdmin, active: isActive)
+        User userObj = new User(userName: userName, email: email, password: password, confirmPassword: confirmPassword,
+                firstName: firstName, lastName: lastName, photo: photo, admin: isAdmin, active: isActive)
 
         when:
         boolean result = userObj.validate()
-        
+
         then:
         result == expected
 
@@ -54,7 +55,8 @@ class UserSpec extends Specification {
         String firstName = "vikas"
         String lastName = "verma"
         String email = "vikas@gmail.com"
-        User userObj = new User(userName: userName, email: email, password: password,confirmPassword:confirmPassword, firstName: firstName, lastName: lastName)
+        User userObj = new User(userName: userName, email: email, password: password, confirmPassword: confirmPassword,
+                firstName: firstName, lastName: lastName)
 
         when:
         userObj.save()
@@ -63,7 +65,8 @@ class UserSpec extends Specification {
         User.count() == 1
 
         when:
-        userObj = new User(userName: "jim", email: email, password: password,confirmPassword:confirmPassword, firstName: "jim", lastName: "john")
+        userObj = new User(userName: "jim", email: email, password: password, confirmPassword: confirmPassword,
+                firstName: "jim", lastName: "john")
         userObj.save()
 
         then:
@@ -82,7 +85,8 @@ class UserSpec extends Specification {
         String email = "vikas@gmail.com"
         String confirmPassword = "vikas12345"
 
-        User userObj = new User(userName: userName, email: email, password: password,confirmPassword: confirmPassword, firstName: firstName, lastName: lastName)
+        User userObj = new User(userName: userName, email: email, password: password, confirmPassword: confirmPassword,
+                firstName: firstName, lastName: lastName)
 
         when:
         userObj.save()
@@ -91,7 +95,8 @@ class UserSpec extends Specification {
         User.count() == 1
 
         when:
-        userObj = new User(userName: userName, email: "vfsf@as.com", password: password,confirmPassword: confirmPassword, firstName: firstName, lastName: lastName)
+        userObj = new User(userName: userName, email: "vfsf@as.com", password: password, confirmPassword:confirmPassword,
+                firstName: firstName, lastName: lastName)
         userObj.save()
 
         then:
@@ -108,7 +113,8 @@ class UserSpec extends Specification {
         String confirmPassword = "vikas12345"
 
         String email = "vikas1@gmail.com"
-        User userObj = new User(userName: userName, email: email, password: password,confirmPassword:confirmPassword, firstName: firstName, lastName: lastName)
+        User userObj = new User(userName: userName, email: email, password: password, confirmPassword: confirmPassword,
+                firstName: firstName, lastName: lastName)
 
         when:
         String result = userObj.getName()
@@ -147,7 +153,8 @@ class UserSpec extends Specification {
         String firstName = "vikas"
         String lastName = "verma"
         String email = "vikas@gmail.com"
-        User user = new User(userName: userName, email: email, password: password,confirmPassword:confirmPassword, firstName: firstName, lastName: lastName)
+        User user = new User(userName: userName, email: email, password: password, confirmPassword: confirmPassword,
+                firstName: firstName, lastName: lastName)
         user.save(flush: true)
         Topic topic = new Topic(name: "topic1", createdBy: user, visibility: Visibility.PUBLIC)
         topic.save(flush: true)
@@ -164,9 +171,11 @@ class UserSpec extends Specification {
         String firstName = "vikas"
         String lastName = "verma"
         String email = "vikas@gmail.com"
-        User user1 = new User(userName: userName, email: email, password: password,confirmPassword:confirmPassword, firstName: firstName, lastName: lastName)
+        User user1 = new User(userName: userName, email: email, password: password, confirmPassword: confirmPassword,
+                firstName: firstName, lastName: lastName)
 
-        User user2 = new User(userName: "asd", email: "asd@asd.com", password: password,confirmPassword:confirmPassword, firstName: firstName, lastName: lastName)
+        User user2 = new User(userName: "asd", email: "asd@asd.com", password: password, confirmPassword: confirmPassword,
+                firstName: firstName, lastName: lastName)
 
         user1.save(flush: true)
         user2.save(flush: true)
@@ -176,6 +185,69 @@ class UserSpec extends Specification {
 
         expect:
         User.get(2).isSubscribed(topic.id) == false
+    }
+
+    def "check equals method with same reference"() {
+        given:
+        String userName = "vikasvrm"
+        String password = "vikas12345"
+        String firstName = "vikas"
+        String lastName = "verma"
+        String email = "vikas@gmail.com"
+        String confirmPassword = "vikas12345"
+         new User(userName: userName, email: email, password: password, confirmPassword: confirmPassword,
+                firstName: firstName, lastName: lastName).save()
+        User user = User.get(1l)
+        expect:
+        user.equals(user) == true
+    }
+
+    def "check equals method with different reference and same id"() {
+        given:
+        String userName = "vikasvrm"
+        String password = "vikas12345"
+        String firstName = "vikas"
+        String lastName = "verma"
+        String email = "vikas@gmail.com"
+        String confirmPassword = "vikas12345"
+        new User(userName: userName, email: email, password: password, confirmPassword: confirmPassword,
+                firstName: firstName, lastName: lastName).save()
+        new User(userName: userName, email: email, password: password, confirmPassword: confirmPassword,
+                firstName: firstName, lastName: lastName).save()
+        expect:
+        User.get(1l).equals(User.get(1l)) == true
+    }
+
+    def "check equals method with different reference and id"() {
+        given:
+        String userName = "vikasvrm"
+        String password = "vikas12345"
+        String firstName = "vikas"
+        String lastName = "verma"
+        String email = "vikas@gmail.com"
+        String confirmPassword = "vikas12345"
+        new User(userName: userName, email: email, password: password, confirmPassword: confirmPassword,
+                firstName: firstName, lastName: lastName).save()
+        new User(userName: userName, email: email, password: password, confirmPassword: confirmPassword,
+                firstName: firstName, lastName: lastName).save()
+        expect:
+        User.get(1l).equals(User.get(2l)) == false
+    }
+    def "check hashCode method"(){
+        String userName = "vikasvrm"
+        String password = "vikas12345"
+        String firstName = "vikas"
+        String lastName = "verma"
+        String email = "vikas@gmail.com"
+        String confirmPassword = "vikas12345"
+
+        expect:
+        new User(userName: userName, email: email, password: password, confirmPassword: confirmPassword,
+                firstName: firstName, lastName: lastName).save().hashCode() != 0
+    }
+    def "check hashCode method with 0 hashcode value"(){
+        expect:
+        new User().hashCode() == 0
     }
 }
 

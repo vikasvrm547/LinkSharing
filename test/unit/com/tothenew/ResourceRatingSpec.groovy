@@ -49,4 +49,44 @@ class ResourceRatingSpec extends Specification {
         resourceRatingObj.errors.allErrors.size() == 1;
         resourceRatingObj.errors.getFieldErrorCount('user') == 1;
     }
+
+    def "check tostring method"() {
+        given:
+        ResourceRating resourceRating = new ResourceRating(user: new User(userName: "vikas"), score: 5,
+                resource: new DocumentResource(filePath: "/home/name"))
+        expect:
+        resourceRating.toString() == "ResourceRating{resource=/home/name, user=vikas, score=5}"
+    }
+
+    def "check equals method with same reference"() {
+        given:
+        new ResourceRating(user: new User(),resource: new LinkResource(),score: 5).save()
+        ResourceRating resourceRating = ResourceRating.get(1l)
+        expect:
+        resourceRating.equals(resourceRating) == true
+    }
+
+    def "check equals method with different reference and same id"() {
+        given:
+        new ResourceRating(user: new User(),resource: new LinkResource(),score: 5).save()
+        new ResourceRating(user: new User(),resource: new LinkResource(),score: 5).save()
+        expect:
+        ResourceRating.get(1l).equals(ResourceRating.get(1l)) == true
+    }
+
+    def "check equals method with different reference and id"() {
+        given:
+        new ResourceRating(user: new User(),resource: new LinkResource(),score: 5).save()
+        new ResourceRating(user: new User(),resource: new LinkResource(),score: 5).save()
+        expect:
+        ResourceRating.get(1l).equals(ResourceRating.get(2l)) == false
+    }
+    def "check hashCode method"(){
+        expect:
+        new ResourceRating(user: new User(),resource: new LinkResource(),score: 5).save().hashCode() != 0
+    }
+    def "check hashCode method with 0 hashcode value"(){
+        expect:
+        new ReadingItem().hashCode() == 0
+    }
 }

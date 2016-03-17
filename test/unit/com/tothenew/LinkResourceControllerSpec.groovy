@@ -1,12 +1,9 @@
 package com.tothenew
 
 import com.tothenew.co.LinkResourceCO
-import com.tothenew.enums.Visibility
 import grails.test.mixin.Mock
 import grails.test.mixin.TestFor
-import org.xhtmlrenderer.css.parser.property.PrimitivePropertyBuilders
 import spock.lang.Specification
-import com.tothenew.User;
 
 @Mock([Topic, LinkResource])
 @TestFor(LinkResourceController)

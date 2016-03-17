@@ -66,9 +66,9 @@ class User {
         return [firstName, lastName].findAll { it }.join(" ")
     }
 
-   /* boolean equals(User user) {
-        return this.id == user.id
-    }*/
+    /* boolean equals(User user) {
+         return this.id == user.id
+     }*/
 
     boolean equals(o) {
         if (this.is(o)) return true

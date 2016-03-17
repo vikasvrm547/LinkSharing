@@ -7,7 +7,8 @@ class ResourceSearchCO extends SearchCO {
     Long topicId
     Long id // its user id
     Visibility visibility
-    User getUser(){
+
+    User getUser() {
         return User.get(id)
     }
 }

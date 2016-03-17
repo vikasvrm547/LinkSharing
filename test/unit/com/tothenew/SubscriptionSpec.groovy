@@ -52,7 +52,7 @@ class SubscriptionSpec extends Specification {
         4   | new Topic() | new User() | null                     | false
     }
 
-        @Unroll("Sno------------ #sno")
+    @Unroll("Sno------------ #sno")
     def "check Visibility enum convertToEnum method"() {
         when:
         Seriousness result = Seriousness.convertToEnum(str)
@@ -69,7 +69,45 @@ class SubscriptionSpec extends Specification {
         7   | "Private"      | null
         8   | "vikas "       | null
         9   | " "            | null
+    }
 
+    def "check tostring method"() {
+        given:
+        Subscription subscription = new Subscription(user: new User(userName: "vikas"), seriousness: Seriousness.SERIOUS,
+                topic: new Topic())
+        expect:
+        subscription.toString() == "Subscription{topic=null, user=vikas, seriousness=Serious}"
+    }
 
+    def "check equals method with same reference"() {
+        given:
+        new Subscription(user: new User(userName: "vikas"), seriousness: Seriousness.SERIOUS, topic: new Topic()).save()
+        Subscription subscription = Subscription.get(1l)
+        expect:
+        subscription.equals(subscription) == true
+    }
+
+    def "check equals method with different reference and same id"() {
+        given:
+        new Subscription(user: new User(userName: "vikas"), seriousness: Seriousness.SERIOUS, topic: new Topic()).save()
+        new Subscription(user: new User(userName: "vikas"), seriousness: Seriousness.SERIOUS, topic: new Topic()).save()
+        expect:
+        Subscription.get(1l).equals(Subscription.get(1l)) == true
+    }
+
+    def "check equals method with different reference and id"() {
+        given:
+        new Subscription(user: new User(userName: "vikas"), seriousness: Seriousness.SERIOUS, topic: new Topic()).save()
+        new Subscription(user: new User(userName: "vikas"), seriousness: Seriousness.SERIOUS, topic: new Topic()).save()
+        expect:
+        Subscription.get(1l).equals(Subscription.get(2l)) == false
+    }
+    def "check hashCode method"(){
+        expect:
+        new Subscription(user: new User(userName: "vikas"), seriousness: Seriousness.SERIOUS, topic: new Topic()).save().hashCode() != 0
+    }
+    def "check hashCode method with 0 hashcode value"(){
+        expect:
+        new Subscription().hashCode() == 0
     }
 }

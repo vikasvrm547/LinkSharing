@@ -22,14 +22,15 @@
 
         <div class="row">
             <div class="col-xs-3">
-                <a href="#">
+                <a href="#" class ="share_button"
+                   description="${post?.description}" topicName="${post?.topicName}" >
                     <div class="fa fa-facebook-official" style= "font-size: medium;margin-right: 5px"></div>
                 </a>
                 <a href="#">
-                    <div class="fa fa-twitter inline" style= "font-size: medium;margin-right: 5px"></div>
+                    <div class="fa fa-twitter inline"  style= "font-size: medium;margin-right: 5px"></div>
                 </a>
                 <a href="#">
-                    <div class="fa fa-google-plus inline" style= "font-size: medium;margin-right: 5px"></div>
+                    <div class="inline g-plus"  data-action="share" data-annotation="none" action="share" style= "margin-right: 5px"></div>
                 </a>
             </div>
 

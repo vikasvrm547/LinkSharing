@@ -11,7 +11,7 @@
     <asset:javascript src="main.js"/>
     <asset:javascript src="jquery.validate.js"/>
     <asset:stylesheet src="BrowseFile.css"/>
-
+    <script src="https://apis.google.com/js/platform.js" async defer></script>
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.12.0/jquery.min.js"></script>
     <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/js/bootstrap.min.js"></script>
     <link rel="stylesheet" href="http://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/css/bootstrap.min.css"/>
@@ -116,4 +116,5 @@
     <asset:javascript src="application.js"/>
 </div>
 </body>
+
 </html>

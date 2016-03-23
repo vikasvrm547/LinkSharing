@@ -1,11 +1,11 @@
 package com.tothenew
 
 class SessionCheckFilters {
-
+    def springSecurityService
     def filters = {
         loginCheck(controller: '*', action: 'save|delete|update|changeIsRead|join|invite') {
             before = {
-                if (!session.user)
+                if (!springSecurityService.isLoggedIn())
                     redirect(controller: "login", action: "index")
             }
 
@@ -14,7 +14,7 @@ class SessionCheckFilters {
         userIndexcheck(controller: 'user', action: 'show|toggleActive|edit|updatePassword') {
             before = {
 
-                if (!session.user)
+                if (!springSecurityService.isLoggedIn())
                     redirect(controller: "login", action: "index")
             }
         }
@@ -23,7 +23,7 @@ class SessionCheckFilters {
         consoleCheck(controller: "console", action: "*"){
             before = {
 
-                if(!(session.user?.admin))
+                if(!(springSecurityService.getCurrentUser()?.admin))
                     redirect(controller: "login", action: "index")
             }
         }

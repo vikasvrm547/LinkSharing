@@ -20,6 +20,7 @@
 </head>
 
 <body>
+<g:set var="springSecurityService" bean="springSecurityService"/>
 <div class="container-fluid">
     <nav class="nav navbar-default navbar-fixed-top" style="margin-left: 2%;margin-right: 2%">
         <div class="container-fluid">
@@ -52,7 +53,7 @@
                     </div>
                 </div>
 
-                <g:if test="${session.user}">
+                <sec:ifLoggedIn>
 
                     <g:if test="${controllerName.equals("user")}">
                      <ls:canSeeCreateTopicHeaderIcon >
@@ -70,21 +71,23 @@
                         <select class="btn btn-primary dropdown-toggle nav-dropdown" type="button"
                                 id="headerUserDropDown"
                                 onchange="location = this.options[this.selectedIndex].value;">
-                            <option value="" disabled selected>${session.user}</option>
+                            <option value="" disabled selected>
+                                <sec:loggedInUserInfo field="username"/>
+                            </option>
                             <option value="<g:createLink controller='user' action='profile'
-                                                         params="[id: session.user?.id]"/>">
+                                                         params="[id: springSecurityService.loadCurrentUser()?.id]"/>">
                                 Profile
                             </option>
                             <option value="<g:createLink controller='user' action='edit'/>">
                                 Edit
                             </option>
-                            <g:if test="${session.user?.admin}">
+                            <sec:ifAllGranted roles="ROLE_ADMIN">
                                 <option value="<g:createLink controller='user' action='list'/>">Users</option>
-                            </g:if>
+                            </sec:ifAllGranted>
                             <option value="<g:createLink controller='login' action='logout'/> ">Logout</option>
                         </select>
                     </div>
-                </g:if>
+                </sec:ifLoggedIn>
             </g:form>
         </div>
     </nav>

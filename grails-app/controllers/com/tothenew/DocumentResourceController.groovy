@@ -4,6 +4,7 @@ import com.tothenew.constants.Constants
 import grails.transaction.Transactional
 
 class DocumentResourceController extends ResourceController {
+    def springSecurityService
     @Transactional
     def save() {
         def file = params.file
@@ -22,9 +23,10 @@ class DocumentResourceController extends ResourceController {
     }
 
     void saveDocumentResource(def params, Topic topic) {
+        User currentUser = springSecurityService.getCurrentUser()
         String path = "/home/vikas${grailsApplication.config.linksharing.documents.folderPath}/${UUID.randomUUID()}.pdf"
         DocumentResource documentResource = new DocumentResource(description: params.comment, filePath: path,
-                createdBy: session.user, topic: topic, contentType: params.file.contentType)
+                createdBy: currentUser, topic: topic, contentType: params.file.contentType)
         if (documentResource.save()) {
             File fileDest = new File(path)
             params.file.transferTo(fileDest)
@@ -41,8 +43,9 @@ class DocumentResourceController extends ResourceController {
     }
 
     def download(Long resourceId) {
+        User currentUser = springSecurityService.getCurrentUser()
         DocumentResource documentResource = (DocumentResource) Resource.get(resourceId)
-        if (documentResource && documentResource.topic.canViewedBy(session.user)) {
+        if (documentResource && documentResource.topic.canViewedBy(currentUser)) {
             def file = new File(documentResource.filePath)
             if (file.exists()) {
                 response.setContentType(Constants.DOCUMENT_CONTENT_TYPE)

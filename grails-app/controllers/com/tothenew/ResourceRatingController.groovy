@@ -1,9 +1,10 @@
 package com.tothenew
 
 import grails.converters.JSON
+import grails.plugin.springsecurity.annotation.Secured
 
 class ResourceRatingController {
-
+    @Secured(['ROLE_NORMAL'])
     def save() {
         Map resultInfo = [:]
         Resource resource = Resource.get(params.int('resourceId'))

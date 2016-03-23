@@ -13,7 +13,7 @@ class LoginControllerSpec extends Specification {
 
     void "check index method with session"() {
         given:
-        User user = new User(email: "v1@gmail.com", userName: "vikas1", password: Constants.PASSWORD,
+        User user = new User(email: "v1@gmail.com", username: "vikas1", password: Constants.PASSWORD,
                 confirmPassword: Constants.PASSWORD, firstName: "vikas", lastName: "verma", active: true)
         and:
         session.user = user
@@ -33,7 +33,7 @@ class LoginControllerSpec extends Specification {
 
     void "check logout method"() {
         given:
-        User user = new User(email: "v1@gmail.com", userName: "vikas1", password: Constants.PASSWORD,
+        User user = new User(email: "v1@gmail.com", username: "vikas1", password: Constants.PASSWORD,
                 confirmPassword: Constants.PASSWORD, firstName: "vikas", lastName: "verma", active: true)
         and:
         session.user = user
@@ -65,7 +65,7 @@ class LoginControllerSpec extends Specification {
     void "check loginhandler method with valid conditions"() {
         given:
         User user = new User(email: "v1@gmail.com",
-                userName: "vikas1",
+                username: "vikas1",
                 password: Constants.PASSWORD,
                 confirmPassword: Constants.PASSWORD,
                 firstName: "vikas",

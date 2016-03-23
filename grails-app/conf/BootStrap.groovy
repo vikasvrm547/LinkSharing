@@ -2,9 +2,11 @@ import com.tothenew.DocumentResource
 import com.tothenew.LinkResource
 import com.tothenew.ReadingItem
 import com.tothenew.Resource
+import com.tothenew.Role
 import com.tothenew.Subscription
 import com.tothenew.Topic
 import com.tothenew.ResourceRating
+import com.tothenew.UserRole
 import com.tothenew.constants.Constants
 import com.tothenew.User
 import com.tothenew.enums.Seriousness
@@ -14,22 +16,20 @@ class BootStrap {
     def grailsApplication
     List<User> users = []
     def init = { servletContext ->
-        User user = new User(email: "v1@gmail.com",
-                userName: "vikas1",
+        /*User user = new User(email: "v1@gmail.com",
+                username: "vikas1",
                 password: Constants.PASSWORD,
-                confirmPassword: Constants.PASSWORD,
                 firstName: "vikas",
                 lastName: "verma",
-                active: true)
+                enabled: true).save()
 
-        User admin = new User(email: "v2@gmail.com",
-                userName: "vikas2",
+        User admin =new User(email: "v2@gmail.com",
+                username: "vikas2",
                 password: Constants.PASSWORD,
-                confirmPassword: Constants.PASSWORD,
                 firstName: "vikas",
                 lastName: "verma",
-                active: true,
-                admin: true)
+                enabled: true,
+                admin: true).save()*/
 
          /*  if (!User.count()) {
                 createUser(user)
@@ -41,6 +41,12 @@ class BootStrap {
             subscribeTopics()
             createReadingItems()
             createResourceRatings()*/
+     /*   Role roleUser= new Role(authority: "ROLE_NORMAL").save()
+        Role roleAdmin= new Role(authority: "ROLE_ADMIN").save()
+
+        UserRole.create(user,roleUser)
+        UserRole.create(admin,roleUser)
+        UserRole.create(admin,roleAdmin)*/
 
     }
 

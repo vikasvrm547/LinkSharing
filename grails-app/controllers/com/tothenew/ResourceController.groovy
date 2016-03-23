@@ -3,9 +3,11 @@ package com.tothenew
 import com.tothenew.co.ResourceSearchCO
 import com.tothenew.enums.Visibility
 import com.tothenew.vo.PostVO
+import grails.plugin.springsecurity.annotation.Secured
 
+@Secured(['permitAll'])
 class ResourceController {
-
+    def springSecurityService
     def search(ResourceSearchCO resourceSearchCO) {
         String result = ""
         List<PostVO> postVOList = []
@@ -29,7 +31,7 @@ class ResourceController {
 
     def show(Long resourceId) {
 
-        User currentUser = session.user
+        User currentUser = springSecurityService.getCurrentUser()
         Resource resource = Resource.findById(resourceId)
         if (resource) {
             if (resource.topic.canViewedBy(currentUser)) {
@@ -47,9 +49,10 @@ class ResourceController {
         }
     }
 
-
+    @Secured(['ROLE_NORMAL'])
     def delete(Long id) {
-        if (session.user.canDeleteResource(id)) {
+        User currentUser = springSecurityService.getCurrentUser()
+        if (currentUser?.canDeleteResource(id)) {
             Resource resource = Resource.load(id);
             if (resource) {
                 try {
@@ -66,7 +69,7 @@ class ResourceController {
             }
         }
     }
-
+    @Secured(['ROLE_NORMAL'])
     def update(Long resourceId, String description) {
         if (Resource.updateDescription(resourceId, description)) {
             flash.message = "Successfully update description"
@@ -77,6 +80,7 @@ class ResourceController {
     }
 
     void addToReadingItems(Resource resource) {
+        User currentUser = springSecurityService.getCurrentUser()
         Topic topic = Resource.createCriteria().get {
             projections {
                 property('topic')
@@ -85,7 +89,7 @@ class ResourceController {
         }
         List<User> subscribedUserList = topic.getSubscribedUsers()
         subscribedUserList.each { user ->
-            if (user.id == session.user?.id)
+            if (user.id == currentUser?.id)
                 resource.addToReadingItems(new ReadingItem(user: user, resource: resource, isRead: true).save())
             else
                 resource.addToReadingItems(new ReadingItem(user: user, resource: resource, isRead: false).save())

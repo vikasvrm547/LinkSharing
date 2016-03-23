@@ -50,7 +50,7 @@ class ReadingItemSpec extends Specification {
 
     def "check tostring method"() {
         given:
-        ReadingItem readingItem = new ReadingItem(user: new User(userName: "vikas"), isRead: true)
+        ReadingItem readingItem = new ReadingItem(user: new User(username: "vikas"), isRead: true)
         expect:
         readingItem.toString() == "ReadingItem{user=vikas, isRead=true}"
     }

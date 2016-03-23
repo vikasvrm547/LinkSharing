@@ -4,6 +4,7 @@ import com.tothenew.enums.Seriousness
 import com.tothenew.enums.Visibility
 
 class LinkSharingTagLib {
+    def springSecurityService
     static namespace = "ls"
 
     def readLink = { attr, body ->
@@ -64,8 +65,9 @@ class LinkSharingTagLib {
 
     def showSubscribe = { attr, body ->
         Long topicId = attr.topicId
-        if (session.user) {
-            if (session.user.isSubscribed(topicId)) {
+        User currentUser = springSecurityService.getCurrentUser()
+        if (currentUser) {
+            if (currentUser?.isSubscribed(topicId)) {
 
                 out << g.link([class : "subscription ${attr.class}", controller: 'subscription', action: 'delete',
                                params: [topicId: topicId]], "Unsubscribe")
@@ -78,8 +80,9 @@ class LinkSharingTagLib {
 
     def showSeriousness = { attr, body ->
         Long topicId = attr.topicId
-        if (session.user && topicId) {
-            Subscription subscription = session.user.getSubscription(topicId)
+        User currentUser = springSecurityService.getCurrentUser()
+        if (currentUser && topicId) {
+            Subscription subscription = currentUser?.getSubscription(topicId)
             if (subscription) {
                 out << g.select(from: Seriousness.values(), optionKey: "key", value: subscription?.seriousness,
                         name: "seriousness", class: attr.class, topicId: topicId)
@@ -89,8 +92,9 @@ class LinkSharingTagLib {
 
     def showInvitation = { attr, body ->
         Long topicId = attr.topicId
-        if (session.user && topicId) {
-            Subscription subscription = session.user.getSubscription(topicId)
+        User currentUser = springSecurityService.getCurrentUser()
+        if (currentUser && topicId) {
+            Subscription subscription = currentUser?.getSubscription(topicId)
             if (subscription) {
                 out << g.link(class: attr.class,title: attr.title,style: "font-size: large")
             }
@@ -98,9 +102,9 @@ class LinkSharingTagLib {
     }
 
     def showSubscribedTopics = { attr, body ->
-        User user = session.user
-        if (user) {
-            out << g.select(from: user.getSubscribedTopics(),
+        User currentUser = springSecurityService.getCurrentUser()
+        if (currentUser) {
+            out << g.select(from: currentUser?.getSubscribedTopics(),
                     name: "topicId", optionKey: "id", class: attr.class)
         }
 

@@ -12,7 +12,7 @@ class TopicServiceSpec extends Specification {
 
     void "check search method"(){
         given:
-       /* new User(email: "v1@gmail.com", userName: "vikas1", password: Constants.PASSWORD,
+       /* new User(email: "v1@gmail.com", username: "vikas1", password: Constants.PASSWORD,
                 confirmPassword: Constants.PASSWORD, firstName: "vikas", lastName: "verma", active: true).save(flush: true)
         Topic topicObj = new Topic(name: "topic1", createdBy: User.get(1), visibility: Visibility.PUBLIC)
         topicObj.save(flush: true)*/

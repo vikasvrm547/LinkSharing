@@ -1,9 +1,12 @@
 package com.tothenew
 
+import grails.plugin.springsecurity.SpringSecurityUtils
+
 class LoginController {
+    def springSecurityService
 
     def index() {
-        if (session.user) {
+        if (springSecurityService.isLoggedIn()) {
             forward(controller: "user", action: "show")
         } else {
             render(view: 'index', model:
@@ -12,16 +15,16 @@ class LoginController {
     }
 
     def loginHandler(String loginEmailOrUsername, String loginPassword) {
-        User user = User.findByUserNameAndPassword(loginEmailOrUsername, loginPassword)
+        User user = User.findByUsernameAndPassword(loginEmailOrUsername, loginPassword)
         if (!user) {
             user = User.findByEmailAndPassword(loginEmailOrUsername, loginPassword)
         }
         if (user) {
             if (user.active) {
                 session.user = user
-                session.uniqueIdForTopicEdit = 1
+                //session.uniqueIdForTopicEdit = 1
             } else {
-                flash.error = "user is not active"
+                flash.error = "user is not enabled"
             }
         } else {
             flash.error = "Incorrect credentials"
@@ -35,12 +38,13 @@ class LoginController {
     }
 
     def validateUserName() {
-        Boolean valid = User.countByUserName(params.userName) ? false : true
+        Boolean valid = User.countByUsername(params.userName) ? false : true
         render valid
     }
 
     def logout() {
-        session.invalidate()
-        forward(action: 'index')
+        redirect uri: SpringSecurityUtils.securityConfig.logout.filterProcessesUrl
+        //session.invalidate()
+        //forward(action: 'index')
     }
 }

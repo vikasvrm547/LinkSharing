@@ -11,19 +11,24 @@ import com.tothenew.dto.EmailDTO
 import com.tothenew.enums.Visibility
 import com.tothenew.util.Utility
 import com.tothenew.vo.UserVO
+import grails.plugin.springsecurity.annotation.Secured
 
+@Secured(['ROLE_NORMAL'])
 class UserController {
     def assetResourceLocator
     def subscriptionService
     def topicService
     def resourceService
     def emailService
+    def springSecurityService
 
     def show(SearchCO searchCO) {
         searchCO.max = searchCO.max ?: 9
         searchCO.offset = searchCO.offset ?: 0
-
-        User currentUser = session.user
+        if (!session.uniqueIdForTopicEdit)
+            session.uniqueIdForTopicEdit = 1
+        //User currentUser = session.user
+        User currentUser = springSecurityService.getCurrentUser()
 
         render(view: 'index', model: [linkResourceCO   : null, tendingTopics: Topic?.getTrendingTopics(),
                                       subscribedTopics : currentUser?.getSubscribedTopics(),
@@ -33,6 +38,7 @@ class UserController {
                                       searchCO         : searchCO])
     }
 
+    @Secured(['permitAll'])
     def image(Long userId) {
         User user = User.get(userId)
         if (user?.photo) {
@@ -45,6 +51,7 @@ class UserController {
         response.outputStream.flush()
     }
 
+    @Secured(['permitAll'])
     def register(UserCO registerCO) {
         if (registerCO.hasErrors()) {
             flash.error = g.message(code: "com.tothenew.User.controller.register.validation.not.pass")
@@ -66,7 +73,6 @@ class UserController {
             render(view: '/login/index', model: [topPosts  : Resource.getTopPosts(), recentShares: Resource.getRecentShares(),
                                                  registerCO: registerCO])
         }
-
     }
 
     def subscribedTopics() {
@@ -76,15 +82,16 @@ class UserController {
     def profile(ResourceSearchCO resourceSearchCO) {
         if (resourceSearchCO.id) {
             User user = User.get(resourceSearchCO.id)
-            User currentUser = session.user
+            User currentUser = springSecurityService.getCurrentUser()
             render(view: 'profile', model: [currentUser: currentUser, user: user,
                                             resources  : resourceService.search(resourceSearchCO)])
         } else render("Sorry")
     }
 
+    @Secured(['ROLE_ADMIN'])
     def subscriptions(Long id) {
         TopicSearchCO topicSearchCO = new TopicSearchCO(id: id)
-        User currentUser = session.user
+        User currentUser = springSecurityService.getCurrentUser()
         if (currentUser) {
             if (!(currentUser.admin || currentUser.id == id)) {
                 topicSearchCO.visibility = Visibility.PUBLIC
@@ -99,7 +106,7 @@ class UserController {
 
     def topics(Long id) {
         TopicSearchCO topicSearchCO = new TopicSearchCO(id: id)
-        User currentUser = session.user
+        User currentUser = springSecurityService.getCurrentUser()
         if (currentUser) {
             if (!(currentUser.admin || currentUser.id == id)) {
                 topicSearchCO.visibility = null
@@ -113,12 +120,13 @@ class UserController {
         render(template: '/topic/list', model: [topics: createdTopics])
     }
 
+    @Secured(['ROLE_ADMIN'])
     def toggleActive(Long id) {
         User user = User.get(id)
 
         if (user && (!user.admin)) {
-            user.active = !user.active
-            user.confirmPassword = user.password
+            user.enabled = !user.enabled
+            //user.confirmPassword = user.password
             if (user.save(flush: true)) {
                 flash.message = g.message(code: "com.tothenew.User.controller.toggle.active.success")
             } else {
@@ -135,13 +143,13 @@ class UserController {
         List<UserVO> userVOList = []
         userSearchCO.max = userSearchCO.max ?: 20
         userSearchCO.offset = userSearchCO.offset ?: 0
-        if (session.user?.admin) {
+        if (springSecurityService.getCurrentUser()?.admin) {
             List users = User.search(userSearchCO).list([sort  : userSearchCO.sort, order: userSearchCO.order, max: userSearchCO.max,
                                                          offset: userSearchCO.offset])
             users.each { user ->
-                userVOList.add(new UserVO(id: user.id, userName: user.userName, email: user.email,
+                userVOList.add(new UserVO(id: user.id, userName: user.username, email: user.email,
                         firstName: user.firstName,
-                        lastName: user.lastName, active: user.active))
+                        lastName: user.lastName, enabled: user.enabled))
             }
             render(view: 'list', model: [users: userVOList, userSearchCO: userSearchCO, totalCount: users.totalCount])
         } else {
@@ -169,38 +177,41 @@ class UserController {
     }
 
     def edit() {
-        [currentUser: session.user]
+        [currentUser: springSecurityService.getCurrentUser()]
     }
 
     def save(UpdateUserCO updateUserCO) {
+        User currentUser = springSecurityService.getCurrentUser()
         User user = updateUserCO.getUser()
         if (user) {
             user.firstName = updateUserCO.firstName
             user.lastName = updateUserCO.lastName
-            user.userName = updateUserCO.userName
+            user.username = updateUserCO.userName
             if (updateUserCO.userPhoto.bytes) {
                 if (checkImageType(updateUserCO.userPhoto.contentType))
                     user.photo = updateUserCO.userPhoto.bytes
                 else
                     user.errors.rejectValue('photo', 'nullable')
             }
-            user.confirmPassword = user.password
             if ((!user.hasErrors()) && user.save(flush: true)) {
-                session.user = user
                 flash.message = "successfully update your details"
             } else flash.error = "Failed to update your details"
         } else flash.error = "Something went wrong"
-        render(view: "/user/edit", model: [currentUser: session.user, user: user])
+        println springSecurityService.authentication.credentials
+        render(view: "/user/edit", model: [currentUser: user ?: currentUser, user: user])
     }
 
     def updatePassword(UpdatePasswordCO updatePasswordCO) {
+        User currentUser = springSecurityService.getCurrentUser()
         User user = updatePasswordCO.getUser()
+        boolean isPasswordValid = springSecurityService.passwordEncoder.isPasswordValid(user.password, updatePasswordCO.oldPassword, null)
         if (user) {
-            if (user.password.equals(updatePasswordCO.oldPassword)) {
+            if (isPasswordValid) {
                 user.password = updatePasswordCO.password
-                user.confirmPassword = updatePasswordCO.password
+                //user.confirmPassword = updatePasswordCO.password
                 if (user.save(flush: true)) {
-                    session.user = user
+                    springSecurityService.reauthenticate(user.username, updatePasswordCO.password)
+                    currentUser = springSecurityService.getCurrentUser()
                     flash.message = "Successfully update password"
                 } else {
                     flash.error = "Could not update password"
@@ -211,7 +222,7 @@ class UserController {
         } else {
             flash.error = "User not exist"
         }
-        render(view: "/user/edit", model: [currentUser: session.user, user: user])
+        render(view: "/user/edit", model: [currentUser: currentUser, user: user])
     }
 
     Boolean checkImageType(String type) {

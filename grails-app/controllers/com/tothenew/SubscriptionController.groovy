@@ -2,15 +2,18 @@ package com.tothenew
 
 import com.tothenew.enums.Seriousness
 import grails.converters.JSON
-
+import grails.plugin.springsecurity.annotation.Secured
+@Secured(['ROLE_NORMAL'])
 class SubscriptionController {
+    def springSecurityService
 
     def delete(Long topicId) {
         Thread.sleep(2000)
+
         Map resultInfo = [:]
-        User currentUser = session.user
+        User currentUser = springSecurityService.getCurrentUser()
         Topic topic = Topic.get(topicId)
-        if (topic.createdBy.equals(session.user)) {
+        if (topic.createdBy.equals(currentUser)) {
             resultInfo.error = "Creator of topic cannot delete subscription"
         } else if (topic && currentUser) {
             Subscription subscription = Subscription.findByTopicAndUser(topic, currentUser)
@@ -30,9 +33,10 @@ class SubscriptionController {
     def save(Long topicId) {
         Thread.sleep(2000)
         Topic topic = Topic.get(topicId)
+        User currentUser = springSecurityService.getCurrentUser()
         Map resultInfo = [:]
         if (topic) {
-            Subscription subscription = new Subscription(topic: topic, user: session.user, seriousness: Seriousness.SERIOUS)
+            Subscription subscription = new Subscription(topic: topic, user: currentUser, seriousness: Seriousness.SERIOUS)
             if (subscription?.save(flush: true)) {
                 resultInfo.message = "Subscription save successfully"
             } else {
@@ -47,10 +51,11 @@ class SubscriptionController {
 
     def update(Long topicId, String seriousnessString) {
         Map resultInfo = [:]
-        Seriousness seriousnessEnum = Seriousness.convertToEnum(seriousnessString);
+        User currentUser = springSecurityService.loadCurrentUser()
+        Seriousness seriousnessEnum = Seriousness.convertToEnum(seriousnessString)
         Subscription subscription = Subscription.createCriteria().get {
             eq('topic.id', topicId)
-            eq('user.id', session.user.id)
+            eq('user.id', currentUser?.id)
         }
         if (seriousnessEnum) {
             if (subscription) {

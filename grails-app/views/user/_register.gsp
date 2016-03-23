@@ -44,9 +44,9 @@
                 <div class="col-sm-4"><label class="control-label">User name<small class="asterisk"> *</small></label></div>
 
                 <div class="col-sm-8">
-                    <input type="text" class="form-control" placeholder="User name" name="userName"
-                           value="${registerCO?.userName}" id="userName">
-            <div class="error"><g:fieldError field="userName" bean="${registerCO}"/></div>
+                    <input type="text" class="form-control" placeholder="User name" name="username"
+                           value="${registerCO?.username}" id="username">
+            <div class="error"><g:fieldError field="username" bean="${registerCO}"/></div>
                 </div>
             </div>
 

@@ -52,7 +52,7 @@ class ResourceRatingSpec extends Specification {
 
     def "check tostring method"() {
         given:
-        ResourceRating resourceRating = new ResourceRating(user: new User(userName: "vikas"), score: 5,
+        ResourceRating resourceRating = new ResourceRating(user: new User(username: "vikas"), score: 5,
                 resource: new DocumentResource(filePath: "/home/name"))
         expect:
         resourceRating.toString() == "ResourceRating{resource=/home/name, user=vikas, score=5}"

@@ -49,7 +49,7 @@
                 <tr>
                     <g:sortableColumn property="id" title="Id"
                                       params="[q: userSearchCO?.q, max: userSearchCO.max, offset: userSearchCO.offset]"/>
-                    <g:sortableColumn property="userName" title="User name"
+                    <g:sortableColumn property="username" title="User name"
                                       params="[q: userSearchCO?.q, max: userSearchCO.max, offset: userSearchCO.offset]"/>
                     <g:sortableColumn property="email" title="Email"
                                       params="[q: userSearchCO?.q, max: userSearchCO.max, offset: userSearchCO.offset]"/>
@@ -63,7 +63,7 @@
                 </tr>
                 </thead>
                 <g:each in="${users}" var="user">
-                    <g:if test="${user.active}">
+                    <g:if test="${user.enabled}">
                         <g:set var="bootstrapAlertClass" value="alert alert-success"/>
                     </g:if>
                     <g:else>
@@ -76,9 +76,9 @@
                         <td>${user.email}</td>
                         <td>${user.firstName}</td>
                         <td>${user.lastName}</td>
-                        <td>${user.active}</td>
+                        <td>${user.enabled}</td>
                         <td>
-                            <g:if test="${user.active}">
+                            <g:if test="${user.enabled}">
                                 <g:link controller="user" action="toggleActive"
                                         params='[id: "${user.id}"]'>De-activate</g:link>
                             </g:if>

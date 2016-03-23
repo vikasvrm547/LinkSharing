@@ -112,9 +112,9 @@ class TopicSpec extends Specification {
         String lastName = "verma"
         String email = "vikas@gmail.com"
 
-        User user1 = new User(userName: userName, email: email, password: password, confirmPassword: confirmPassword, firstName: firstName, lastName: lastName, admin: isAdmin)
+        User user1 = new User(username: userName, email: email, password: password, confirmPassword: confirmPassword, firstName: firstName, lastName: lastName, admin: isAdmin)
         user1.save(flush: true)
-        User user2 = new User(userName: "asd", email: "asd@asd.com", password: password, confirmPassword: confirmPassword, firstName: firstName, lastName: lastName, admin: isAdmin)
+        User user2 = new User(username: "asd", email: "asd@asd.com", password: password, confirmPassword: confirmPassword, firstName: firstName, lastName: lastName, admin: isAdmin)
         user2.save(flush: true)
         Topic topicObj = new Topic(name: "topic1", createdBy: User.get(2), visibility: visibility)
         topicObj.save(flush: true)
@@ -162,7 +162,7 @@ class TopicSpec extends Specification {
         String lastName = "verma"
         String email = "vikas@gmail.com"
         String confirmPassword = "vikas12345"
-        new User(userName: userName, email: email, password: password, confirmPassword: confirmPassword,
+        new User(username: userName, email: email, password: password, confirmPassword: confirmPassword,
                 firstName: firstName, lastName: lastName).save()
         Topic topic = new Topic(createdBy: new User(), name: "t", visibility: Visibility.PUBLIC).save()
         new LinkResource(description: "s1",createdBy: User.get(1l),

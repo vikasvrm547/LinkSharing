@@ -136,3 +136,22 @@ log4j.main = {
 
 
 }
+
+// Added by the Spring Security Core plugin:
+grails.plugin.springsecurity.successHandler.defaultTargetUrl = '/login/index'
+grails.plugin.springsecurity.failureHandler.defaultFailureUrl = '/login/index'
+grails.plugin.springsecurity.auth.loginFormUrl = '/login/index'
+grails.plugin.springsecurity.userLookup.userDomainClassName = 'com.tothenew.User'
+grails.plugin.springsecurity.userLookup.authorityJoinClassName = 'com.tothenew.UserRole'
+grails.plugin.springsecurity.authority.className = 'com.tothenew.Role'
+grails.plugin.springsecurity.controllerAnnotations.staticRules = [
+        '/'              : ['permitAll'],
+        '/index'         : ['permitAll'],
+        '/index.gsp'     : ['permitAll'],
+        '/assets/**'     : ['permitAll'],
+        '/**/js/**'      : ['permitAll'],
+        '/**/css/**'     : ['permitAll'],
+        '/**/images/**'  : ['permitAll'],
+        '/**/favicon.ico': ['permitAll']
+]
+

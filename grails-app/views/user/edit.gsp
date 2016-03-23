@@ -60,9 +60,9 @@
 
                     <div class="col-sm-8">
                         <input type="text" class="form-control" placeholder="User name" name="userName" id="username"
-                               value="${currentUser?.userName}">
+                               value="${currentUser?.username}">
 
-                        <div class="error"><g:fieldError field="userName" bean="${user}"/></div>
+                        <div class="error"><g:fieldError field="username" bean="${user}"/></div>
                     </div>
                 </div>
 

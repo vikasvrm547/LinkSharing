@@ -112,7 +112,7 @@ class Topic {
                 }
                 createdBy {
                     property('id')
-                    property('userName')
+                    property('username')
                     property('firstName')
                     property('lastName')
                 }

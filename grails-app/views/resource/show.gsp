@@ -60,13 +60,13 @@
                     </div>
                     <div class="row">
 
-                        <g:if test="${session.user}">
+                        <sec:ifLoggedIn>
                             <div id="rateYo" class="pull-right"></div>
                             <input type="hidden" id="default-hidden-resource-rating"
                                    value="${currentUser?.getScore(postVO?.resourceID)}"/>
                             <input type="hidden" id="hidden-user-id" value="${currentUser?.id}"/>
                             <input type="hidden" id="hidden-resource-id" value="${postVO?.resourceID}"/>
-                        </g:if>
+                        </sec:ifLoggedIn>
 
                     </div>
                 </div>

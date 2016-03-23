@@ -5,14 +5,15 @@
 
     <div class="panel-body">
 
-        <g:form class="form-horizontal" role="form" url="[controller: 'login', action: 'loginHandler']">
+       %{-- <g:form class="form-horizontal" role="form" url="[controller: 'login', action: 'loginHandler']">--}%
+        <form class="form-horizontal" role="form" method="post" action="${resource(file: 'j_spring_security_check')}">
             <div class="form-group">
-                <div class="col-sm-4"><label class="control-label">Email/Username<small class="asterisk"> *</small>
+                <div class="col-sm-4"><label class="control-label">Username<small class="asterisk"> *</small>
                 </label></div>
 
                 <div class="col-sm-8">
-                    <input type="text" class="form-control" id="loginEmailOrUsername" name="loginEmailOrUsername"
-                           placeholder="Email/Username">
+                    <input type="text" class="form-control" id="loginEmailOrUsername" name='j_username'
+                           placeholder="Username">
                 </div>
             </div>
 
@@ -21,7 +22,7 @@
                 </label></div>
 
                 <div class="col-sm-8">
-                    <input type="password" class="form-control" id="loginPassword" name="loginPassword"
+                    <input type="password" class="form-control" id="loginPassword" name='j_password'
                            placeholder="Password">
                 </div>
             </div>
@@ -32,10 +33,10 @@
                     <span id="forgot-password" class="col-sm-6" style="text-decoration: underline;color:green">
                         Forgot Password
                     </span>
-                    <g:submitButton name="Submit" class="btn btn-primary col-sm-6"></g:submitButton>
+                    <g:submitButton name="login" value="Login" class="btn btn-primary col-sm-6"></g:submitButton>
                 </div>
             </div>
-        </g:form>
+        </form>
 
     </div>
 </div>

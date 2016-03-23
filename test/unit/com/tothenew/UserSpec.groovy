@@ -14,7 +14,7 @@ class UserSpec extends Specification {
     @Unroll("check user constraints sno---------#sno")
     def "check user constraints excluding email uniqueness verification"() {
         given:
-        User userObj = new User(userName: userName, email: email, password: password, confirmPassword: confirmPassword,
+        User userObj = new User(username: userName, email: email, password: password, confirmPassword: confirmPassword,
                 firstName: firstName, lastName: lastName, photo: photo, admin: isAdmin, active: isActive)
 
         when:
@@ -55,7 +55,7 @@ class UserSpec extends Specification {
         String firstName = "vikas"
         String lastName = "verma"
         String email = "vikas@gmail.com"
-        User userObj = new User(userName: userName, email: email, password: password, confirmPassword: confirmPassword,
+        User userObj = new User(username: userName, email: email, password: password, confirmPassword: confirmPassword,
                 firstName: firstName, lastName: lastName)
 
         when:
@@ -65,7 +65,7 @@ class UserSpec extends Specification {
         User.count() == 1
 
         when:
-        userObj = new User(userName: "jim", email: email, password: password, confirmPassword: confirmPassword,
+        userObj = new User(username: "jim", email: email, password: password, confirmPassword: confirmPassword,
                 firstName: "jim", lastName: "john")
         userObj.save()
 
@@ -85,7 +85,7 @@ class UserSpec extends Specification {
         String email = "vikas@gmail.com"
         String confirmPassword = "vikas12345"
 
-        User userObj = new User(userName: userName, email: email, password: password, confirmPassword: confirmPassword,
+        User userObj = new User(username: userName, email: email, password: password, confirmPassword: confirmPassword,
                 firstName: firstName, lastName: lastName)
 
         when:
@@ -95,14 +95,14 @@ class UserSpec extends Specification {
         User.count() == 1
 
         when:
-        userObj = new User(userName: userName, email: "vfsf@as.com", password: password, confirmPassword:confirmPassword,
+        userObj = new User(username: userName, email: "vfsf@as.com", password: password, confirmPassword:confirmPassword,
                 firstName: firstName, lastName: lastName)
         userObj.save()
 
         then:
         User.count() == 1
         userObj.errors.allErrors.size() == 1
-        userObj.errors.getFieldErrorCount('userName') == 1
+        userObj.errors.getFieldErrorCount('username') == 1
     }
 
     @Unroll("check getName method sno---------#sno")
@@ -113,7 +113,7 @@ class UserSpec extends Specification {
         String confirmPassword = "vikas12345"
 
         String email = "vikas1@gmail.com"
-        User userObj = new User(userName: userName, email: email, password: password, confirmPassword: confirmPassword,
+        User userObj = new User(username: userName, email: email, password: password, confirmPassword: confirmPassword,
                 firstName: firstName, lastName: lastName)
 
         when:
@@ -132,7 +132,7 @@ class UserSpec extends Specification {
 
     def "Check toString of user"() {
         setup:
-        User user = new User(userName: userName)
+        User user = new User(username: userName)
 
         when:
         String name = user.toString()
@@ -153,7 +153,7 @@ class UserSpec extends Specification {
         String firstName = "vikas"
         String lastName = "verma"
         String email = "vikas@gmail.com"
-        User user = new User(userName: userName, email: email, password: password, confirmPassword: confirmPassword,
+        User user = new User(username: userName, email: email, password: password, confirmPassword: confirmPassword,
                 firstName: firstName, lastName: lastName)
         user.save(flush: true)
         Topic topic = new Topic(name: "topic1", createdBy: user, visibility: Visibility.PUBLIC)
@@ -171,10 +171,10 @@ class UserSpec extends Specification {
         String firstName = "vikas"
         String lastName = "verma"
         String email = "vikas@gmail.com"
-        User user1 = new User(userName: userName, email: email, password: password, confirmPassword: confirmPassword,
+        User user1 = new User(username: userName, email: email, password: password, confirmPassword: confirmPassword,
                 firstName: firstName, lastName: lastName)
 
-        User user2 = new User(userName: "asd", email: "asd@asd.com", password: password, confirmPassword: confirmPassword,
+        User user2 = new User(username: "asd", email: "asd@asd.com", password: password, confirmPassword: confirmPassword,
                 firstName: firstName, lastName: lastName)
 
         user1.save(flush: true)
@@ -195,7 +195,7 @@ class UserSpec extends Specification {
         String lastName = "verma"
         String email = "vikas@gmail.com"
         String confirmPassword = "vikas12345"
-         new User(userName: userName, email: email, password: password, confirmPassword: confirmPassword,
+         new User(username: userName, email: email, password: password, confirmPassword: confirmPassword,
                 firstName: firstName, lastName: lastName).save()
         User user = User.get(1l)
         expect:
@@ -210,9 +210,9 @@ class UserSpec extends Specification {
         String lastName = "verma"
         String email = "vikas@gmail.com"
         String confirmPassword = "vikas12345"
-        new User(userName: userName, email: email, password: password, confirmPassword: confirmPassword,
+        new User(username: userName, email: email, password: password, confirmPassword: confirmPassword,
                 firstName: firstName, lastName: lastName).save()
-        new User(userName: userName, email: email, password: password, confirmPassword: confirmPassword,
+        new User(username: userName, email: email, password: password, confirmPassword: confirmPassword,
                 firstName: firstName, lastName: lastName).save()
         expect:
         User.get(1l).equals(User.get(1l)) == true
@@ -226,9 +226,9 @@ class UserSpec extends Specification {
         String lastName = "verma"
         String email = "vikas@gmail.com"
         String confirmPassword = "vikas12345"
-        new User(userName: userName, email: email, password: password, confirmPassword: confirmPassword,
+        new User(username: userName, email: email, password: password, confirmPassword: confirmPassword,
                 firstName: firstName, lastName: lastName).save()
-        new User(userName: userName, email: email, password: password, confirmPassword: confirmPassword,
+        new User(username: userName, email: email, password: password, confirmPassword: confirmPassword,
                 firstName: firstName, lastName: lastName).save()
         expect:
         User.get(1l).equals(User.get(2l)) == false
@@ -242,7 +242,7 @@ class UserSpec extends Specification {
         String confirmPassword = "vikas12345"
 
         expect:
-        new User(userName: userName, email: email, password: password, confirmPassword: confirmPassword,
+        new User(username: userName, email: email, password: password, confirmPassword: confirmPassword,
                 firstName: firstName, lastName: lastName).save().hashCode() != 0
     }
     def "check hashCode method with 0 hashcode value"(){

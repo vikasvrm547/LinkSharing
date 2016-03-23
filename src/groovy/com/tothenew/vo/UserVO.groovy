@@ -8,5 +8,5 @@ class UserVO {
     String lastName
     String email
     Boolean admin
-    Boolean active
+    Boolean enabled
 }

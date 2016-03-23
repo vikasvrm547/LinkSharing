@@ -143,7 +143,7 @@ class BootspaginateTagLib {
             // display paginate steps
             (beginstep..endstep).each { int i ->
                 if (currentstep == i) {
-                    writer << "<li class=\"active\"><a href='javascript:void(0);'>${i}</a></li>"
+                    writer << "<li class=\"enabled\"><a href='javascript:void(0);'>${i}</a></li>"
                 }
                 else {
                     linkParams.offset = (i - 1) * max

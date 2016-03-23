@@ -16,7 +16,7 @@ class UserControllerSpec extends Specification {
     @ConfineMetaClassChanges([Topic, User])
     void "check show action"() {
         given:
-        User user = new User(email: "v1@gmail.com", userName: "vikas1", password: Constants.PASSWORD,
+        User user = new User(email: "v1@gmail.com", username: "vikas1", password: Constants.PASSWORD,
                 confirmPassword: Constants.PASSWORD, firstName: "vikas", lastName: "verma", active: true).save(flush: true)
         session.user = user
         and:
@@ -68,7 +68,7 @@ class UserControllerSpec extends Specification {
 
     void "check with unauthorized email forgotPassword action"() {
         given:
-        new User(email: "v1@gmail.com", userName: "vikas1", password: Constants.PASSWORD, confirmPassword: Constants.PASSWORD,
+        new User(email: "v1@gmail.com", username: "vikas1", password: Constants.PASSWORD, confirmPassword: Constants.PASSWORD,
                 firstName: "vikas", lastName: "verma", active: true).save(flush: true)
         when:
         controller.forgotPassword("vikasvrm@gmail.com")
@@ -79,7 +79,7 @@ class UserControllerSpec extends Specification {
 
     void "check with inactive user email forgotPassword action"() {
         given:
-        new User(email: "v1@gmail.com", userName: "vikas1", password: Constants.PASSWORD, confirmPassword: Constants.PASSWORD,
+        new User(email: "v1@gmail.com", username: "vikas1", password: Constants.PASSWORD, confirmPassword: Constants.PASSWORD,
                 firstName: "vikas", lastName: "verma", active: false).save(flush: true)
         when:
         controller.forgotPassword("v1@gmail.com")
@@ -91,7 +91,7 @@ class UserControllerSpec extends Specification {
     @ConfineMetaClassChanges(User)
     void "check with failed to update password user email forgotPassword action"() {
         given:
-        new User(email: "v1@gmail.com", userName: "vikas1", password: Constants.PASSWORD, confirmPassword: Constants.PASSWORD,
+        new User(email: "v1@gmail.com", username: "vikas1", password: Constants.PASSWORD, confirmPassword: Constants.PASSWORD,
                 firstName: "vikas", lastName: "verma", active: true).save(flush: true)
         and:
         User.metaClass.static.updatePassword = { String newPassword, String email ->
@@ -110,7 +110,7 @@ class UserControllerSpec extends Specification {
     @ConfineMetaClassChanges(User)
     void "check with success to update password user email forgotPassword action"() {
         given:
-        new User(email: "v1@gmail.com", userName: "vikas1", password: Constants.PASSWORD, confirmPassword: Constants.PASSWORD,
+        new User(email: "v1@gmail.com", username: "vikas1", password: Constants.PASSWORD, confirmPassword: Constants.PASSWORD,
                 firstName: "vikas", lastName: "verma", active: true).save(flush: true)
         and:
         User.metaClass.static.updatePassword = { String newPassword, String email ->
@@ -183,7 +183,7 @@ class UserControllerSpec extends Specification {
 
     void "check toggleActive action with user found but is admin"() {
         given:
-        new User(email: "v1@gmail.com", userName: "vikas1", password: Constants.PASSWORD,
+        new User(email: "v1@gmail.com", username: "vikas1", password: Constants.PASSWORD,
                 confirmPassword: Constants.PASSWORD, firstName: "vikas", lastName: "verma", admin: true).save(flush: true)
 
         when:
@@ -194,7 +194,7 @@ class UserControllerSpec extends Specification {
     }
     void "check toggleActive action with user found and not admin"() {
         given:
-        new User(email: "v1@gmail.com", userName: "vikas1", password: Constants.PASSWORD,
+        new User(email: "v1@gmail.com", username: "vikas1", password: Constants.PASSWORD,
                 confirmPassword: Constants.PASSWORD, firstName: "vikas", lastName: "verma", admin: false).save(flush: true)
 
         when:

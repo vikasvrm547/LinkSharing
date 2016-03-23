@@ -79,7 +79,7 @@ abstract class Resource {
                 }
                 createdBy {
                     property('id')
-                    property('userName')
+                    property('username')
                     property('firstName')
                     property('lastName')
                 }
@@ -111,7 +111,7 @@ abstract class Resource {
                 }
                 createdBy {
                     property('id')
-                    property('userName')
+                    property('username')
                     property('firstName')
                     property('lastName')
                 }
@@ -142,7 +142,7 @@ abstract class Resource {
                     }
                     'createdBy' {
                         property('id')
-                        property('userName')
+                        property('username')
                         property('firstName')
                         property('lastName')
                     }
@@ -187,7 +187,7 @@ abstract class Resource {
                 }
                 'createdBy' {
                     property('id')
-                    property('userName')
+                    property('username')
                     property('firstName')
                     property('lastName')
                 }

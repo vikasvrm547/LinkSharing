@@ -68,10 +68,11 @@ grails.project.dependency.resolution = {
         compile ":console:1.5.0"
         //plugin for email
         compile "org.grails.plugins:mail:1.0.7"
-        //plugin for qurtz
+        //plugin for quartz
         compile ':quartz:1.0.1'
         //plugin codenarc
         compile "org.grails.plugins:codenarc:0.25.1"
+        compile "org.grails.plugins:spring-security-core:2.0.0"
         //Plugin for test
         test "org.grails.plugins:code-coverage:2.0.3-3"
         // plugins needed at runtime but not for compilation

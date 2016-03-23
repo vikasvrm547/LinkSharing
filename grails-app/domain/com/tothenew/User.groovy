@@ -4,11 +4,12 @@ import com.tothenew.co.SearchCO
 import com.tothenew.co.UserSearchCO
 import com.tothenew.vo.PostVO
 
+class User implements Serializable {
 
-class User {
+    private static final long serialVersionUID = 1
+
+    transient springSecurityService
     String email
-    String userName
-    String password
     String firstName
     String lastName
     Byte[] photo
@@ -16,28 +17,66 @@ class User {
     Boolean active = false
     Date dateCreated
     Date lastUpdated
+    String username
+    String password
+    boolean accountExpired
+    boolean accountLocked
+    boolean passwordExpired
+    //String confirmPassword
+    boolean enabled = false
 
-    String confirmPassword;
-    static transients = ['name', 'confirmPassword', 'subscribedTopics']
+    User(String username, String password) {
+        this()
+        this.username = username
+        this.password = password
+    }
+
+    Set<Role> getAuthorities() {
+        UserRole.findAllByUserSpec(this)*.role
+    }
+
+    def beforeInsert() {
+        encodePassword()
+    }
+
+    def beforeUpdate() {
+        if (isDirty('password')) {
+            encodePassword()
+        }
+    }
+    def afterInsert() {
+        User.withNewSession {
+            Role role = Role.findOrSaveWhere(authority: "ROLE_NORMAL")
+            println this
+            UserRole.create(this,role,true)
+        }
+    }
+
+    protected void encodePassword() {
+        password = springSecurityService?.passwordEncoder ? springSecurityService.encodePassword(password) : password
+    }
 
     static mapping = {
         photo(sqlType: 'longblob')
         sort id: 'desc'
+        password column: '`password`'
     }
+    static transients = ['name','subscribedTopics','springSecurityService']
+
 
     static constraints = {
         email(unique: true, blank: false, email: true)
         password(blank: false, minSize: 5)
         firstName(blank: false)
         lastName(blank: false)
-        userName(unique: true, blank: false)
+        username(unique: true, blank: false)
         photo(nullable: true)
         active(nullable: true)
         admin(nullable: true)
-        confirmPassword(bindable: true, nullable: true, blank: true, validator: { val, user ->
-            return (val != null) && val.equals(user.password)
+        /*confirmPassword(bindable: true, nullable: true, blank: true, validator: { val, user ->
 
-        })
+            return (val != null) && val.equals(user.password)
+        })*/
     }
 
     static hasMany = [topics   : Topic, subscriptions: Subscription, readingItems: ReadingItem,
@@ -47,7 +86,7 @@ class User {
         search { UserSearchCO userSearchCO ->
             eq('admin', false)
             if (userSearchCO.active != null) {
-                eq("active", userSearchCO.active)
+                eq("enabled", userSearchCO.active)
             }
 
             if (userSearchCO.q) {
@@ -55,7 +94,7 @@ class User {
                     ilike("firstName", "%${userSearchCO.q}%")
                     ilike("lastName", "%${userSearchCO.q}%")
                     ilike("email", "%${userSearchCO.q}%")
-                    ilike("userName", "%${userSearchCO.q}%")
+                    ilike("username", "%${userSearchCO.q}%")
 
                 }
             }
@@ -65,10 +104,6 @@ class User {
     String getName() {
         return [firstName, lastName].findAll { it }.join(" ")
     }
-
-    /* boolean equals(User user) {
-         return this.id == user.id
-     }*/
 
     boolean equals(o) {
         if (this.is(o)) return true
@@ -87,7 +122,7 @@ class User {
 
     @Override
     String toString() {
-        return userName
+        return username
     }
 
     List getSubscribedTopics() {
@@ -116,7 +151,7 @@ class User {
         List<PostVO> readingItemsList = [];
         ReadingItem.findAllByUser(this, [max: searchCO.max, offset: searchCO.offset, sort: 'lastUpdated', order: 'desc']).each {
             readingItemsList.add(new PostVO(topicId: it.resource.topic.id, resourceID: it.resource.id, description: it.resource.description,
-                    topicName: it.resource.topic.name, userId: it.resource.createdBy.id, userUserName: it.resource.createdBy.userName,
+                    topicName: it.resource.topic.name, userId: it.resource.createdBy.id, userUserName: it.resource.createdBy.username,
                     userFirstName: it.resource.createdBy.firstName, userLastName: it.resource.createdBy.lastName,
                     isRead: it.isRead,
                     url: it.resource.class.toString().equals("class com.tothenew.LinkResource") ? it.resource.toString() : "",

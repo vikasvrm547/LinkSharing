@@ -47,7 +47,7 @@ class User implements Serializable {
     def afterInsert() {
         User.withNewSession {
             Role role = Role.findOrSaveWhere(authority: "ROLE_NORMAL")
-            println this
+         //   println this
             UserRole.create(this,role,true)
         }
     }

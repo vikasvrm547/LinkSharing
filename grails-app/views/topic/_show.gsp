@@ -60,9 +60,9 @@
     </div>
     <g:set var="springSecurityService" bean="springSecurityService"/>
     <sec:ifLoggedIn>
-        <div class="footer">
+          <div class="footer">
             <ls:showSeriousness topicId="${topic?.id}" class="btn btn-primary seriousness"/>
-            <ls:canUpdateTopic topicId="${topic?.id}" currentUser="${springSecurityService}">
+            <ls:canUpdateTopic topicId="${topic?.id}" currentUser="${springSecurityService?.getCurrentUser()}">
                 <ls:showVisibility topicName="${topic?.name}" visibility="${topic?.visibility}"
                                    class="btn btn-primary visibility" topicId = "${topic?.id}"/>
                 <i class="glyphicon glyphicon-edit nav_icon" style="color: #337ab7;"
@@ -75,5 +75,5 @@
             <ls:showInvitation class="fa fa-envelope-o nav_icon" topicId="${topic?.id}" title="Invite friends"/>
         </div>
     </sec:ifLoggedIn>
-    <input type="hidden" id="hidden-current-user-id"  value="${springSecurityService?.id}"/>
+    <input type="hidden" id="hidden-current-user-id"  value="${springSecurityService?.getCurrentUser()?.id}"/>
 </div>

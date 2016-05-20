@@ -59,7 +59,7 @@ class UserController {
                                                  registerCO: registerCO])
         } else if ((!registerCO.userPhoto?.bytes) || checkImageType(registerCO.userPhoto?.contentType)) {
             User newUser = new User(registerCO.properties)
-            newUser.photo = registerCO.userPhoto.bytes
+            newUser.photo = registerCO?.userPhoto?.bytes
             if (!newUser.save()) {
                 flash.error = g.message(code: "com.tothenew.User.controller.register.validation.not.pass")
                 render(view: '/login/index', model: [topPosts  : Resource.getTopPosts(), recentShares: Resource.getRecentShares(),
